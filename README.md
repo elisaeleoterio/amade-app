@@ -1,6 +1,8 @@
-# Welcome to your Expo app 👋
+# AMADE App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+App de gestão de estoque e vendas da Associação de Artesãos em Madeira, feito com [Expo](https://expo.dev).
+
+> 📖 Guia completo de desenvolvimento (pacotes instalados, comandos, como rebuildar o dev client): [`docs/DESENVOLVIMENTO.md`](./docs/DESENVOLVIMENTO.md)
 
 ## Get started
 
@@ -12,28 +14,13 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
 
 2. Start the app
 
+   Este projeto usa módulos nativos que **não funcionam no app Expo Go**. É preciso abrir com um [development build](https://docs.expo.dev/develop/development-builds/introduction/) próprio (ver `docs/DESENVOLVIMENTO.md`):
+
    ```bash
-   npx expo start
+   npx expo start --dev-client
    ```
 
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+You can start developing by editing the files inside the **src/app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
 
 ### Other setup steps
 
@@ -45,7 +32,7 @@ This command will move the starter code to the **app-example** directory and cre
 
 To learn more about developing your project with Expo, look at the following resources:
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
+- [Expo documentation (versão SDK 57)](https://docs.expo.dev/versions/v57.0.0/): sempre usar a doc versionada, não a "latest" — várias APIs mudaram.
 - [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
 
 ## Join the community
