@@ -8,26 +8,29 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        general: {
+          bg: "#FFFBEB", // Fundo creme
+        },
         // Cores do Administrador e Geral
         admin: {
           dark: "#2A0F01", // Marrom bem escuro
-          main: "#451A03", // Marrom principal
-          light: "#712B05", // Marrom claro
-          surface: "#FFFBEB", // Fundo creme
+          lighter: "#451A03", // Marrom levemente mais escuro
+          main: "#712B05", // Marrom principal
+          surface: "#E0D1C7", // Marrom bem claro (Tab e Ghost)
         },
         // Cores do Lojista
         lojista: {
           dark: "#4C0519", // Vinho escuro
-          main: "#810F2F", // Vinho principal
-          light: "#9F1239", // Rosa/Magenta forte
-          surface: "#FFF1F2", // Fundo rosado
+          wine: "#810F2F", // Vinho principal
+          main: "#9F1239", // Rosa/Magenta forte
+          surface: "#E9CCD2", // Ghost rosado
         },
         // Cores do Artesão
         artesao: {
           dark: "#14532D", // Verde escuro
           main: "#166534", // Verde principal
           light: "#15803D", // Verde claro
-          surface: "#F0FDF4", // Fundo esverdeado
+          surface: "#E5EFE5", // Fundo esverdeado
         },
         // Cores de Feedback (Toasters)
         toaster: {
