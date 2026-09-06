@@ -1,13 +1,18 @@
 import { View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 import AmadeLogo from "@/assets/logoComplete.svg";
-import { Button } from "@/components/ui/button";
+import { ScreenTemplate } from "@/components/templates/screen-template";
+import { Input } from "@/components/ui/input";
 import { Text } from "@/components/ui/text";
 
 export default function WelcomeScreen() {
   return (
-    <SafeAreaView className="flex-1 bg-general-bg justify-center items-center px-8">
+    <ScreenTemplate
+      navbar={{
+        title: "Welcome",
+        showBack: true,
+      }}
+    >
       <View className="items-center mb-2">
         <AmadeLogo color="#712B05" width={250} />
       </View>
@@ -22,8 +27,11 @@ export default function WelcomeScreen() {
         </Text>
       </View>
 
-      <View className="gap-4 text">
-        <Button
+      <View className="gap-4 ">
+        <Input placeholder="Entrar" appRole="lojista" />
+        <Input placeholder="Criar Conta" />
+
+        {/* <Button
           size="lg"
           appRole="lojista"
           variant="ghostOutline"
@@ -38,8 +46,8 @@ export default function WelcomeScreen() {
           onPress={() => console.log("Criar Conta")}
         >
           <Text className="text-[22px]">Criar Conta</Text>
-        </Button>
+        </Button> */}
       </View>
-    </SafeAreaView>
+    </ScreenTemplate>
   );
 }
