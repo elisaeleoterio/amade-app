@@ -1,58 +1,28 @@
 import { TextClassContext } from "@/components/ui/text";
 import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
-import { Platform, Pressable } from "react-native";
+import { Pressable } from "react-native";
 
-const buttonVariants = cva(
-  cn(
-    "group shrink-0 flex-row items-center justify-center gap-2 rounded-full shadow-none",
-    Platform.select({
-      web: "focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive whitespace-nowrap outline-none transition-all focus-visible:ring-[3px] disabled:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0",
-    }),
-  ),
+const buttonVariantsAdmin = cva(
+  cn(" flex-row items-center justify-center rounded-[20px]"),
   {
     variants: {
       variant: {
-        default: cn(
-          "bg-admin-primary active:bg-primary/90 shadow-sm shadow-black/5",
-          Platform.select({ web: "hover:bg-primary/90" }),
-        ),
-        destructive: cn(
-          "bg-destructive active:bg-destructive/90 dark:bg-destructive/60 shadow-sm shadow-black/5",
-          Platform.select({
-            web: "hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40",
-          }),
-        ),
+        default: cn("bg-admin-main active:bg-admin-main/80"),
         outline: cn(
-          "border-border bg-background active:bg-accent dark:bg-input/30 dark:border-input dark:active:bg-input/50 border shadow-sm shadow-black/5",
-          Platform.select({
-            web: "hover:bg-accent dark:hover:bg-input/50",
-          }),
+          "bg-transparent border-2 border-admin-main active:bg-admin-surface active:border-admin-main/80",
         ),
-        secondary: cn(
-          "bg-secondary active:bg-secondary/80 shadow-sm shadow-black/5",
-          Platform.select({ web: "hover:bg-secondary/80" }),
+        secondary: cn("bg-secondary active:bg-secondary/80"),
+        ghost: cn("bg-admin-surface active:bg-admin-surface/80"),
+        ghostOutline: cn(
+          "bg-transparent border-2 border-admin-surface active:bg-admin-surface active:border-admin-surface/80",
         ),
-        ghost: cn(
-          "active:bg-accent dark:active:bg-accent/50",
-          Platform.select({ web: "hover:bg-accent dark:hover:bg-accent/50" }),
-        ),
-        link: "",
       },
       size: {
-        default: cn(
-          "h-10 px-4 py-2 sm:h-9",
-          Platform.select({ web: "has-[>svg]:px-3" }),
-        ),
-        sm: cn(
-          "h-9 gap-1.5 rounded-md px-3 sm:h-8",
-          Platform.select({ web: "has-[>svg]:px-2.5" }),
-        ),
-        lg: cn(
-          "h-11 rounded-md px-6 sm:h-10",
-          Platform.select({ web: "has-[>svg]:px-4" }),
-        ),
-        icon: "h-10 w-10 sm:h-9 sm:w-9",
+        default: cn("h-14 px-10"),
+        sm: cn("h-10 w-32 rounded-2xl"),
+        lg: cn("h-16 px-20"),
+        icon: cn("h-14 w-14"),
       },
     },
     defaultVariants: {
@@ -62,34 +32,26 @@ const buttonVariants = cva(
   },
 );
 
-const buttonTextVariants = cva(
-  cn(
-    "text-foreground text-sm font-medium",
-    Platform.select({ web: "pointer-events-none transition-colors" }),
-  ),
+const buttonVariantsArtesao = cva(
+  cn(" flex-row items-center justify-center rounded-[20px]"),
   {
     variants: {
       variant: {
-        default: "text-primary-foreground",
-        destructive: "text-white",
+        default: cn("bg-artesao-main active:bg-artesao-main/80"),
         outline: cn(
-          "group-active:text-accent-foreground",
-          Platform.select({ web: "group-hover:text-accent-foreground" }),
+          "bg-transparent border-2 border-artesao-main active:bg-artesao-surface active:border-artesao-main/80",
         ),
-        secondary: "text-secondary-foreground",
-        ghost: "group-active:text-accent-foreground",
-        link: cn(
-          "text-primary group-active:underline",
-          Platform.select({
-            web: "underline-offset-4 hover:underline group-hover:underline",
-          }),
+        secondary: cn("bg-secondary active:bg-secondary/80"),
+        ghost: cn("bg-artesao-surface active:bg-artesao-surface/80"),
+        ghostOutline: cn(
+          "bg-transparent border-2 border-artesao-surface active:bg-artesao-surface active:border-artesao-surface/80",
         ),
       },
       size: {
-        default: "",
-        sm: "",
-        lg: "",
-        icon: "",
+        default: cn("h-14 px-10"),
+        sm: cn("h-10 w-32 rounded-2xl"),
+        lg: cn("h-16 px-20"),
+        icon: cn("h-14 w-14"),
       },
     },
     defaultVariants: {
@@ -98,27 +60,148 @@ const buttonTextVariants = cva(
     },
   },
 );
+
+const buttonVariantsLojista = cva(
+  cn(" flex-row items-center justify-center rounded-[20px]"),
+  {
+    variants: {
+      variant: {
+        default: cn("bg-lojista-main active:bg-lojista-main/80"),
+        outline: cn(
+          "bg-transparent border-2 border-lojista-main active:bg-lojista-surface active:border-lojista-main/80",
+        ),
+        secondary: cn("bg-secondary active:bg-secondary/80"),
+        ghost: cn("bg-lojista-surface active:bg-lojista-surface/80"),
+        ghostOutline: cn(
+          "bg-transparent border-2 border-lojista-surface active:bg-lojista-surface active:border-lojista-surface/80",
+        ),
+      },
+      size: {
+        default: cn("h-14 px-10"),
+        sm: cn("h-10 w-32 rounded-2xl"),
+        lg: cn("h-16 px-20"),
+        icon: cn("h-14 w-14"),
+      },
+    },
+    defaultVariants: {
+      variant: "default",
+      size: "default",
+    },
+  },
+);
+
+const buttonTextVariantsAdmin = cva(cn("font-poppins-regular text-lg"), {
+  variants: {
+    variant: {
+      default: "text-general-bg",
+      outline: "text-admin-main",
+      secondary: "text-admin-dark",
+      ghost: "text-general-bg",
+      ghostOutline: "text-admin-surface",
+    },
+    size: {
+      default: "text-lg",
+      sm: "text-md",
+      lg: "text-xl",
+      icon: "",
+    },
+  },
+  defaultVariants: {
+    variant: "default",
+    size: "default",
+  },
+});
+
+const buttonTextVariantsArtesao = cva(cn("font-poppins-regular text-lg"), {
+  variants: {
+    variant: {
+      default: "text-general-bg",
+      outline: "text-artesao-main",
+      secondary: "text-artesao-dark",
+      ghost: "text-general-bg",
+      ghostOutline: "text-artesao-surface",
+    },
+    size: {
+      default: "text-lg",
+      sm: "text-md",
+      lg: "text-lg",
+      icon: "",
+    },
+  },
+  defaultVariants: {
+    variant: "default",
+    size: "default",
+  },
+});
+
+const buttonTextVariantsLojista = cva(cn("font-poppins-regular text-lg"), {
+  variants: {
+    variant: {
+      default: "text-general-bg",
+      outline: "text-lojista-main",
+      secondary: "text-lojista-dark",
+      ghost: "text-general-bg",
+      ghostOutline: "text-lojista-surface",
+    },
+    size: {
+      default: "text-lg",
+      sm: "text-md",
+      lg: "text-lg",
+      icon: "",
+    },
+  },
+  defaultVariants: {
+    variant: "default",
+    size: "default",
+  },
+});
+
+type AppRole = "admin" | "artesao" | "lojista";
 
 type ButtonProps = React.ComponentProps<typeof Pressable> &
   React.RefAttributes<typeof Pressable> &
-  VariantProps<typeof buttonVariants>;
+  VariantProps<typeof buttonVariantsAdmin> & {
+    appRole?: AppRole;
+  };
 
-function Button({ className, variant, size, ...props }: ButtonProps) {
+const buttonVariantsByRole = {
+  admin: buttonVariantsAdmin,
+  artesao: buttonVariantsArtesao,
+  lojista: buttonVariantsLojista,
+} as const;
+
+const buttonTextVariantsByRole = {
+  admin: buttonTextVariantsAdmin,
+  artesao: buttonTextVariantsArtesao,
+  lojista: buttonTextVariantsLojista,
+} as const;
+
+function Button({
+  className,
+  variant,
+  size,
+  appRole = "admin",
+  role = "button",
+  ...props
+}: ButtonProps) {
+  const selectedButtonVariants = buttonVariantsByRole[appRole];
+  const selectedTextVariants = buttonTextVariantsByRole[appRole];
+
   return (
-    <TextClassContext.Provider value={buttonTextVariants({ variant, size })}>
+    <TextClassContext.Provider value={selectedTextVariants({ variant, size })}>
       <Pressable
         className={cn(
           props.disabled && "opacity-50",
-          buttonVariants({ variant, size }),
+          selectedButtonVariants({ variant, size }),
           className,
         )}
-        role="button"
+        role={role}
         {...props}
       />
     </TextClassContext.Provider>
   );
 }
 
-export { Button, buttonTextVariants, buttonVariants };
+export { Button, buttonTextVariantsAdmin, buttonVariantsAdmin };
 export type { ButtonProps };
 

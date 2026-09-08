@@ -40,6 +40,7 @@ const textVariants = cva(
         large: "text-lg font-semibold",
         small: "text-sm font-medium leading-none",
         muted: "text-muted-foreground text-sm",
+        screenTitle: "",
       },
     },
     defaultVariants: {
