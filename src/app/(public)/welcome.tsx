@@ -1,16 +1,17 @@
-import { View } from "react-native";
-
 import AmadeLogo from "@/assets/logoComplete.svg";
 import { ScreenTemplate } from "@/components/templates/screen-template";
-import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
+import { useRouter } from "expo-router";
+import { View } from "react-native";
 
 export default function WelcomeScreen() {
+  const router = useRouter();
   return (
     <ScreenTemplate
+      variant="centered"
       navbar={{
-        title: "Welcome",
-        showBack: true,
+        showBack: false,
       }}
     >
       <View className="items-center mb-2">
@@ -28,14 +29,11 @@ export default function WelcomeScreen() {
       </View>
 
       <View className="gap-4 ">
-        <Input placeholder="Entrar" appRole="lojista" />
-        <Input placeholder="Criar Conta" />
-
-        {/* <Button
+        <Button
           size="lg"
-          appRole="lojista"
-          variant="ghostOutline"
-          onPress={() => console.log("Entrar na conta")}
+          appRole="admin"
+          variant="default"
+          onPress={() => router.push("/(public)/login")}
         >
           <Text className="text-[22px]">Entrar na Conta</Text>
         </Button>
@@ -43,10 +41,10 @@ export default function WelcomeScreen() {
         <Button
           variant="outline"
           size="lg"
-          onPress={() => console.log("Criar Conta")}
+          onPress={() => router.push("/(public)/signup")}
         >
           <Text className="text-[22px]">Criar Conta</Text>
-        </Button> */}
+        </Button>
       </View>
     </ScreenTemplate>
   );
