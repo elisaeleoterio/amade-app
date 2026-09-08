@@ -2,15 +2,15 @@ import * as React from "react";
 import { Pressable, View } from "react-native";
 
 import { cva, type VariantProps } from "class-variance-authority";
-import { router, useNavigation } from "expo-router";
+import { router } from "expo-router";
 import { ChevronLeft, UserRoundArrowLeft } from "lucide-react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
+import { Text } from "@/components/ui/text";
 import { cn } from "@/lib/utils";
-import { Icon } from "./icon";
-import { Text } from "./ui/text";
 
 const navbarVariants = cva(
-  "min-h-16 w-full flex-row items-center justify-between px-4",
+  "min-h-16 w-full flex-row items-center bg-[#FDFBF5] justify-between px-4",
   {
     variants: {
       variant: {
@@ -24,7 +24,7 @@ const navbarVariants = cva(
       },
       shadow: {
         default: "",
-        none: "",
+        none: "shadow-none elevation-0",
       },
     },
     defaultVariants: {
@@ -34,6 +34,20 @@ const navbarVariants = cva(
     },
   },
 );
+
+export type AppRole = "admin" | "artesao" | "lojista";
+
+const roleTextColors: Record<AppRole, string> = {
+  admin: "text-admin-main",
+  artesao: "text-artesao-main",
+  lojista: "text-lojista-main",
+};
+
+const roleHexColors: Record<AppRole, string> = {
+  admin: "#712B05",
+  artesao: "#166534",
+  lojista: "#9F1239",
+};
 
 export type NavbarProps = VariantProps<typeof navbarVariants> & {
   title?: string;
@@ -46,6 +60,7 @@ export type NavbarProps = VariantProps<typeof navbarVariants> & {
   textStyle?: string;
   onLeftPress?: () => void;
   onBackPress?: () => void;
+  appRole?: AppRole;
 };
 
 export const Navbar = ({
@@ -62,21 +77,44 @@ export const Navbar = ({
   textStyle,
   onLeftPress,
   onBackPress,
+  appRole = "admin",
 }: NavbarProps) => {
-  const navigation = useNavigation();
-  const canGoBack = navigation.canGoBack();
-  const iconColor = variant === "home" ? "text-neutral-500" : "text-primary";
+  const insets = useSafeAreaInsets();
+  let canGoBack = false;
+  try {
+    canGoBack = router.canGoBack();
+  } catch (error) {
+    canGoBack = false;
+  }
+
+  const activeRoleColor = roleTextColors[appRole];
+  const activeHexColor = roleHexColors[appRole];
+
+  const iconColor = variant === "home" ? "#737373" : activeHexColor;
 
   const handleBack = () => {
     if (onLeftPress) return onLeftPress();
     if (onBackPress) return onBackPress();
-    if (canGoBack) navigation.goBack();
+    if (canGoBack) router.back();
   };
 
   return (
-    <View className="z-10">
+    // Adicionamos a sombra e a elevação aqui no container pai para que ela se projete abaixo da navbar inteira
+    <View
+      className={cn(
+        "z-10 bg-[#FDFBF5]",
+        shadow !== "none" && "shadow-sm shadow-black/10 elevation-4",
+      )}
+    >
       {shadow !== "none" && (
-        <View className="absolute -top-[20px] left-0 right-0 z-[20] h-[20px] bg-background" />
+        <View
+          className="absolute left-0 right-0 z-[20]"
+          style={{
+            top: -insets.top,
+            height: insets.top,
+            backgroundColor: "#FDFBF5",
+          }}
+        />
       )}
 
       <View className={cn(navbarVariants({ variant, size, shadow }))}>
@@ -90,11 +128,11 @@ export const Navbar = ({
                 (() => router.push("./src/app/(authenticated)/roleSelect"))
               }
             >
-              <Icon as={UserRoundArrowLeft} size={24} className={iconColor} />
+              <UserRoundArrowLeft size={24} color={iconColor} />
             </Pressable>
           ) : (showBack ?? canGoBack) ? (
             <Pressable onPress={handleBack}>
-              <Icon as={ChevronLeft} size={24} className={iconColor} />
+              <ChevronLeft size={24} color={iconColor} />
             </Pressable>
           ) : null}
         </View>
@@ -106,7 +144,11 @@ export const Navbar = ({
                 variant={titleVariant}
                 adjustsFontSizeToFit={true}
                 numberOfLines={1}
-                className={cn("text-primary", titleClassName)}
+                className={cn(
+                  activeRoleColor,
+                  "font-poppins-medium text-xl",
+                  titleClassName,
+                )}
               >
                 {title}
               </Text>

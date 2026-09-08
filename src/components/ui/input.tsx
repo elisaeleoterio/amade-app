@@ -12,11 +12,11 @@ function Input({
   return (
     <TextInput
       style={[
-        { height: 48, textAlignVertical: "center", paddingVertical: 0 },
+        { height: 46, textAlignVertical: "center", paddingVertical: 0 },
         style,
       ]}
       className={cn(
-        `focus:border-2 font-poppins-regular rounded-2xl px-8 text-lg ${appRole == "admin" ? "focus:border-admin-main bg-admin-main/5 text-admin-dark" : "focus:border-lojista-main bg-lojista-main/5 text-lojista-dark"}`,
+        `focus:border-2 font-poppins-regular rounded-2xl px-4 text-lg ${appRole == "admin" ? "focus:border-admin-main bg-admin-main/5 text-admin-dark" : "focus:border-lojista-main bg-lojista-main/5 text-lojista-dark"}`,
         props.editable === false && cn("opacity-20"),
         className,
       )}

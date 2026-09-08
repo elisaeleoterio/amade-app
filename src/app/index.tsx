@@ -8,9 +8,9 @@ const Index = () => {
   const isAuthenticated = false;
 
   if (isAuthenticated) {
-    return <Redirect href="/auth/welcome" />;
+    return <Redirect href="/(authenticated)/roleSelect" />;
   }
-  return <Redirect href="/auth/welcome" />;
+  return <Redirect href="/(public)/welcome" />;
 };
 
 export default Index;
