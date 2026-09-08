@@ -1,11 +1,12 @@
 import * as React from "react";
 import {
-    KeyboardAvoidingView,
-    KeyboardAvoidingViewProps,
-    ScrollView,
-    ScrollViewProps,
-    View,
-    ViewStyle,
+  KeyboardAvoidingView,
+  KeyboardAvoidingViewProps,
+  Platform,
+  ScrollView,
+  ScrollViewProps,
+  View,
+  ViewStyle,
 } from "react-native";
 
 import { cva, type VariantProps } from "class-variance-authority";
@@ -14,7 +15,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Navbar, NavbarProps } from "@/components/navbar";
 import { cn } from "@/lib/utils";
 
-const screenVariants = cva("flex-1", {
+const screenVariants = cva("", {
   variants: {
     variant: {
       default: "",
@@ -39,10 +40,7 @@ export interface ScreenTemplateProps extends VariantProps<
   hideSideInsets?: boolean;
   isStatic?: boolean;
   keyboardAvoidingViewEnabled?: boolean;
-  keyboardAvoidingViewProps?: Omit<
-    KeyboardAvoidingViewProps,
-    "style" | "behavior"
-  >;
+  keyboardAvoidingViewProps?: Omit<KeyboardAvoidingViewProps, "style">;
   scrollViewProps?: Omit<
     ScrollViewProps,
     "keyboardShouldPersistTaps" | "contentContainerStyle" | "className"
@@ -102,7 +100,7 @@ export const ScreenTemplate = ({
     );
 
   const contentClasses = cn(
-    "flex-1 px-6",
+    "px-6",
     screenVariants({ variant }),
     contentClassName,
   );
@@ -113,7 +111,7 @@ export const ScreenTemplate = ({
     <ScrollView
       keyboardShouldPersistTaps="handled"
       contentContainerStyle={resolvedContentContainerStyle}
-      className={contentClasses}
+      contentContainerClassName={contentClasses}
       {...scrollViewProps}
     >
       {children}
@@ -127,7 +125,7 @@ export const ScreenTemplate = ({
       {keyboardAvoidingViewEnabled ? (
         <KeyboardAvoidingView
           className="flex-1"
-          behavior={"height"}
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
           {...keyboardAvoidingViewProps}
         >
           {content}
