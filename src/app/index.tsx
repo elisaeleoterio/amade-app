@@ -5,7 +5,7 @@ import { Redirect } from "expo-router";
 // TODO Tela redireciona de acordo com a autenticação do usuário
 
 const Index = () => {
-  const isAuthenticated = false;
+  const isAuthenticated = true;
 
   if (isAuthenticated) {
     return <Redirect href="/(authenticated)/roleSelect" />;
