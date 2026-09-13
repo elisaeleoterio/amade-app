@@ -7,15 +7,22 @@ interface LogoutModalProps {
   visible: boolean;
   onClose: () => void;
   onConfirm: () => void;
+  role?: "admin" | "lojista" | "artesao";
 }
+
+const roleColors = {
+  admin: "#712B05",
+  lojista: "#9F1239",
+  artesao: "#166534",
+};
 
 export const LogoutModal = ({
   visible,
   onClose,
   onConfirm,
+  role = "admin",
 }: LogoutModalProps) => {
-  // Cores extraídas do design
-  const primaryBrown = "#5C280C";
+  const activeColor = roleColors[role];
 
   return (
     <Modal
@@ -34,31 +41,33 @@ export const LogoutModal = ({
             className="absolute right-5 top-5 p-2"
             activeOpacity={0.7}
           >
-            <X size={24} color={"#712B05"} strokeWidth={1.5} />
+            <X size={24} color={activeColor} strokeWidth={1.5} />
           </TouchableOpacity>
 
           <View className="mb-4 mt-2">
-            <Info size={56} color={"#712B05"} strokeWidth={1.2} />
+            <Info size={56} color={activeColor} strokeWidth={1.2} />
           </View>
 
-          {/* Textos */}
-          <Text className="text-center font-poppins-semibold text-[20px] mb-3 mx-10 text-admin-main">
+          <Text
+            className="text-center font-poppins-semibold text-[20px] mb-3 mx-10"
+            style={{ color: activeColor }}
+          >
             Tem certeza que deseja sair da sua conta?
           </Text>
 
-          <Text className="text-center font-poppins-regular text-[15px] mx-6 mb-8 leading-6 px-2 text-admin-main">
+          <Text
+            className="text-center font-poppins-regular text-[15px] mx-6 mb-8 leading-6 px-2"
+            style={{ color: activeColor }}
+          >
             Ao confirmar, você será deslogado e precisará informar seus dados de
             login novamente.
           </Text>
 
-          {/* Container dos Botões */}
           <View className="w-full flex-row justify-between">
-            {/* Botão Cancelar */}
             <Button onPress={onClose} variant="outline" size="md">
               <Text>Cancelar</Text>
             </Button>
 
-            {/* Botão Sair da Conta */}
             <Button variant="default" size="md" onPress={onConfirm}>
               <Text>Sair da Conta</Text>
             </Button>
