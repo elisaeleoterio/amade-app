@@ -5,6 +5,8 @@
   "dependencies": {
     "@expo-google-fonts/poppins": "^0.4.1",
     "@expo/ui": "~57.0.18",
+    "@react-navigation/bottom-tabs": "^7.18.18",
+    "@react-navigation/native": "^7.3.18",
     "@rn-primitives/slot": "^1.5.2",
     "class-variance-authority": "^0.7.1",
     "expo": "~57.0.22",
