@@ -15,21 +15,21 @@ const roleConfig = {
     icon: Brush,
     colors: ["#15803D", "#14532D"] as const,
     textColor: "#166534",
-    route: "/(artesao)",
+    route: "/(authenticated)/artesao/",
   },
   lojista: {
     label: "Lojista",
     icon: ShoppingBasket,
     colors: ["#9F1239", "#810F2F"] as const,
     textColor: "#9F1239",
-    route: "/(lojista)",
+    route: "/(authenticated)/lojista/",
   },
   admin: {
     label: "Admin",
     icon: Folder,
     colors: ["#712B05", "#451A03"] as const,
     textColor: "#712B05",
-    route: "/(admin)",
+    route: "/(authenticated)/admin/",
   },
 };
 

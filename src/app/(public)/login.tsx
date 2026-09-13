@@ -17,7 +17,7 @@ export default function LoginScreen() {
   // Ajustar para a lógica de login
   const handleLogin = () => {
     console.log("logar com:", email, password);
-    router.push("/roleSelect");
+    router.replace("/roleSelect");
   };
 
   return (
