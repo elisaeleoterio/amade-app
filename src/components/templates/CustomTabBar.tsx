@@ -54,6 +54,9 @@ export function CustomTabBar({
 
       {/* 2. Mapeamento das telas reais (Home, Profile, etc) */}
       {state.routes.map((route, index) => {
+        if (!iconMap[route.name]) {
+          return null;
+        }
         const isFocused = state.index === index;
         const strokeWidth = isFocused ? 2.5 : 1.5;
 
