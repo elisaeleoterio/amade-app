@@ -1,15 +1,11 @@
-import { LogoutModal } from "@/components/modals/logoutModal";
 import { CustomTabBar } from "@/components/templates/CustomTabBar";
 import { Tabs, useRouter } from "expo-router";
-import { useState } from "react";
 import { View } from "react-native";
 
 export default function ArtesaoLayout() {
   const router = useRouter();
-  const [isLogoutModalVisible, setLogoutModalVisible] = useState(false);
 
   const handleConfirmLogout = async () => {
-    setLogoutModalVisible(false);
     // Lógica de limpar token
     router.replace("/welcome");
   };
@@ -21,7 +17,7 @@ export default function ArtesaoLayout() {
           <CustomTabBar
             {...props}
             role="artesao"
-            onLogoutPress={() => setLogoutModalVisible(true)}
+            onLogoutPress={() => router.replace("/(authenticated)/roleSelect")}
           />
         )}
         screenOptions={{ headerShown: false }}
@@ -29,13 +25,6 @@ export default function ArtesaoLayout() {
         <Tabs.Screen name="index" options={{ title: "Início" }} />
         <Tabs.Screen name="profile" options={{ title: "Meu Perfil" }} />
       </Tabs>
-
-      <LogoutModal
-        visible={isLogoutModalVisible}
-        onClose={() => setLogoutModalVisible(false)}
-        onConfirm={handleConfirmLogout}
-        role={"artesao"}
-      />
     </View>
   );
 }

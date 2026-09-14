@@ -1,3 +1,4 @@
+import type { Role } from "@/types/role.type";
 import { Info, X } from "lucide-react-native";
 import { Modal, Pressable, TouchableOpacity, View } from "react-native";
 import { Button } from "../ui/button";
@@ -7,7 +8,7 @@ interface LogoutModalProps {
   visible: boolean;
   onClose: () => void;
   onConfirm: () => void;
-  role?: "admin" | "lojista" | "artesao";
+  role?: Role;
 }
 
 const roleColors = {
@@ -64,11 +65,21 @@ export const LogoutModal = ({
           </Text>
 
           <View className="w-full flex-row justify-between">
-            <Button onPress={onClose} variant="outline" size="md">
+            <Button
+              appRole={role}
+              onPress={onClose}
+              variant="outline"
+              size="md"
+            >
               <Text>Cancelar</Text>
             </Button>
 
-            <Button variant="default" size="md" onPress={onConfirm}>
+            <Button
+              appRole={role}
+              variant="default"
+              size="md"
+              onPress={onConfirm}
+            >
               <Text>Sair da Conta</Text>
             </Button>
           </View>

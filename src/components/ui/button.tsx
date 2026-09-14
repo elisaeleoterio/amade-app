@@ -1,5 +1,6 @@
 import { TextClassContext } from "@/components/ui/text";
 import { cn } from "@/lib/utils";
+import type { Role } from "@/types/role.type";
 import { cva, type VariantProps } from "class-variance-authority";
 import { Pressable } from "react-native";
 
@@ -52,7 +53,7 @@ const buttonVariantsArtesao = cva(
         default: cn("h-14 px-10"),
         sm: cn("h-10 w-32 rounded-2xl"),
         lg: cn("h-16 px-20"),
-        md: cn("h-12 px-16"),
+        md: cn("h-12 px-7"),
         icon: cn("h-14 w-14"),
       },
     },
@@ -82,7 +83,7 @@ const buttonVariantsLojista = cva(
         default: cn("h-14 px-10"),
         sm: cn("h-10 w-32 rounded-2xl"),
         lg: cn("h-16 px-20"),
-        md: cn("h-12 px-16"),
+        md: cn("h-12 px-7"),
         icon: cn("h-14 w-14"),
       },
     },
@@ -162,12 +163,10 @@ const buttonTextVariantsLojista = cva(cn("font-poppins-regular text-lg"), {
   },
 });
 
-type AppRole = "admin" | "artesao" | "lojista";
-
 type ButtonProps = React.ComponentProps<typeof Pressable> &
   React.RefAttributes<typeof Pressable> &
   VariantProps<typeof buttonVariantsAdmin> & {
-    appRole?: AppRole;
+    appRole?: Role;
   };
 
 const buttonVariantsByRole = {
