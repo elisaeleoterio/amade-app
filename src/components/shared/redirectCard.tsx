@@ -11,11 +11,10 @@ interface RedirectCardProps {
   role: Role;
 }
 
-// Configuração de cores baseada no role do usuário
 const roleConfig = {
   artesao: {
-    primary: "#14532D", // Verde escuro (textos e ícones)
-    border: "#C6DACB", // Verde claro (borda)
+    primary: "#14532D",
+    border: "#C6DACB",
   },
   lojista: {
     primary: "#9F1239",
@@ -54,7 +53,7 @@ export const RedirectCard = ({
       {/* Textos à direita */}
       <View className="flex-1">
         <Text
-          className="mb-1 font-poppins-regular text-[24px]"
+          className="mb-1 font-poppins-medium text-xl"
           style={{ color: colors.primary }}
         >
           {title}
