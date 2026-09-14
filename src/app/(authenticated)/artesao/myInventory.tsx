@@ -176,6 +176,12 @@ export default function MyInventory() {
                 imageUrl={item.imageUrls[0]}
                 status={item.status}
                 paymentMethod={item.paymentMethod}
+                onPress={() => {
+                  router.push({
+                    pathname: "/(authenticated)/artesao/[id]",
+                    params: { id: item.id, origin: "inventory" },
+                  });
+                }}
               />
             ))
           )}

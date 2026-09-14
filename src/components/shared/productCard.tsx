@@ -13,13 +13,12 @@ interface ItemCardProps {
   onPress?: () => void;
 }
 
-// Configuração de cores baseada no role
 const roleConfig = {
   artesao: {
-    primary: "#14532D", // Verde escuro (textos e ícones)
-    border: "#C6DACB", // Verde claro (borda do card)
-    tagBg: "#E5EFE5", // Fundo da tag
-    line: "#E5EFE5", // Cor da linha divisória
+    primary: "#14532D",
+    border: "#C6DACB",
+    tagBg: "#E5EFE5",
+    line: "#E5EFE5",
   },
   lojista: {
     primary: "#4C0519",
@@ -47,7 +46,6 @@ export const ProductCard = ({
 }: ItemCardProps) => {
   const colors = roleConfig[role];
 
-  // Componente interno para renderizar a Tag (badge)
   const Tag = ({ label }: { label?: string }) => {
     if (!label) return null;
     return (
@@ -86,7 +84,7 @@ export const ProductCard = ({
       <View className="ml-4 flex-1 py-1">
         {/* Título */}
         <Text
-          className="font-poppins-regular text-lg"
+          className="font-poppins-medium text-xl"
           style={{ color: colors.primary }}
           numberOfLines={1}
         >
