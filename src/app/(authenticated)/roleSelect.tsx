@@ -47,6 +47,7 @@ export default function RoleSelect() {
       contentContainerStyle={{
         flexGrow: 1,
       }}
+      className="bg-general-bg"
     >
       <LogoutModal
         visible={isLogoutModalVisible}

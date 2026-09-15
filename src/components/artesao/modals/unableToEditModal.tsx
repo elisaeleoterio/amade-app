@@ -25,7 +25,7 @@ export const UnableToEditModal = ({
         className="flex-1 items-center justify-center bg-black/50 px-4"
         onPress={onClose}
       >
-        <Pressable className="w-full max-w-sm rounded-[32px] bg-[#FDFBF5] p-6 items-center shadow-lg relative">
+        <Pressable className="w-full max-w-sm rounded-[32px] bg-general-bg p-6 items-center shadow-lg relative">
           <TouchableOpacity
             onPress={onClose}
             className="absolute right-5 top-5 p-2"

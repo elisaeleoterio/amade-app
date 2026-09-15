@@ -111,11 +111,11 @@ export default function MyInventory() {
         title: "Meu Estoque",
         onBackPress: () => router.back(),
       }}
-      className="bg-[#FDFBF5]"
+      className="bg-general-bg"
     >
       <View className="px-5">
         {/* Barra de Pesquisa */}
-        <View className="mt-4 h-12 flex-row items-center rounded-2xl bg-[#E8EFE8] px-4">
+        <View className="mt-4 h-12 flex-row items-center rounded-2xl bg-artesao-surface px-4">
           <TextInput
             value={searchQuery}
             onChangeText={setSearchQuery}

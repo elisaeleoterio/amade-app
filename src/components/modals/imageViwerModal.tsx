@@ -75,7 +75,7 @@ export const ImageViewerModal = ({
       animationType="fade"
       onRequestClose={onClose}
     >
-      <View className="flex-1 bg-[#FDFBF5] justify-center items-center">
+      <View className="flex-1 bg-general-bg justify-center items-center">
         {/* Botão de Fechar */}
         <TouchableOpacity
           onPress={onClose}

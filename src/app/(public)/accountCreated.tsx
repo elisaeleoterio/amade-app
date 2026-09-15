@@ -22,6 +22,7 @@ export default function AccountCreated() {
       scrollViewProps={{
         automaticallyAdjustKeyboardInsets: true,
       }}
+      className="bg-general-bg"
     >
       <View className="items-center mb-10">
         <FaceSlightlySmiling color={"#712B05"} size={108} strokeWidth={0.8} />

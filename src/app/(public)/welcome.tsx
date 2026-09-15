@@ -13,7 +13,7 @@ export default function WelcomeScreen() {
       navbar={{
         showBack: false,
       }}
-      className="bg-[#FDFBF5]"
+      className="bg-general-bg"
     >
       <View className="items-center mb-2">
         <AmadeLogo color="#712B05" width={250} />

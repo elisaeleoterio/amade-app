@@ -164,7 +164,7 @@ export const ProductDetailsTemplate = ({
         showBack: true,
         onBackPress: handleGoBack,
       }}
-      className="bg-[#FDFBF5]"
+      className="bg-general-bg"
     >
       <ScrollView
         className="flex-1 px-5"

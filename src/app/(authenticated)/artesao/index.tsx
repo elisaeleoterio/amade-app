@@ -56,7 +56,7 @@ export default function WelcomeScreen() {
 
   if (loading) {
     return (
-      <View className="flex-1 items-center justify-center bg-[#FDFBF5]">
+      <View className="flex-1 items-center justify-center bg-general-bg">
         <ActivityIndicator size="large" color="#14532D" />
         <Text className="mt-4 font-poppins-regular">Buscando dados...</Text>
       </View>
@@ -79,7 +79,7 @@ export default function WelcomeScreen() {
           </Text>
         ),
       }}
-      className="bg-[#FDFBF5]"
+      className="bg-general-bg"
     >
       {/* Meu Estoque */}
       <View className="flex-1 bg-[#E5EFE5]/40 p-5 rounded-3xl mb-4">

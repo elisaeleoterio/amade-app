@@ -273,7 +273,7 @@ export const ProductModal = ({
                     key={index}
                     activeOpacity={imageUrl ? 0.7 : 1}
                     onPress={() => imageUrl && handleRemoveImage(index)}
-                    className="aspect-[3/4] flex-1 overflow-hidden rounded-2xl bg-[#E8EFE8]"
+                    className="aspect-[3/4] flex-1 overflow-hidden rounded-2xl bg-general-bg"
                   >
                     {imageUrl ? (
                       <Image
