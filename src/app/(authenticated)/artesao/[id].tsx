@@ -1,16 +1,19 @@
+import { DeleteProductModal } from "@/components/artesao/modals/deleteProductModal";
 import { ProductModal } from "@/components/artesao/modals/ProductModal";
+import { UnableToEditModal } from "@/components/artesao/modals/unableToEditModal";
 import { ProductDetailsTemplate } from "@/components/templates/ProductDetailsTemplate";
 import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/sonner";
 import { Text } from "@/components/ui/text";
 import {
-    deleteMockProduct,
-    fetchMockProducts,
-    Product,
-    updateMockProduct,
+  deleteMockProduct,
+  fetchMockProducts,
+  Product,
+  updateMockProduct,
 } from "@/mocks/productMock";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { useState } from "react";
-import { Alert, View } from "react-native";
+import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
+import { useCallback, useState } from "react";
+import { View } from "react-native";
 
 export default function ArtesaoProductDetailsScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -19,94 +22,112 @@ export default function ArtesaoProductDetailsScreen() {
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [refreshKey, setRefreshKey] = useState(0);
+  const [isOpenUnableToEdit, setOpenUnableToEdit] = useState(false);
+  const [isDeleteProductModalOpen, setisDeleteProductModalOpen] =
+    useState(false);
 
-  const handleOpenEditModal = async () => {
-    try {
-      setIsProcessing(true);
-      const allProducts = await fetchMockProducts();
-      const productToEdit = allProducts.find((p) => p.id === id);
+  useFocusEffect(
+    useCallback(() => {
+      const loadProductData = async () => {
+        try {
+          const allProducts = await fetchMockProducts();
+          const product = allProducts.find((p) => p.id === id);
+          if (product) {
+            setSelectedProduct(product);
+          }
+        } catch (error) {
+          toast.error("Erro ao carregar dados do produto");
+        }
+      };
+      loadProductData();
+    }, [id, refreshKey]),
+  );
 
-      if (productToEdit) {
-        setSelectedProduct(productToEdit);
-        setIsEditModalVisible(true);
-      }
-    } catch (error) {
-      console.error("Erro ao buscar produto", error);
-    } finally {
-      setIsProcessing(false);
-    }
+  const handleOpenEditModal = () => {
+    if (!selectedProduct) return;
+    setIsEditModalVisible(true);
   };
 
-  // Função para salvar a EDIÇÃO
   const handleSaveProduct = async (savedProduct: Product) => {
     try {
       setIsProcessing(true);
       await updateMockProduct(savedProduct);
       setIsEditModalVisible(false);
-
-      Alert.alert("Sucesso", "Produto atualizado com sucesso!", [
-        { text: "OK", onPress: () => router.back() },
-      ]);
+      setRefreshKey((prev) => prev + 1);
+      toast.success("Produto atualizado com sucesso!");
     } catch (error) {
-      Alert.alert("Erro", "Não foi possível salvar as alterações.");
+      toast.error("Não foi possível salvar as alterações.");
     } finally {
       setIsProcessing(false);
     }
   };
 
-  // Função para EXCLUIR
-  const handleDeleteProduct = () => {
-    Alert.alert(
-      "Confirmar Exclusão",
-      "Tem certeza que deseja remover este produto do estoque?",
-      [
-        { text: "Cancelar", style: "cancel" },
-        {
-          text: "Excluir",
-          style: "destructive",
-          onPress: async () => {
-            try {
-              setIsProcessing(true);
-              await deleteMockProduct(id);
-              Alert.alert("Sucesso", "Produto removido.");
-              router.back();
-            } catch (error) {
-              Alert.alert("Erro", "Não foi possível excluir o produto.");
-              setIsProcessing(false);
-            }
-          },
-        },
-      ],
-    );
+  const handleDeleteProduct = async () => {
+    try {
+      setIsProcessing(true);
+      await deleteMockProduct(id);
+      toast.success("Produto removido.");
+      setIsProcessing(false);
+      router.back();
+    } catch (error) {
+      toast.error("Não foi possível excluir o produto.");
+      setIsProcessing(false);
+    }
   };
 
+  const isEditBlocked =
+    selectedProduct?.status === "Vendido" ||
+    selectedProduct?.status === "Quitado";
+  const isExcludeBlocked =
+    isEditBlocked || selectedProduct?.status === "Disponível";
+
   return (
-    <ProductDetailsTemplate productId={id} role="artesao">
+    <ProductDetailsTemplate
+      productId={id}
+      role="artesao"
+      onUpdateProduct={handleSaveProduct}
+      refreshKey={refreshKey}
+    >
       <View className="w-full flex-row justify-between gap-4">
         <View className="flex-1">
           <Button
             appRole="artesao"
-            variant="outline"
+            variant={isExcludeBlocked ? "ghost" : "outline"}
             size="md"
-            onPress={handleDeleteProduct}
+            onPress={() => {
+              isExcludeBlocked
+                ? setOpenUnableToEdit(true)
+                : setisDeleteProductModalOpen(true);
+            }}
             disabled={isProcessing}
           >
-            <Text className="text-artesao-main">
-              {isProcessing ? "Aguarde..." : "Excluir"}
-            </Text>
+            <Text>Excluir</Text>
           </Button>
+
+          <DeleteProductModal
+            visible={isDeleteProductModalOpen}
+            onClose={() => setisDeleteProductModalOpen(false)}
+            onConfirm={handleDeleteProduct}
+          />
         </View>
 
         <View className="flex-1">
           <Button
             appRole="artesao"
-            variant="default"
+            variant={isEditBlocked ? "ghost" : "default"}
             size="md"
             onPress={handleOpenEditModal}
             disabled={isProcessing}
           >
-            <Text className="text-white">Editar</Text>
+            <Text>Editar</Text>
           </Button>
+
+          <UnableToEditModal
+            visible={isOpenUnableToEdit}
+            onClose={() => setOpenUnableToEdit(false)}
+            productStatus={selectedProduct?.status}
+          />
         </View>
       </View>
 
