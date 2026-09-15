@@ -2,8 +2,8 @@ import { ScreenTemplate } from "@/components/templates/screen-template";
 import { Text } from "@/components/ui/text";
 import { fetchMockProducts, Product } from "@/mocks/productMock";
 import type { Role } from "@/types/role.type";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
+import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
+import React, { useCallback, useState } from "react";
 import { ActivityIndicator, Image, ScrollView, View } from "react-native";
 
 interface ProductDetailsTemplateProps {
@@ -40,22 +40,36 @@ export const ProductDetailsTemplate = ({
   const { origin } = useLocalSearchParams<{ origin?: string }>();
   const theme = roleTheme[role];
 
-  useEffect(() => {
-    const loadProductDetails = async () => {
-      try {
-        setLoading(true);
-        const allProducts = await fetchMockProducts();
-        const foundProduct = allProducts.find((p) => p.id === productId);
-        if (foundProduct) setProduct(foundProduct);
-      } catch (error) {
-        console.error("Erro ao carregar os detalhes", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  useFocusEffect(
+    useCallback(() => {
+      let isActive = true;
 
-    loadProductDetails();
-  }, [productId]);
+      const loadProductDetails = async () => {
+        try {
+          setLoading(true);
+
+          const allProducts = await fetchMockProducts();
+          const foundProduct = allProducts.find((p) => p.id === productId);
+
+          if (isActive) {
+            setProduct(foundProduct ?? null);
+          }
+        } catch (error) {
+          console.error("Erro ao carregar os detalhes", error);
+        } finally {
+          if (isActive) {
+            setLoading(false);
+          }
+        }
+      };
+
+      loadProductDetails();
+
+      return () => {
+        isActive = false;
+      };
+    }, [productId]),
+  );
 
   if (loading || !product) {
     return (

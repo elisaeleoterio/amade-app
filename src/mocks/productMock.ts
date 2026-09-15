@@ -8,7 +8,7 @@ export interface Product {
   imageUrls: string[];
 }
 
-export const MOCK_PRODUCTS: Product[] = [
+export let MOCK_PRODUCTS: Product[] = [
   {
     id: "COD-001",
     title: "Boneco de Fritz",
@@ -48,10 +48,48 @@ export const MOCK_PRODUCTS: Product[] = [
   },
 ];
 
+// SIMULAÇÃO DE GET
 export const fetchMockProducts = async (): Promise<Product[]> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(MOCK_PRODUCTS);
     }, 0);
+  });
+};
+
+// SIMULAÇÃO DE POST
+export const createMockProduct = async (newProduct: Product): Promise<void> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      // Adiciona o novo produto no início do vetor
+      MOCK_PRODUCTS = [newProduct, ...MOCK_PRODUCTS];
+      resolve();
+    }, 800);
+  });
+};
+
+// SIMULAÇÃO DE PUT
+export const updateMockProduct = async (
+  updatedProduct: Product,
+): Promise<void> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      // Mapeia o vetor e substitui o produto que tem o mesmo ID
+      MOCK_PRODUCTS = MOCK_PRODUCTS.map((p) =>
+        p.id === updatedProduct.id ? updatedProduct : p,
+      );
+      resolve();
+    }, 800);
+  });
+};
+
+// SIMULAÇÃO DE DELETE
+export const deleteMockProduct = async (id: string): Promise<void> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      // Filtra o vetor removendo o produto com o ID informado
+      MOCK_PRODUCTS = MOCK_PRODUCTS.filter((p) => p.id !== id);
+      resolve();
+    }, 800);
   });
 };

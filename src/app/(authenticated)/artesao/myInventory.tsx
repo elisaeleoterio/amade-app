@@ -3,9 +3,9 @@ import { ProductCard } from "@/components/shared/productCard";
 import { ScreenTemplate } from "@/components/templates/screen-template";
 import { Text } from "@/components/ui/text";
 import { fetchMockProducts, Product } from "@/mocks/productMock";
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import { Info, Search } from "lucide-react-native";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
     ActivityIndicator,
     TextInput,
@@ -32,7 +32,7 @@ export default function MyInventory() {
     "Inativo",
   ];
 
-  useEffect(() => {
+  useFocusEffect(() => {
     const loadProducts = async () => {
       try {
         setLoading(true);
@@ -46,7 +46,7 @@ export default function MyInventory() {
     };
 
     loadProducts();
-  }, []);
+  });
 
   const toggleFilter = (filter: string) => {
     if (filter === "Todos") {
