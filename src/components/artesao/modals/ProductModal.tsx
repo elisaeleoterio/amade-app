@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/sonner";
 import { Text } from "@/components/ui/text";
 import { Product } from "@/mocks/productMock";
-import { Status } from "@/types/status.type"; // Importa apenas o Type
+import { Status } from "@/types/status.type";
 import * as ImagePicker from "expo-image-picker";
 import { ChevronDown } from "lucide-react-native";
 import { useEffect, useState } from "react";
@@ -28,7 +29,6 @@ const STATUS_OPTIONS: Status[] = [
   "Cadastrado",
   "Disponível",
   "Vendido",
-  "Quitado",
   "Indisponível",
 ];
 
@@ -55,12 +55,7 @@ export const ProductModal = ({
           initialData.status === "Vendido" ||
           initialData.status === "Quitado"
         ) {
-          Alert.alert(
-            "Ação não permitida",
-            `Este produto está marcado como ${initialData.status} e não pode mais ser editado.`,
-          );
           onClose();
-          return;
         }
 
         setTitle(initialData.title);
@@ -81,13 +76,18 @@ export const ProductModal = ({
 
   const handleSave = () => {
     if (!title.trim() || !price.trim() || !description.trim()) {
-      Alert.alert("Atenção", "Preencha todos os campos obrigatórios.");
+      toast.warning("Preencha todos os campos obrigatórios.");
+      return;
+    }
+
+    if (imageUrls.length === 0) {
+      toast.warning("Você deve adicionar pelo menos 1 imagem ao produto.");
       return;
     }
 
     const numericPrice = parseFloat(price.replace(",", "."));
     if (isNaN(numericPrice)) {
-      Alert.alert("Atenção", "Insira um valor de preço válido.");
+      toast.warning("Insira um valor de preço válido.");
       return;
     }
 
@@ -111,17 +111,14 @@ export const ProductModal = ({
 
   const handleAddImage = async () => {
     if (imageUrls.length >= 3) {
-      Alert.alert("Limite", "Você só pode adicionar até 3 imagens.");
+      toast.warning("Você só pode adicionar até 3 imagens.");
       return;
     }
 
     const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!permissionResult.granted) {
-      Alert.alert(
-        "Permissão negada",
-        "Precisamos de acesso à sua galeria para adicionar fotos.",
-      );
+      toast.warning("Precisamos de acesso à sua galeria para adicionar fotos.");
       return;
     }
 
@@ -166,7 +163,6 @@ export const ProductModal = ({
           <Text className="mb-6 text-center font-poppins-semibold text-[20px] text-artesao-main">
             {isEditing ? "Editar Produto" : "Novo Produto"}
           </Text>
-
           <ScrollView
             showsVerticalScrollIndicator={false}
             className="flex-1 mb-16"
