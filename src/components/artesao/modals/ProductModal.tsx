@@ -1,3 +1,4 @@
+import { ImageViewerModal } from "@/components/modals/imageViwerModal";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/sonner";
 import { Text } from "@/components/ui/text";
@@ -7,7 +8,6 @@ import * as ImagePicker from "expo-image-picker";
 import { ChevronDown } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import {
-  Alert,
   Image,
   KeyboardAvoidingView,
   Modal,
@@ -45,7 +45,7 @@ export const ProductModal = ({
   const [status, setStatus] = useState<Status>("Cadastrado");
   const [description, setDescription] = useState("");
   const [imageUrls, setImageUrls] = useState<string[]>([]);
-
+  const [isOpenImageViewer, setIsOpenImageViewer] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
@@ -135,17 +135,13 @@ export const ProductModal = ({
   };
 
   const handleRemoveImage = (indexToRemove: number) => {
-    Alert.alert("Remover Imagem", "Deseja remover esta imagem do produto?", [
-      { text: "Cancelar", style: "cancel" },
-      {
-        text: "Remover",
-        style: "destructive",
-        onPress: () =>
-          setImageUrls((prev) =>
-            prev.filter((_, index) => index !== indexToRemove),
-          ),
-      },
-    ]);
+    if (imageUrls.length > 1) {
+      setImageUrls((prev) =>
+        prev.filter((_, index) => index !== indexToRemove),
+      );
+    } else {
+      toast.warning("Você deve ter pelo menos 1 imagem para cada produto.");
+    }
   };
 
   return (
@@ -269,20 +265,29 @@ export const ProductModal = ({
               {[0, 1, 2].map((index) => {
                 const imageUrl = imageUrls[index];
                 return (
-                  <TouchableOpacity
-                    key={index}
-                    activeOpacity={imageUrl ? 0.7 : 1}
-                    onPress={() => imageUrl && handleRemoveImage(index)}
-                    className="aspect-[3/4] flex-1 overflow-hidden rounded-2xl bg-general-bg"
-                  >
-                    {imageUrl ? (
-                      <Image
-                        source={{ uri: imageUrl }}
-                        className="h-full w-full"
-                        resizeMode="cover"
-                      />
-                    ) : null}
-                  </TouchableOpacity>
+                  <>
+                    <TouchableOpacity
+                      key={index}
+                      activeOpacity={imageUrl ? 0.7 : 1}
+                      onPress={() => setIsOpenImageViewer(true)}
+                      className="aspect-[3/4] flex-1 overflow-hidden rounded-2xl bg-general-bg"
+                    >
+                      {imageUrl ? (
+                        <Image
+                          source={{ uri: imageUrl }}
+                          className="h-full w-full"
+                          resizeMode="cover"
+                        />
+                      ) : null}
+                    </TouchableOpacity>
+                    <ImageViewerModal
+                      visible={isOpenImageViewer}
+                      imageUrl={imageUrl}
+                      role="artesao"
+                      onClose={() => setIsOpenImageViewer(false)}
+                      onRemove={() => handleRemoveImage(index)}
+                    />
+                  </>
                 );
               })}
             </View>

@@ -52,9 +52,9 @@ export const UnableToEditModal = ({
             </Text>
           ) : (
             <Text className="text-center font-poppins-regular text-[15px] mx-4 mb-8 leading-6 px-2 text-artesao-dark">
-              Este produto está marcado como e, portanto,
-              <Text className="font-poppins-semibold">{productStatus}</Text> e
-              não pode mais ser editado nem excluido.
+              Este produto está marcado como{" "}
+              <Text className="font-poppins-semibold">{productStatus}</Text> e,
+              portanto, não pode mais ser editado nem excluido.
             </Text>
           )}
         </Pressable>
