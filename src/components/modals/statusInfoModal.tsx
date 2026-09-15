@@ -7,12 +7,6 @@ interface StatusInfoModalProps {
   onClose: () => void;
 }
 
-const roleColors = {
-  admin: "#712B05",
-  lojista: "#9F1239",
-  artesao: "#166534",
-};
-
 export const StatusInfoModal = ({ visible, onClose }: StatusInfoModalProps) => {
   return (
     <Modal
@@ -25,7 +19,7 @@ export const StatusInfoModal = ({ visible, onClose }: StatusInfoModalProps) => {
         className="flex-1 items-center justify-center bg-black/50 px-4"
         onPress={onClose}
       >
-        <Pressable className="w-full max-w-sm rounded-[32px] bg-white p-6 items-center shadow-lg relative">
+        <Pressable className="w-full max-w-sm rounded-[32px] bg-[#FDFBF5] p-6 items-center shadow-lg relative">
           <TouchableOpacity
             onPress={onClose}
             className="absolute right-5 top-5 p-2"
@@ -56,6 +50,13 @@ export const StatusInfoModal = ({ visible, onClose }: StatusInfoModalProps) => {
               </Text>
             </Text>
             <Text className="text-[#4F6B59] font-poppins-semibold">
+              Disponível:{" "}
+              <Text className="text-[#4F6B59] font-poppins-light">
+                Produtos cadastrados no sistema e entregues na loja, disponíveis
+                para compra.
+              </Text>
+            </Text>
+            <Text className="text-[#4F6B59] font-poppins-semibold">
               Vendido:{" "}
               <Text className="text-[#4F6B59] font-poppins-light">
                 Produtos comprados na loja, porém ainda não processados pela
@@ -70,10 +71,10 @@ export const StatusInfoModal = ({ visible, onClose }: StatusInfoModalProps) => {
               </Text>
             </Text>
             <Text className="text-[#4F6B59] font-poppins-semibold">
-              Inativo:{" "}
+              Indisponível:{" "}
               <Text className="text-[#4F6B59] font-poppins-light">
                 Produtos que por algum motivo não estão mais disponíveis para
-                venda.
+                venda na loja.
               </Text>
             </Text>
           </View>
