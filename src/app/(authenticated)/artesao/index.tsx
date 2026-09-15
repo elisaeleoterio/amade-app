@@ -3,50 +3,66 @@ import { ProductCard } from "@/components/shared/productCard";
 import { RedirectCard } from "@/components/shared/redirectCard";
 import { ScreenTemplate } from "@/components/templates/screen-template";
 import { Button } from "@/components/ui/button";
+import { toast } from "@/components/ui/sonner";
 import { Text } from "@/components/ui/text";
 import { fetchMockProducts, Product } from "@/mocks/productMock";
 import { MOCK_USER_ARTESAO_LOJISTA, UserProfile } from "@/mocks/userMock";
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import { CirclePlus, ShoppingCart } from "lucide-react-native";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, View } from "react-native";
 
 export default function WelcomeScreen() {
   const [user, setUser] = useState<UserProfile | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
-  useEffect(() => {
-    const loadProducts = async () => {
-      try {
-        setLoading(true);
-        const data = await fetchMockProducts();
-        setProducts(data);
-      } catch (error) {
-        console.error("Erro ao carregar", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  useFocusEffect(
+    useCallback(() => {
+      let isActive = true;
+      const loadProducts = async () => {
+        try {
+          setLoading(true);
+          const data = await fetchMockProducts();
+          if (isActive) {
+            setProducts(data);
+          }
+        } catch (error) {
+          toast.error("Erro ao carregar produtos");
+        } finally {
+          if (isActive) {
+            setLoading(false);
+          }
+        }
+      };
 
-    loadProducts();
-  }, []);
+      loadProducts();
+
+      return () => {
+        isActive = false;
+      };
+    }, []),
+  );
 
   useEffect(() => {
     setUser(MOCK_USER_ARTESAO_LOJISTA);
   }, []);
 
-  if (!user) return null;
+  if (!user) {
+    toast.error("Erro ao buscar dados do usuário");
+    return null;
+  }
+
   if (loading) {
     return (
-      <View className="flex-1 items-center justify-center bg-white">
+      <View className="flex-1 items-center justify-center bg-general-bg">
         <ActivityIndicator size="large" color="#14532D" />
-        <Text className="mt-4 font-poppins-regular">Buscando estoque...</Text>
+        <Text className="mt-4 font-poppins-regular">Buscando dados...</Text>
       </View>
     );
   }
 
-  const router = useRouter();
   return (
     <ScreenTemplate
       navbar={{
@@ -63,7 +79,7 @@ export default function WelcomeScreen() {
           </Text>
         ),
       }}
-      className="bg-[#FDFBF5]"
+      className="bg-general-bg"
     >
       {/* Meu Estoque */}
       <View className="flex-1 bg-[#E5EFE5]/40 p-5 rounded-3xl mb-4">
@@ -98,6 +114,7 @@ export default function WelcomeScreen() {
           </Text>
         </Button>
       </View>
+
       {/* Cards de Redirecionamento */}
       <View className="">
         <RedirectCard

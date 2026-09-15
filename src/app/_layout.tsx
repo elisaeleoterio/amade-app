@@ -1,3 +1,4 @@
+import { Toaster } from "@/components/ui/sonner";
 import {
   Poppins_200ExtraLight,
   Poppins_300Light,
@@ -12,7 +13,6 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import "../global.css";
 
-// Mantém a tela de splash visível enquanto as fontes baixam
 SplashScreen.preventAutoHideAsync();
 
 export default function Layout() {
@@ -26,27 +26,21 @@ export default function Layout() {
   });
 
   useEffect(() => {
-    if (error) {
-      console.error("Erro ao baixar as fontes do Google:", error);
-      throw error;
-    }
-    if (fontsLoaded) {
-      SplashScreen.hideAsync();
-    }
+    if (error) throw error;
+    if (fontsLoaded) SplashScreen.hideAsync();
   }, [fontsLoaded, error]);
 
-  if (!fontsLoaded && !error) {
-    return null;
-  }
+  if (!fontsLoaded && !error) return null;
 
   return (
-    <Stack
-      screenOptions={{
-        headerShown: false,
-        contentStyle: {
-          backgroundColor: "#FDFBF5",
-        },
-      }}
-    />
+    <>
+      <Stack
+        screenOptions={{
+          headerShown: false,
+          contentStyle: { backgroundColor: "#FDFBF5" },
+        }}
+      />
+      <Toaster />
+    </>
   );
 }

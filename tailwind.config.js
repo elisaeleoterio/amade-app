@@ -9,7 +9,7 @@ module.exports = {
     extend: {
       colors: {
         general: {
-          bg: "#FFFBEB", // Fundo creme
+          bg: "#FDFBF5", // Fundo creme
         },
         // Cores do Administrador e Geral
         admin: {

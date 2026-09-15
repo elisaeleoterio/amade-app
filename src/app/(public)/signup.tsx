@@ -50,6 +50,7 @@ export default function SignUp() {
       scrollViewProps={{
         automaticallyAdjustKeyboardInsets: true,
       }}
+      className="bg-general-bg"
     >
       <View className="items-center mb-2">
         <AmadeLogo color="#712B05" width={150} />

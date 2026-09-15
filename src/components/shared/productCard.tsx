@@ -70,7 +70,7 @@ export const ProductCard = ({
     <TouchableOpacity
       activeOpacity={0.5}
       onPress={onPress}
-      className="mb-4 w-full flex-row rounded-3xl border-[1.5px] p-3 bg-[#FDFBF5]"
+      className="mb-4 w-full flex-row rounded-3xl border-[1.5px] p-3 bg-general-bg"
       style={{ borderColor: colors.border }}
     >
       {/* Imagem do Produto */}

@@ -1,29 +1,20 @@
-import type { Role } from "@/types/role.type";
-import { Info, X } from "lucide-react-native";
+import { Button } from "@/components/ui/button";
+import { Text } from "@/components/ui/text";
+import { TriangleAlert, X } from "lucide-react-native";
 import { Modal, Pressable, TouchableOpacity, View } from "react-native";
-import { Button } from "../ui/button";
-import { Text } from "../ui/text";
 
-interface LogoutModalProps {
+interface DeleteImageModalProps {
   visible: boolean;
   onClose: () => void;
   onConfirm: () => void;
-  role?: Role;
 }
 
-const roleColors = {
-  admin: "#712B05",
-  lojista: "#9F1239",
-  artesao: "#166534",
-};
-
-export const LogoutModal = ({
+export const DeleteImageModal = ({
   visible,
   onClose,
   onConfirm,
-  role = "admin",
-}: LogoutModalProps) => {
-  const activeColor = roleColors[role];
+}: DeleteImageModalProps) => {
+  const activeColor = "#166534";
 
   return (
     <Modal
@@ -46,41 +37,43 @@ export const LogoutModal = ({
           </TouchableOpacity>
 
           <View className="mb-4 mt-2">
-            <Info size={56} color={activeColor} strokeWidth={1.2} />
+            <TriangleAlert size={56} color={activeColor} strokeWidth={1.2} />
           </View>
 
           <Text
             className="text-center font-poppins-semibold text-[20px] mb-3 mx-10"
             style={{ color: activeColor }}
           >
-            Tem certeza que deseja sair da sua conta?
+            Tem certeza que deseja excluir essa imagem?
           </Text>
 
           <Text
             className="text-center font-poppins-regular text-[15px] mx-6 mb-8 leading-6 px-2"
             style={{ color: activeColor }}
           >
-            Ao confirmar, você será deslogado e precisará informar seus dados de
-            login novamente.
+            Ao excluir essa imagem, não será possível recuperá-la
+            posteriormente.
           </Text>
 
           <View className="w-full flex-row justify-between">
             <Button
-              appRole={role}
+              appRole="artesao"
+              className="bg-toaster-success w-40"
               onPress={onClose}
-              variant="outline"
+              variant="default"
               size="md"
             >
               <Text>Cancelar</Text>
             </Button>
 
             <Button
-              appRole={role}
+              appRole="artesao"
+              className="bg-toaster-error w-40"
               variant="default"
               size="md"
               onPress={onConfirm}
             >
-              <Text>Sair da Conta</Text>
+              <Text>Excluir</Text>
             </Button>
           </View>
         </Pressable>

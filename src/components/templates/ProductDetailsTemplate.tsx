@@ -2,14 +2,22 @@ import { ScreenTemplate } from "@/components/templates/screen-template";
 import { Text } from "@/components/ui/text";
 import { fetchMockProducts, Product } from "@/mocks/productMock";
 import type { Role } from "@/types/role.type";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import React, { useEffect, useState } from "react";
-import { ActivityIndicator, Image, ScrollView, View } from "react-native";
-
+import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
+import React, { useCallback, useState } from "react";
+import {
+  ActivityIndicator,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { ImageViewerModal } from "../modals/imageViwerModal";
+import { toast } from "../ui/sonner";
 interface ProductDetailsTemplateProps {
   productId: string;
   role: Role;
-  children?: React.ReactNode; // Recebe os botões específicos de cada Role
+  children?: React.ReactNode;
+  refreshKey?: number;
 }
 
 const roleTheme = {
@@ -33,29 +41,74 @@ export const ProductDetailsTemplate = ({
   productId,
   role,
   children,
-}: ProductDetailsTemplateProps) => {
+  refreshKey,
+  onUpdateProduct,
+}: ProductDetailsTemplateProps & {
+  onUpdateProduct?: (p: Product) => void;
+}) => {
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { origin } = useLocalSearchParams<{ origin?: string }>();
   const theme = roleTheme[role];
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [isViewerVisible, setIsViewerVisible] = useState(false);
 
-  useEffect(() => {
-    const loadProductDetails = async () => {
-      try {
-        setLoading(true);
-        const allProducts = await fetchMockProducts();
-        const foundProduct = allProducts.find((p) => p.id === productId);
-        if (foundProduct) setProduct(foundProduct);
-      } catch (error) {
-        console.error("Erro ao carregar os detalhes", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  useFocusEffect(
+    useCallback(() => {
+      let isActive = true;
 
-    loadProductDetails();
-  }, [productId]);
+      const loadProductDetails = async () => {
+        try {
+          setLoading(true);
+
+          const allProducts = await fetchMockProducts();
+          const foundProduct = allProducts.find((p) => p.id === productId);
+
+          if (isActive) {
+            setProduct(foundProduct ?? null);
+          }
+        } catch (error) {
+          toast.error("Erro ao carregar os detalhes do produto.");
+        } finally {
+          if (isActive) {
+            setLoading(false);
+          }
+        }
+      };
+
+      loadProductDetails();
+
+      return () => {
+        isActive = false;
+      };
+    }, [productId, refreshKey]),
+  );
+
+  const handleOpenViewer = (url: string) => {
+    setSelectedImage(url);
+    setIsViewerVisible(true);
+  };
+
+  const handleRemoveImageFromViewer = async () => {
+    if (!product || !selectedImage) return;
+
+    if (product.imageUrls.length <= 1) {
+      toast.warning("O produto precisa ter pelo menos 1 imagem.");
+      return;
+    }
+
+    const newImageUrls = product.imageUrls.filter(
+      (url) => url !== selectedImage,
+    );
+    const updatedProduct = { ...product, imageUrls: newImageUrls };
+
+    setProduct(updatedProduct);
+
+    if (onUpdateProduct) {
+      onUpdateProduct(updatedProduct);
+    }
+  };
 
   if (loading || !product) {
     return (
@@ -111,7 +164,7 @@ export const ProductDetailsTemplate = ({
         showBack: true,
         onBackPress: handleGoBack,
       }}
-      className="bg-[#FDFBF5]"
+      className="bg-general-bg"
     >
       <ScrollView
         className="flex-1 px-5"
@@ -142,8 +195,10 @@ export const ProductDetailsTemplate = ({
           {[0, 1, 2].map((index) => {
             const imageUrl = product.imageUrls[index];
             return (
-              <View
+              <TouchableOpacity
                 key={index}
+                activeOpacity={imageUrl ? 0.7 : 1}
+                onPress={() => imageUrl && handleOpenViewer(imageUrl)}
                 className="flex-1 aspect-[3/4] rounded-2xl overflow-hidden"
                 style={{ backgroundColor: theme.line }}
               >
@@ -154,10 +209,18 @@ export const ProductDetailsTemplate = ({
                     resizeMode="cover"
                   />
                 )}
-              </View>
+              </TouchableOpacity>
             );
           })}
         </View>
+
+        <ImageViewerModal
+          visible={isViewerVisible}
+          imageUrl={selectedImage}
+          role={role}
+          onClose={() => setIsViewerVisible(false)}
+          onRemove={handleRemoveImageFromViewer}
+        />
 
         {/* Linha Divisória */}
         <View

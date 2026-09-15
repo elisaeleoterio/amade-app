@@ -35,6 +35,7 @@ export default function SendEmail() {
       scrollViewProps={{
         automaticallyAdjustKeyboardInsets: true,
       }}
+      className="bg-general-bg"
     >
       <View className="items-center">
         <AmadeLogo color="#712B05" width={150} />

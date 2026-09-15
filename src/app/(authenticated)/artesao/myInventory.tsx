@@ -1,16 +1,17 @@
 import { StatusInfoModal } from "@/components/modals/statusInfoModal";
 import { ProductCard } from "@/components/shared/productCard";
 import { ScreenTemplate } from "@/components/templates/screen-template";
+import { toast } from "@/components/ui/sonner";
 import { Text } from "@/components/ui/text";
 import { fetchMockProducts, Product } from "@/mocks/productMock";
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import { Info, Search } from "lucide-react-native";
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import {
-    ActivityIndicator,
-    TextInput,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 export default function MyInventory() {
@@ -32,21 +33,33 @@ export default function MyInventory() {
     "Inativo",
   ];
 
-  useEffect(() => {
-    const loadProducts = async () => {
-      try {
-        setLoading(true);
-        const data = await fetchMockProducts();
-        setProducts(data);
-      } catch (error) {
-        console.error("Erro ao carregar", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  useFocusEffect(
+    useCallback(() => {
+      let isActive = true;
 
-    loadProducts();
-  }, []);
+      const loadProducts = async () => {
+        try {
+          setLoading(true);
+          const data = await fetchMockProducts();
+          if (isActive) {
+            setProducts(data);
+          }
+        } catch (error) {
+          toast.error("Erro ao carregar");
+        } finally {
+          if (isActive) {
+            setLoading(false);
+          }
+        }
+      };
+
+      loadProducts();
+
+      return () => {
+        isActive = false;
+      };
+    }, []),
+  );
 
   const toggleFilter = (filter: string) => {
     if (filter === "Todos") {
@@ -96,12 +109,13 @@ export default function MyInventory() {
       navbar={{
         appRole: "artesao",
         title: "Meu Estoque",
+        onBackPress: () => router.back(),
       }}
-      className="bg-[#FDFBF5]"
+      className="bg-general-bg"
     >
       <View className="px-5">
         {/* Barra de Pesquisa */}
-        <View className="mt-4 h-12 flex-row items-center rounded-2xl bg-[#E8EFE8] px-4">
+        <View className="mt-4 h-12 flex-row items-center rounded-2xl bg-artesao-surface px-4">
           <TextInput
             value={searchQuery}
             onChangeText={setSearchQuery}
