@@ -1,10 +1,12 @@
+import type { PaymentMethod } from "@/types/payment.type";
+import type { Status } from "@/types/status.type";
 export interface Product {
   id: string;
   title: string;
   description: string;
   price: number;
-  status: "Cadastrado" | "Disponível" | "Vendido" | "Quitado" | "Indisponível";
-  paymentMethod?: "PIX" | "Cartão de Crédito" | "Dinheiro" | "Boleto";
+  status: Status;
+  paymentMethod?: PaymentMethod;
   imageUrls: string[];
 }
 
@@ -46,13 +48,24 @@ export let MOCK_PRODUCTS: Product[] = [
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTg_t0kPewVq2TAfC76rO5MOZYoAo53R2M23LmPlRPH_C3Zlg4IflFyrGA-&s=10",
     ],
   },
+  {
+    id: "COD-004",
+    title: "Caneca de Refri",
+    description:
+      "Caneca rústica tratada com cera de abelha, ideal para decoração ou uso.",
+    price: 85.5,
+    status: "Quitado",
+    imageUrls: [
+      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTg_t0kPewVq2TAfC76rO5MOZYoAo53R2M23LmPlRPH_C3Zlg4IflFyrGA-&s=10",
+    ],
+  },
 ];
 
 // SIMULAÇÃO DE GET
 export const fetchMockProducts = async (): Promise<Product[]> => {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve(MOCK_PRODUCTS);
+      resolve([...MOCK_PRODUCTS]); // O spread [...] cria uma nova referência, forçando a re-renderização
     }, 0);
   });
 };
