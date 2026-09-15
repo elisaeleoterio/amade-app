@@ -11,7 +11,7 @@ export default function ArtesaoLayout() {
   };
 
   return (
-    <View className="flex-1 bg-white">
+    <View className="flex-1 bg-general-bg">
       <Tabs
         tabBar={(props) => (
           <CustomTabBar

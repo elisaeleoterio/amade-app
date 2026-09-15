@@ -64,7 +64,6 @@ export const ImageViewerModal = ({
   };
 
   if (!imageUrl) {
-    toast.error("Erro ao carregar imagem selecionada.");
     return null;
   }
 

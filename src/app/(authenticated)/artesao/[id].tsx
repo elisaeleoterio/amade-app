@@ -117,7 +117,7 @@ export default function ArtesaoProductDetailsScreen() {
             appRole="artesao"
             variant={isEditBlocked ? "ghost" : "default"}
             size="md"
-            onPress={handleOpenEditModal}
+            onPress={() => setOpenUnableToEdit(true)}
             disabled={isProcessing}
           >
             <Text>Editar</Text>
