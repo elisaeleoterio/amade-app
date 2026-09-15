@@ -44,7 +44,7 @@ const buttonVariantsArtesao = cva(
           "bg-transparent border-2 border-artesao-main active:bg-artesao-surface active:border-artesao-main/80",
         ),
         secondary: cn("bg-secondary active:bg-secondary/80"),
-        ghost: cn("bg-artesao-surface active:bg-artesao-surface/80"),
+        ghost: cn("bg-artesao-main/20 active:bg-artesao-surface/10"),
         ghostOutline: cn(
           "bg-transparent border-2 border-artesao-surface active:bg-artesao-surface active:border-artesao-surface/80",
         ),
