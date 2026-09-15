@@ -74,7 +74,6 @@ export const fetchMockProducts = async (): Promise<Product[]> => {
 export const createMockProduct = async (newProduct: Product): Promise<void> => {
   return new Promise((resolve) => {
     setTimeout(() => {
-      // Adiciona o novo produto no início do vetor
       MOCK_PRODUCTS = [newProduct, ...MOCK_PRODUCTS];
       resolve();
     }, 800);
@@ -87,7 +86,6 @@ export const updateMockProduct = async (
 ): Promise<void> => {
   return new Promise((resolve) => {
     setTimeout(() => {
-      // Mapeia o vetor e substitui o produto que tem o mesmo ID
       MOCK_PRODUCTS = MOCK_PRODUCTS.map((p) =>
         p.id === updatedProduct.id ? updatedProduct : p,
       );
@@ -100,7 +98,6 @@ export const updateMockProduct = async (
 export const deleteMockProduct = async (id: string): Promise<void> => {
   return new Promise((resolve) => {
     setTimeout(() => {
-      // Filtra o vetor removendo o produto com o ID informado
       MOCK_PRODUCTS = MOCK_PRODUCTS.filter((p) => p.id !== id);
       resolve();
     }, 800);
