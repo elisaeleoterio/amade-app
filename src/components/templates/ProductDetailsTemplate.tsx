@@ -145,7 +145,6 @@ export const ProductDetailsTemplate = ({
     );
   }
 
-  // NOVA TELA: Se o loading acabou e não achou o produto (ex: foi excluído)
   if (!product) {
     return (
       <View
