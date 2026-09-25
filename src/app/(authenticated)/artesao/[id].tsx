@@ -23,6 +23,7 @@ export default function ArtesaoProductDetailsScreen() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
+
   const [isOpenUnableToEdit, setOpenUnableToEdit] = useState(false);
   const [isDeleteProductModalOpen, setisDeleteProductModalOpen] =
     useState(false);
@@ -43,11 +44,6 @@ export default function ArtesaoProductDetailsScreen() {
       loadProductData();
     }, [id, refreshKey]),
   );
-
-  const handleOpenEditModal = () => {
-    if (!selectedProduct) return;
-    setIsEditModalVisible(true);
-  };
 
   const handleSaveProduct = async (savedProduct: Product) => {
     try {
@@ -79,6 +75,7 @@ export default function ArtesaoProductDetailsScreen() {
   const isEditBlocked =
     selectedProduct?.status === "Vendido" ||
     selectedProduct?.status === "Quitado";
+
   const isExcludeBlocked =
     isEditBlocked || selectedProduct?.status === "Disponível";
 
@@ -90,6 +87,7 @@ export default function ArtesaoProductDetailsScreen() {
       refreshKey={refreshKey}
     >
       <View className="w-full flex-row justify-between gap-4">
+        {/* BOTÃO EXCLUIR */}
         <View className="flex-1">
           <Button
             appRole="artesao"
@@ -102,7 +100,13 @@ export default function ArtesaoProductDetailsScreen() {
             }}
             disabled={isProcessing}
           >
-            <Text>Excluir</Text>
+            <Text
+              className={
+                isExcludeBlocked ? "text-gray-400" : "text-artesao-main"
+              }
+            >
+              Excluir
+            </Text>
           </Button>
 
           <DeleteProductModal
@@ -112,25 +116,34 @@ export default function ArtesaoProductDetailsScreen() {
           />
         </View>
 
+        {/* BOTÃO EDITAR */}
         <View className="flex-1">
           <Button
             appRole="artesao"
             variant={isEditBlocked ? "ghost" : "default"}
             size="md"
-            onPress={() => setOpenUnableToEdit(true)}
+            onPress={() => {
+              isEditBlocked
+                ? setOpenUnableToEdit(true)
+                : setIsEditModalVisible(true);
+            }}
             disabled={isProcessing}
           >
-            <Text>Editar</Text>
+            <Text className={isEditBlocked ? "text-gray-400" : "text-white"}>
+              Editar
+            </Text>
           </Button>
-
-          <UnableToEditModal
-            visible={isOpenUnableToEdit}
-            onClose={() => setOpenUnableToEdit(false)}
-            productStatus={selectedProduct?.status}
-          />
         </View>
       </View>
 
+      {/* MODAL DE AVISO */}
+      <UnableToEditModal
+        visible={isOpenUnableToEdit}
+        onClose={() => setOpenUnableToEdit(false)}
+        productStatus={selectedProduct?.status}
+      />
+
+      {/* MODAL DO FORMULÁRIO DE EDIÇÃO */}
       <ProductModal
         visible={isEditModalVisible}
         onClose={() => setIsEditModalVisible(false)}

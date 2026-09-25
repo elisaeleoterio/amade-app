@@ -50,7 +50,6 @@ export default function WelcomeScreen() {
   }, []);
 
   if (!user) {
-    toast.error("Erro ao buscar dados do usuário");
     return null;
   }
 
