@@ -109,32 +109,6 @@ export const ProductDetailsTemplate = ({
       onUpdateProduct(updatedProduct);
     }
   };
-
-  if (loading || !product) {
-    return (
-      <View
-        className="flex-1 items-center justify-center"
-        style={{ backgroundColor: theme.bg }}
-      >
-        <ActivityIndicator size="large" color={theme.main} />
-        <Text
-          className="mt-4 font-poppins-regular"
-          style={{ color: theme.main }}
-        >
-          Carregando produto...
-        </Text>
-      </View>
-    );
-  }
-
-  const inventoryRoutes = {
-    artesao: "/(authenticated)/artesao/myInventory",
-  } as const;
-
-  const homeRoutes = {
-    artesao: "/(authenticated)/artesao",
-  } as const;
-
   const handleGoBack = () => {
     if (origin === "inventory") {
       const inventoryRoute =
@@ -153,6 +127,63 @@ export const ProductDetailsTemplate = ({
 
     router.back();
   };
+
+  if (loading) {
+    return (
+      <View
+        className="flex-1 items-center justify-center"
+        style={{ backgroundColor: theme.bg }}
+      >
+        <ActivityIndicator size="large" color={theme.main} />
+        <Text
+          className="mt-4 font-poppins-regular"
+          style={{ color: theme.main }}
+        >
+          Carregando produto...
+        </Text>
+      </View>
+    );
+  }
+
+  // NOVA TELA: Se o loading acabou e não achou o produto (ex: foi excluído)
+  if (!product) {
+    return (
+      <View
+        className="flex-1 items-center justify-center px-6"
+        style={{ backgroundColor: theme.bg }}
+      >
+        <Text
+          className="font-poppins-semibold text-xl text-center mb-2"
+          style={{ color: theme.main }}
+        >
+          Produto não encontrado
+        </Text>
+        <Text
+          className="font-poppins-regular text-[15px] text-center mb-6"
+          style={{ color: theme.main }}
+        >
+          Este produto pode ter sido removido do estoque.
+        </Text>
+        <TouchableOpacity
+          onPress={handleGoBack}
+          className="px-6 py-3 rounded-xl"
+          style={{ backgroundColor: theme.main }}
+        >
+          <Text className="font-poppins-medium text-white text-[15px]">
+            Voltar
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
+  const inventoryRoutes = {
+    artesao: "/(authenticated)/artesao/myInventory",
+  } as const;
+
+  const homeRoutes = {
+    artesao: "/(authenticated)/artesao",
+  } as const;
 
   const formattedPrice = `R$${product.price.toFixed(2).replace(".", ",")}`;
 

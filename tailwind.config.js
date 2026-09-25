@@ -27,6 +27,7 @@ module.exports = {
         },
         // Cores do Artesão
         artesao: {
+          extraDark: "#0C331C",
           dark: "#14532D", // Verde escuro
           main: "#166534", // Verde principal
           light: "#15803D", // Verde claro

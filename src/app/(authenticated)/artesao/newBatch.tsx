@@ -1,5 +1,5 @@
 import { ProductModal } from "@/components/artesao/modals/ProductModal";
-import { RemoveProductBatchtModal } from "@/components/artesao/modals/removeProductsBtach";
+import { RemoveProductBatchtModal } from "@/components/artesao/modals/removeProductsBtachModal";
 import { ProductCard } from "@/components/shared/productCard";
 import { ScreenTemplate } from "@/components/templates/screen-template";
 import { Button } from "@/components/ui/button";
@@ -79,7 +79,7 @@ export default function NewBatchScreen() {
       navbar={{
         appRole: "artesao",
         title: "Novo Lote",
-        showBack: true,
+        showBack: false,
       }}
       className="bg-general-bg"
     >
