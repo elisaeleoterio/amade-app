@@ -2,7 +2,9 @@ import AmadeLogo from "@/assets/logoComplete.svg";
 import { ScreenTemplate } from "@/components/templates/screen-template";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { toast } from "@/components/ui/sonner";
 import { Text } from "@/components/ui/text";
+import { updateMockPassword } from "@/mocks/userMock";
 import { router } from "expo-router";
 import { Eye, EyeOff } from "lucide-react-native";
 import { useState } from "react";
@@ -12,12 +14,30 @@ export default function redefinePassword() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
-  const handlePasswordRedefinition = () => {
-    console.log("Tentando alterar senha com:", {
-      password,
-    });
-    router.push("/(public)/login");
+  const handlePasswordRedefinition = async () => {
+    if (password !== confirmPassword) {
+      toast.error("As senhas não coincidem!");
+      return;
+    }
+    if (password.length < 6) {
+      toast.error("A senha deve ter pelo menos 6 caracteres.");
+      return;
+    }
+
+    try {
+      setIsProcessing(true);
+      await updateMockPassword(password);
+
+      toast.success("Senha alterada com sucesso!");
+
+      router.push("/(public)/login");
+    } catch (error) {
+      toast.error("Erro ao alterar a senha.");
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   return (

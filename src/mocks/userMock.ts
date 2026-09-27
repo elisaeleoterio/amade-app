@@ -27,7 +27,39 @@ export const fetchMockProfile = async (
 ): Promise<UserProfile> => {
   return new Promise((resolve) => {
     setTimeout(() => {
-      resolve(MOCK_USER_ARTESAO_LOJISTA); // Retornaria baseado no role na prática
+      resolve(MOCK_USER_ARTESAO_LOJISTA);
     }, 1000);
+  });
+};
+
+export const updateMockProfileImage = async (
+  newAvatarUrl: string,
+): Promise<UserProfile> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      MOCK_USER_ARTESAO_LOJISTA.avatarUrl = newAvatarUrl;
+      resolve(MOCK_USER_ARTESAO_LOJISTA);
+    }, 800);
+  });
+};
+
+export const updateMockEmail = async (
+  newEmail: string,
+): Promise<UserProfile> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      MOCK_USER_ARTESAO_LOJISTA.email = newEmail;
+      resolve(MOCK_USER_ARTESAO_LOJISTA);
+    }, 800);
+  });
+};
+
+export const updateMockPassword = async (
+  newPassword: string,
+): Promise<boolean> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(true);
+    }, 800);
   });
 };
