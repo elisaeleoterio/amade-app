@@ -2,6 +2,12 @@ import { cn } from "@/lib/utils";
 import { AppRole } from "@/types/app";
 import { TextInput } from "react-native";
 
+const roleStyles: Record<AppRole, string> = {
+  admin: "focus:border-admin-main bg-admin-main/5 text-admin-dark",
+  lojista: "focus:border-lojista-main bg-lojista-main/5 text-lojista-dark",
+  artesao: "focus:border-artesao-main bg-artesao-main/5 text-artesao-dark",
+};
+
 function Input({
   appRole = "admin",
   className,
@@ -16,8 +22,9 @@ function Input({
         style,
       ]}
       className={cn(
-        `focus:border-2 font-poppins-regular rounded-2xl px-4 text-lg ${appRole == "admin" ? "focus:border-admin-main bg-admin-main/5 text-admin-dark" : "focus:border-lojista-main bg-lojista-main/5 text-lojista-dark"}`,
-        props.editable === false && cn("opacity-20"),
+        "focus:border-2 font-poppins-regular rounded-2xl px-4 text-lg",
+        roleStyles[appRole] || roleStyles.admin,
+        props.editable === false && "opacity-20",
         className,
       )}
       placeholderTextColor={"#D1D1D1"}
