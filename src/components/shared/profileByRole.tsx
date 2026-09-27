@@ -1,12 +1,14 @@
 import { DeleteModal } from "@/components/modals/deleteAccountModal";
 import { LogoutModal } from "@/components/modals/logoutModal";
+import { ResetPasswordModal } from "@/components/modals/resetPasswordModal";
+import { EditProfileModal } from "@/components/shared/editProfileModal";
 import { ScreenTemplate } from "@/components/templates/screen-template";
 import { toast } from "@/components/ui/sonner";
 import { Text } from "@/components/ui/text";
 import { fetchMockProfile, UserProfile } from "@/mocks/userMock";
 import type { Role } from "@/types/role.type";
 import { useRouter } from "expo-router";
-import { Lock, LogOut, Trash2 } from "lucide-react-native";
+import { Lock, LogOut, Trash2, UserCog } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, Image, TouchableOpacity, View } from "react-native";
 
@@ -14,43 +16,43 @@ interface ProfileByRoleProps {
   role: Role;
 }
 
+// Dicionário de cores unificado para todos os perfis
 const roleConfig = {
   admin: {
-    dark: "#2A0F01", // Marrom bem escuro
-    lighter: "#451A03", // Marrom levemente mais escuro
-    main: "#712B05", // Marrom principal
-    surface: "#E0D1C7", // Marrom bem claro (Tab e Ghost)
+    main: "#712B05",
+    surface: "#E0D1C7",
+    textDark: "#2A0F01",
   },
-  // Cores do Lojista
   lojista: {
-    dark: "#4C0519", // Vinho escuro
-    wine: "#810F2F", // Vinho principal
-    main: "#9F1239", // Rosa/Magenta forte
-    surface: "#E9CCD2", // Ghost rosado
+    main: "#9F1239",
+    surface: "#E9CCD2",
+    textDark: "#4C0519",
   },
-  // Cores do Artesão
   artesao: {
-    extraDark: "#0C331C",
-    dark: "#14532D", // Verde escuro
-    main: "#166534", // Verde principal
-    light: "#15803D", // Verde claro
-    surface: "#E5EFE5", // Fundo esverdeado
+    main: "#14532D",
+    surface: "#E5EFE5",
+    textDark: "#0C331C",
   },
 };
 
 export const ProfileByRole = ({ role }: ProfileByRoleProps) => {
-  const theme = roleConfig[role];
   const router = useRouter();
+  const theme = roleConfig[role];
+
   const [user, setUser] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isResetPassowordModalOpen, setResetPassowordModalOpen] =
+    useState(false);
 
   useEffect(() => {
     const loadProfile = async () => {
       try {
         setIsLoading(true);
-        const data = await fetchMockProfile("artesao");
+        const data = await fetchMockProfile(role);
         setUser(data);
       } catch (error) {
         toast.error("Erro ao carregar os dados do perfil.");
@@ -59,7 +61,18 @@ export const ProfileByRole = ({ role }: ProfileByRoleProps) => {
       }
     };
     loadProfile();
-  }, []);
+  }, [role]);
+
+  const handleUpdateLocalUser = (newAvatar?: string, newEmail?: string) => {
+    setUser((prev) => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        avatarUrl: newAvatar !== undefined ? newAvatar : prev.avatarUrl,
+        email: newEmail !== undefined ? newEmail : prev.email,
+      };
+    });
+  };
 
   const handleLogout = () => {
     router.replace("/(public)/welcome");
@@ -70,10 +83,14 @@ export const ProfileByRole = ({ role }: ProfileByRoleProps) => {
     router.replace("/(public)/welcome");
   };
 
+  const handleResetPassword = () => {
+    router.push("/(public)/accountSetting/redefinePassword");
+  };
+
   return (
     <ScreenTemplate
       navbar={{
-        appRole: "artesao",
+        appRole: role,
         title: "Meu Perfil",
         showBack: true,
       }}
@@ -82,10 +99,11 @@ export const ProfileByRole = ({ role }: ProfileByRoleProps) => {
       <View className="flex-1 px-5 pt-8">
         {isLoading || !user ? (
           <View className="flex-1 justify-center items-center">
-            <ActivityIndicator size="large" color="#14532D" />
+            <ActivityIndicator size="large" color={theme.main} />
           </View>
         ) : (
           <>
+            {/* Header do Perfil (Avatar + Info) */}
             <View className="flex-row items-center mb-10">
               {user.avatarUrl ? (
                 <Image
@@ -94,18 +112,21 @@ export const ProfileByRole = ({ role }: ProfileByRoleProps) => {
                   style={{ backgroundColor: theme.surface }}
                 />
               ) : (
-                <View className="w-[72px] h-[72px] rounded-full bg-artesao-main items-center justify-center mr-4">
-                  <Text
-                    className="font-poppins-medium text-white mt-1"
-                    style={{ fontSize: 40 }}
-                  >
+                <View
+                  className="w-[72px] h-[72px] rounded-full items-center justify-center mr-4"
+                  style={{ backgroundColor: theme.main }}
+                >
+                  <Text className="font-poppins-regular text-white text-xl mt-1">
                     {user.name.first.charAt(0).toUpperCase()}
                   </Text>
                 </View>
               )}
 
               <View className="flex-1">
-                <Text className="font-poppins-medium text-[20px] text-gray-800">
+                <Text
+                  className="font-poppins-regular text-xl"
+                  style={{ color: theme.textDark }}
+                >
                   {user.name.first} {user.name.second}
                 </Text>
                 <Text className="font-poppins-regular text-[13px] text-gray-500 mt-0.5 capitalize">
@@ -114,19 +135,39 @@ export const ProfileByRole = ({ role }: ProfileByRoleProps) => {
               </View>
             </View>
 
-            {/* Botão: Editar Perfil */}
+            {/* Botão: Editar Conta */}
             <TouchableOpacity
               activeOpacity={0.7}
-              onPress={() =>
-                router.push("/(authenticated)/artesao/editProfile")
-              }
-              className="border border-[#C6DACB] rounded-[20px] py-4 flex-row items-center mb-4 bg-general-bg"
+              onPress={() => setIsEditModalOpen(true)}
+              className="border rounded-[20px] py-4 flex-row items-center mb-4 bg-general-bg"
+              style={{ borderColor: theme.surface }}
             >
               <View className="absolute left-5">
-                <Lock color="#14532D" size={24} strokeWidth={1.5} />
+                <UserCog color={theme.main} size={24} strokeWidth={1.5} />
               </View>
-              <Text className="flex-1 text-center font-poppins-medium text-[17px] text-artesao-main">
-                Editar Perfil
+              <Text
+                className="flex-1 text-center font-poppins-medium text-[17px]"
+                style={{ color: theme.main }}
+              >
+                Editar Conta
+              </Text>
+            </TouchableOpacity>
+
+            {/* Botão: Alterar Senha */}
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => setResetPassowordModalOpen(true)}
+              className="border rounded-[20px] py-4 flex-row items-center mb-4 bg-general-bg"
+              style={{ borderColor: theme.surface }}
+            >
+              <View className="absolute left-5">
+                <Lock color={theme.main} size={24} strokeWidth={1.5} />
+              </View>
+              <Text
+                className="flex-1 text-center font-poppins-medium text-[17px]"
+                style={{ color: theme.main }}
+              >
+                Alterar Senha
               </Text>
             </TouchableOpacity>
 
@@ -134,42 +175,65 @@ export const ProfileByRole = ({ role }: ProfileByRoleProps) => {
             <TouchableOpacity
               activeOpacity={0.7}
               onPress={() => setIsLogoutModalOpen(true)}
-              className="border border-[#C6DACB] rounded-[20px] py-4 flex-row items-center mb-4 bg-general-bg"
+              className="border rounded-[20px] py-4 flex-row items-center mb-4 bg-general-bg"
+              style={{ borderColor: theme.surface }}
             >
               <View className="absolute left-5">
-                <LogOut color="#14532D" size={24} strokeWidth={1.5} />
+                <LogOut color={theme.main} size={24} strokeWidth={1.5} />
               </View>
-              <Text className="flex-1 text-center font-poppins-medium text-[17px] text-artesao-main">
+              <Text
+                className="flex-1 text-center font-poppins-medium text-[17px]"
+                style={{ color: theme.main }}
+              >
                 Sair da Conta
               </Text>
             </TouchableOpacity>
-
-            <LogoutModal
-              visible={isLogoutModalOpen}
-              onClose={() => setIsLogoutModalOpen(false)}
-              onConfirm={handleLogout}
-              role="artesao"
-            />
 
             {/* Botão: Excluir Conta */}
             <TouchableOpacity
               activeOpacity={0.7}
               onPress={() => setIsDeleteModalOpen(true)}
-              className="border border-[#C6DACB] rounded-[20px] py-4 flex-row items-center mb-4 bg-general-bg"
+              className="border rounded-[20px] py-4 flex-row items-center mb-4 bg-general-bg"
+              style={{ borderColor: theme.surface }}
             >
               <View className="absolute left-5">
-                <Trash2 color="#14532D" size={24} strokeWidth={1.5} />
+                <Trash2 color={theme.main} size={24} strokeWidth={1.5} />
               </View>
-              <Text className="flex-1 text-center font-poppins-medium text-[17px] text-artesao-main">
+              <Text
+                className="flex-1 text-center font-poppins-medium text-[17px]"
+                style={{ color: theme.main }}
+              >
                 Excluir Conta
               </Text>
             </TouchableOpacity>
 
+            {/* Injeção dos Modais na Tela */}
+            <EditProfileModal
+              role={role}
+              visible={isEditModalOpen}
+              onClose={() => setIsEditModalOpen(false)}
+              user={user}
+              onSaveSuccess={handleUpdateLocalUser}
+              // Recomendado: Passar o role para o modal também se ele precisar ser tematizado!
+            />
+            <LogoutModal
+              visible={isLogoutModalOpen}
+              onClose={() => setIsLogoutModalOpen(false)}
+              onConfirm={handleLogout}
+              role={role}
+            />
             <DeleteModal
               visible={isDeleteModalOpen}
               onClose={() => setIsDeleteModalOpen(false)}
               onConfirm={handleDeleteAccount}
-              role="artesao"
+              role={role}
+            />
+
+            <ResetPasswordModal
+              visible={isResetPassowordModalOpen}
+              onClose={() => setResetPassowordModalOpen(false)}
+              onConfirm={handleResetPassword}
+              role={role}
             />
           </>
         )}
