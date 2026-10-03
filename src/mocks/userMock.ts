@@ -22,6 +22,63 @@ export const MOCK_USER_ARTESAO_LOJISTA: UserProfile = {
     "https://ui-avatars.com/api/?name=Maria+Gracas&background=14532D&color=fff",
 };
 
+export const mockLogin = async (
+  email: string,
+  password: string,
+): Promise<UserProfile> => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (email === "maria.artes@email.com" && password === "123456") {
+        resolve(MOCK_USER_ARTESAO_LOJISTA);
+      } else {
+        reject(new Error("Credenciais inválidas"));
+      }
+    }, 1500);
+  });
+};
+
+export const mockSignUp = async (
+  name: string,
+  email: string,
+  password: string,
+  roles: string[],
+): Promise<boolean> => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (!name || !email || !password || roles.length === 0) {
+        reject(new Error("Preencha todos os campos e selecione um papel."));
+      } else {
+        resolve(true); // Sucesso
+      }
+    }, 1500);
+  });
+};
+
+export const mockSendPasswordResetEmail = async (
+  email: string,
+): Promise<boolean> => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (!email) reject(new Error("E-mail é obrigatório"));
+      else resolve(true);
+    }, 1200);
+  });
+};
+
+export const mockVerifyEmailCode = async (code: string[]): Promise<boolean> => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      const codeString = code.join("");
+      if (codeString === "1234") {
+        // Use '1234' para simular sucesso
+        resolve(true);
+      } else {
+        reject(new Error("Código de verificação inválido. Use 1234."));
+      }
+    }, 1200);
+  });
+};
+
 export const fetchMockProfile = async (
   role: "artesao" | "lojista" | "admin",
 ): Promise<UserProfile> => {
