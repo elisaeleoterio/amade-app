@@ -2,11 +2,18 @@ import AmadeLogo from "@/assets/logoComplete.svg";
 import { ScreenTemplate } from "@/components/templates/screen-template";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { toast } from "@/components/ui/sonner";
 import { Text } from "@/components/ui/text";
+import { mockSignUp } from "@/mocks/userMock";
 import { router } from "expo-router";
 import { Brush, Eye, EyeOff, ShoppingBag } from "lucide-react-native";
 import { useState } from "react";
-import { Pressable, TouchableOpacity, View } from "react-native";
+import {
+  ActivityIndicator,
+  Pressable,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function SignUp() {
   const [name, setName] = useState("");
@@ -14,8 +21,9 @@ export default function SignUp() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
+  const [showConfirmedPassword, setShowConfirmedPassword] = useState(false);
   const [selectedRoles, setSelectedRoles] = useState<string[]>([]);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const handleToggleRole = (role: "artesao" | "lojista") => {
     if (selectedRoles.includes(role)) {
@@ -25,39 +33,38 @@ export default function SignUp() {
     }
   };
 
-  const handleRegister = () => {
-    console.log("Tentando cadastrar com:", {
-      name,
-      email,
-      password,
-      selectedRoles,
-    });
-    router.push({
-      pathname: "/(public)/accountSetting/emailValidation",
-      params: { whereFrom: "signup" },
-    });
+  const handleRegister = async () => {
+    if (password !== confirmPassword) {
+      toast.error("As senhas não coincidem!");
+      return;
+    }
+
+    try {
+      setIsProcessing(true);
+      await mockSignUp(name, email, password, selectedRoles);
+      toast.success("Código de validação enviado!");
+      router.push({
+        pathname: "/(public)/accountSetting/emailValidation",
+        params: { whereFrom: "signup" },
+      });
+    } catch (error: any) {
+      toast.error(error.message || "Erro ao tentar cadastrar.");
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   return (
     <ScreenTemplate
-      navbar={{
-        title: "Criar Conta",
-      }}
-      contentContainerStyle={{
-        flexGrow: 1,
-        paddingBottom: 150,
-      }}
-      scrollViewProps={{
-        automaticallyAdjustKeyboardInsets: true,
-      }}
+      navbar={{ title: "Criar Conta" }}
+      contentContainerStyle={{ flexGrow: 1, paddingBottom: 150 }}
+      scrollViewProps={{ automaticallyAdjustKeyboardInsets: true }}
       className="bg-general-bg"
     >
       <View className="items-center mb-2">
         <AmadeLogo color="#712B05" width={150} />
       </View>
-
       <View className="self-center w-80 gap-4 mb-8">
-        {/* Seleção de role */}
         <View>
           <Text
             variant="lead"
@@ -65,19 +72,13 @@ export default function SignUp() {
           >
             Selecione seu papel
           </Text>
-
           <View className="flex-row gap-6">
-            {/* Card: Artesão */}
             <Pressable
               onPress={() => handleToggleRole("artesao")}
               className="items-center"
             >
               <View
-                className={`w-[75px] h-[75px] border-2 border-artesao-main rounded-[15px] items-center justify-center ${
-                  selectedRoles.includes("artesao")
-                    ? "bg-artesao-main"
-                    : "bg-transparent"
-                }`}
+                className={`w-[75px] h-[75px] border-2 border-artesao-main rounded-[15px] items-center justify-center ${selectedRoles.includes("artesao") ? "bg-artesao-main" : "bg-transparent"}`}
               >
                 <Brush
                   size={32}
@@ -87,23 +88,16 @@ export default function SignUp() {
                   strokeWidth={1.5}
                 />
               </View>
-
               <Text className="font-poppins-regular text-artesao-main text-lg mt-3">
                 Artesão
               </Text>
             </Pressable>
-
-            {/* Card: Lojista */}
             <Pressable
               onPress={() => handleToggleRole("lojista")}
               className="items-center"
             >
               <View
-                className={`w-[75px] h-[75px] border-2 border-lojista-main rounded-[15px] items-center justify-center ${
-                  selectedRoles.includes("lojista")
-                    ? "bg-lojista-main"
-                    : "bg-transparent"
-                }`}
+                className={`w-[75px] h-[75px] border-2 border-lojista-main rounded-[15px] items-center justify-center ${selectedRoles.includes("lojista") ? "bg-lojista-main" : "bg-transparent"}`}
               >
                 <ShoppingBag
                   size={32}
@@ -120,7 +114,6 @@ export default function SignUp() {
           </View>
         </View>
 
-        {/* Campo de Nome */}
         <View className="mb-3">
           <Text
             variant="lead"
@@ -135,8 +128,6 @@ export default function SignUp() {
             onChangeText={setName}
           />
         </View>
-
-        {/* Campo de Email */}
         <View className="mb-3">
           <Text
             variant="lead"
@@ -153,7 +144,6 @@ export default function SignUp() {
           />
         </View>
 
-        {/* Campo de Senha */}
         <View className="mb-3">
           <Text
             variant="lead"
@@ -161,7 +151,6 @@ export default function SignUp() {
           >
             Senha
           </Text>
-
           <View className="relative justify-center">
             <Input
               placeholder="Digite sua senha"
@@ -170,7 +159,6 @@ export default function SignUp() {
               value={password}
               onChangeText={setPassword}
             />
-
             <TouchableOpacity
               className="absolute right-4"
               onPress={() => setShowPassword(!showPassword)}
@@ -184,7 +172,6 @@ export default function SignUp() {
           </View>
         </View>
 
-        {/* Campo de Confirmar Senha */}
         <View className="mb-3">
           <Text
             variant="lead"
@@ -192,21 +179,19 @@ export default function SignUp() {
           >
             Confirmar Senha
           </Text>
-
           <View className="relative justify-center">
             <Input
               placeholder="Confirme sua senha"
-              secureTextEntry={!showPassword}
+              secureTextEntry={!showConfirmedPassword}
               autoCapitalize="none"
               value={confirmPassword}
               onChangeText={setConfirmPassword}
             />
-
             <TouchableOpacity
               className="absolute right-4"
-              onPress={() => setShowPassword(!showPassword)}
+              onPress={() => setShowConfirmedPassword(!showConfirmedPassword)}
             >
-              {showPassword ? (
+              {showConfirmedPassword ? (
                 <EyeOff size={18} color="#6b7280" />
               ) : (
                 <Eye size={18} color="#6b7280" />
@@ -222,11 +207,14 @@ export default function SignUp() {
           size="lg"
           variant="default"
           onPress={handleRegister}
+          disabled={isProcessing}
         >
-          <Text className="text-[20px] text-white">Cadastrar</Text>
+          {isProcessing ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <Text className="text-[20px] text-general-bg">Cadastrar</Text>
+          )}
         </Button>
-
-        {/* Link para voltar ao login */}
         <View className="items-center mt-4">
           <Text
             variant="large"
@@ -234,7 +222,10 @@ export default function SignUp() {
           >
             Já possui uma conta?
           </Text>
-          <TouchableOpacity onPress={() => router.push("/(public)/login")}>
+          <TouchableOpacity
+            onPress={() => router.push("/(public)/login")}
+            disabled={isProcessing}
+          >
             <Text
               variant="large"
               className="font-poppins-semibold text-admin-dark mt-1"

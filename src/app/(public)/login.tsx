@@ -2,22 +2,37 @@ import AmadeLogo from "@/assets/logoComplete.svg";
 import { ScreenTemplate } from "@/components/templates/screen-template";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { toast } from "@/components/ui/sonner";
 import { Text } from "@/components/ui/text";
+import { mockLogin } from "@/mocks/userMock";
 import { useRouter } from "expo-router";
 import { Eye, EyeOff } from "lucide-react-native";
 import { useState } from "react";
-import { TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, TouchableOpacity, View } from "react-native";
 
 export default function LoginScreen() {
   const router = useRouter();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("maria.artes@email.com");
+  const [password, setPassword] = useState("123456");
   const [showPassword, setShowPassword] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
-  // Ajustar para a lógica de login
-  const handleLogin = () => {
-    console.log("logar com:", email, password);
-    router.replace("/roleSelect");
+  const handleLogin = async () => {
+    if (!email || !password) {
+      toast.error("Preencha e-mail e senha para continuar.");
+      return;
+    }
+
+    try {
+      setIsProcessing(true);
+      const user = await mockLogin(email, password);
+      toast.success(`Bem-vinda de volta, ${user.name.first}!`);
+      router.replace("/roleSelect");
+    } catch (error: any) {
+      toast.error(error.message || "Erro ao tentar entrar.");
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   return (
@@ -70,7 +85,6 @@ export default function LoginScreen() {
               onChangeText={setEmail}
             />
           </View>
-
           <View>
             <Text
               variant="lead"
@@ -104,6 +118,7 @@ export default function LoginScreen() {
           className="self-end -mt-8 -mr-8 mb-8"
           variant="secondary"
           onPress={() => router.push("/(public)/accountSetting/sendEmail")}
+          disabled={isProcessing}
         >
           <Text className="text-[14px] font-poppins-medium">
             Esqueceu a senha?
@@ -117,10 +132,14 @@ export default function LoginScreen() {
           variant="default"
           className="w-64 self-center"
           onPress={handleLogin}
+          disabled={isProcessing}
         >
-          <Text className="text-[20px] text-white">Entrar</Text>
+          {isProcessing ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <Text className="text-[20px] text-general-bg">Entrar</Text>
+          )}
         </Button>
-
         <View className="items-center mt-4">
           <Text
             variant="large"
@@ -128,8 +147,10 @@ export default function LoginScreen() {
           >
             Ainda não possui uma conta?
           </Text>
-
-          <TouchableOpacity onPress={() => router.push("/(public)/signup")}>
+          <TouchableOpacity
+            onPress={() => router.push("/(public)/signup")}
+            disabled={isProcessing}
+          >
             <Text
               variant="large"
               className="font-poppins-semibold text-admin-dark mt-1"
