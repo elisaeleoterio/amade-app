@@ -80,38 +80,53 @@ export default function WelcomeScreen() {
       }}
       className="bg-general-bg"
     >
-      {/* Meu Estoque */}
-      <View className="flex-1 bg-[#E5EFE5]/40 p-5 rounded-3xl mb-4">
-        <Text className="font-poppins-medium text-artesao-main text-left text-xl mb-3">
+      <View className="bg-artesao-surface/40 p-5 rounded-3xl mb-4">
+        <Text className="font-poppins-medium text-artesao-main text-left text-xl mb-4">
           Meu Estoque
         </Text>
-        {products.slice(0, 3).map((item) => (
-          <ProductCard
-            key={item.id}
-            role="artesao"
-            title={item.title}
-            code={item.id}
-            price={item.price}
-            imageUrl={item.imageUrls[0]}
-            status={item.status}
-            paymentMethod={item.paymentMethod}
-            onPress={() => {
-              router.push({
-                pathname: "/(authenticated)/artesao/[id]",
-                params: { id: item.id, origin: "home" },
-              });
-            }}
-          />
-        ))}
-        <Button
-          appRole="artesao"
-          variant="secondary"
-          onPress={() => router.push("/(authenticated)/artesao/myInventory")}
-        >
-          <Text className="font-poppins-semibold text-artesao-main">
-            Ver Mais
-          </Text>
-        </Button>
+
+        {products.length > 0 ? (
+          <View className="flex-1">
+            <View className="gap-3 mb-4">
+              {products.slice(0, 3).map((item) => (
+                <ProductCard
+                  key={item.id}
+                  role="artesao"
+                  title={item.title}
+                  code={item.id}
+                  price={item.price}
+                  imageUrl={item.imageUrls[0]}
+                  status={item.status}
+                  paymentMethod={item.paymentMethod}
+                  onPress={() => {
+                    router.push({
+                      pathname: "/(authenticated)/artesao/[id]",
+                      params: { id: item.id, origin: "home" },
+                    });
+                  }}
+                />
+              ))}
+            </View>
+
+            <Button
+              appRole="artesao"
+              variant="secondary"
+              onPress={() =>
+                router.push("/(authenticated)/artesao/myInventory")
+              }
+            >
+              <Text className="font-poppins-semibold text-artesao-main">
+                Ver Mais
+              </Text>
+            </Button>
+          </View>
+        ) : (
+          <View className="py-8 justify-center items-center">
+            <Text className="font-poppins-regular text-artesao-main text-center text-lg">
+              Você ainda não possui produtos cadastrados!
+            </Text>
+          </View>
+        )}
       </View>
 
       {/* Cards de Redirecionamento */}
