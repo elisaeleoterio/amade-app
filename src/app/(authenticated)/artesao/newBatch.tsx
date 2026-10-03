@@ -1,3 +1,4 @@
+import { BatchInfoModal } from "@/components/artesao/modals/batchInfoModal";
 import { ProductModal } from "@/components/artesao/modals/ProductModal";
 import { RemoveProductBatchtModal } from "@/components/artesao/modals/removeProductsBtachModal";
 import { ProductCard } from "@/components/shared/productCard";
@@ -7,7 +8,7 @@ import { toast } from "@/components/ui/sonner";
 import { Text } from "@/components/ui/text";
 import { createMockProduct, Product } from "@/mocks/productMock";
 import { useRouter } from "expo-router";
-import { CirclePlus } from "lucide-react-native";
+import { CirclePlus, Info } from "lucide-react-native";
 import { useState } from "react";
 import { ScrollView, TouchableOpacity, View } from "react-native";
 
@@ -17,7 +18,7 @@ export default function NewBatchScreen() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isRemoveProductsOpen, setIsRemoveProductsOpen] = useState(false);
   const [batchProducts, setBatchProducts] = useState<Product[]>([]);
-
+  const [isBatchInfoModalOpen, setBatchInfoModalOpen] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
   const handleAddProductToBatch = (newProduct: Product) => {
@@ -80,9 +81,21 @@ export default function NewBatchScreen() {
         appRole: "artesao",
         title: "Novo Lote",
         showBack: false,
+        leftContent: (
+          <Info
+            color="#166534"
+            size={24}
+            strokeWidth={1.5}
+            onPress={() => setBatchInfoModalOpen(true)}
+          />
+        ),
       }}
       className="bg-general-bg"
     >
+      <BatchInfoModal
+        visible={isBatchInfoModalOpen}
+        onClose={() => setBatchInfoModalOpen(false)}
+      />
       <View className="flex-1 px-5 pt-2">
         {/* Botão de Adicionar ao Lote */}
         <TouchableOpacity
