@@ -2,51 +2,84 @@ import AmadeLogo from "@/assets/logoComplete.svg";
 import { ScreenTemplate } from "@/components/templates/screen-template";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { toast } from "@/components/ui/sonner";
 import { Text } from "@/components/ui/text";
+import { mockVerifyEmailCode } from "@/mocks/userMock";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useState } from "react";
-import { TouchableOpacity, View } from "react-native";
+import { useRef, useState } from "react";
+import {
+  ActivityIndicator,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function EmailValidation() {
+  const router = useRouter();
   const [code, setCode] = useState(["", "", "", ""]);
+  const [isProcessing, setIsProcessing] = useState(false);
 
+  const inputRefs = useRef<TextInput[]>([]);
+
+  const handleChange = (text: string, index: number) => {
+    const newChar = text.length > 0 ? text.slice(-1) : "";
+
+    const newCode = [...code];
+    newCode[index] = newChar;
+    setCode(newCode);
+
+    if (newChar !== "" && index < 3) {
+      inputRefs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleKeyPress = (e: any, index: number) => {
+    if (e.nativeEvent.key === "Backspace" && code[index] === "" && index > 0) {
+      inputRefs.current[index - 1]?.focus();
+    }
+  };
   const { whereFrom } = useLocalSearchParams<{
     whereFrom?: "signup" | "resetPassword";
   }>();
 
-  const handleVerifyCode = () => {
-    console.log("Verificando código:", code, "Origem:", whereFrom);
+  const handleVerifyCode = async () => {
+    if (code.some((digit) => digit === "")) {
+      toast.error("Preencha os 4 dígitos do código.");
+      return;
+    }
 
-    if (whereFrom === "resetPassword") {
-      router.push("/(public)/accountSetting/redefinePassword");
-    } else {
-      router.push("/(public)/accountCreated");
+    try {
+      setIsProcessing(true);
+      await mockVerifyEmailCode(code);
+
+      toast.success("Código verificado com sucesso!");
+
+      if (whereFrom === "resetPassword") {
+        router.push("/(public)/accountSetting/redefinePassword");
+      } else {
+        router.push("/(public)/accountCreated");
+      }
+    } catch (error: any) {
+      toast.error(error.message || "Código inválido.");
+    } finally {
+      setIsProcessing(false);
     }
   };
 
   const handleResendCode = () => {
-    console.log("Reenviando código de verificação...", whereFrom);
+    toast.info("Novo código enviado para o seu e-mail!");
   };
-  const router = useRouter();
 
   return (
     <ScreenTemplate
-      navbar={{
-        title: "Validação",
-      }}
-      contentContainerStyle={{
-        flexGrow: 1,
-        paddingBottom: 180,
-      }}
-      scrollViewProps={{
-        automaticallyAdjustKeyboardInsets: true,
-      }}
+      navbar={{ title: "Validação" }}
+      contentContainerStyle={{ flexGrow: 1, paddingBottom: 180 }}
+      scrollViewProps={{ automaticallyAdjustKeyboardInsets: true }}
       className="bg-general-bg"
     >
       <View className="items-center">
         <AmadeLogo color="#712B05" width={150} />
       </View>
-
       <View className="mx-12 mb-3">
         <Text
           variant="large"
@@ -68,26 +101,25 @@ export default function EmailValidation() {
           {Array.from({ length: 4 }).map((_, index) => (
             <Input
               key={index}
+              ref={(ref: any) => {
+                if (ref) inputRefs.current[index] = ref;
+              }}
               placeholder=" "
               keyboardType="number-pad"
-              maxLength={1}
               value={code[index]}
-              onChangeText={(text) => {
-                const newCode = [...code];
-                newCode[index] = text;
-                setCode(newCode);
-              }}
+              onChangeText={(text) => handleChange(text, index)}
+              onKeyPress={(e) => handleKeyPress(e, index)}
+              selectTextOnFocus={true}
               className="text-center w-14 h-14 text-2xl font-poppins-medium"
             />
           ))}
         </View>
 
-        {/* Reenviar Código */}
         <View className="flex-row justify-center">
           <Text className="font-poppins-regular text-admin-lighter text-[14px]">
             Não recebeu o código?{" "}
           </Text>
-          <TouchableOpacity onPress={handleResendCode}>
+          <TouchableOpacity onPress={handleResendCode} disabled={isProcessing}>
             <Text className="font-poppins-semibold text-admin-main text-[14px]">
               Reenviar
             </Text>
@@ -101,15 +133,20 @@ export default function EmailValidation() {
           size="lg"
           variant="default"
           onPress={handleVerifyCode}
+          disabled={isProcessing}
         >
-          <Text className="text-[20px] text-white">Verificar</Text>
+          {isProcessing ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <Text className="text-[20px] text-general-bg">Verificar</Text>
+          )}
         </Button>
-
         <Button
           className="w-64 px-7 self-center"
           size="lg"
           variant="outline"
           onPress={() => router.push("/(public)/welcome")}
+          disabled={isProcessing}
         >
           <Text>Cancelar</Text>
         </Button>
