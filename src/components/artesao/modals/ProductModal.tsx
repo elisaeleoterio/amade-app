@@ -80,11 +80,6 @@ export const ProductModal = ({
       return;
     }
 
-    if (imageUrls.length === 0) {
-      toast.warning("Você deve adicionar pelo menos 1 imagem ao produto.");
-      return;
-    }
-
     const numericPrice = parseFloat(price.replace(",", "."));
     if (isNaN(numericPrice)) {
       toast.warning("Insira um valor de preço válido.");
@@ -135,13 +130,7 @@ export const ProductModal = ({
   };
 
   const handleRemoveImage = (indexToRemove: number) => {
-    if (imageUrls.length > 1) {
-      setImageUrls((prev) =>
-        prev.filter((_, index) => index !== indexToRemove),
-      );
-    } else {
-      toast.warning("Você deve ter pelo menos 1 imagem para cada produto.");
-    }
+    setImageUrls((prev) => prev.filter((_, index) => index !== indexToRemove));
   };
 
   return (
@@ -155,7 +144,7 @@ export const ProductModal = ({
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         className="flex-1 justify-end bg-black/50"
       >
-        <View className="h-[85%] w-full rounded-t-[32px] bg-white px-6 pt-6 pb-8 shadow-xl">
+        <View className="h-[85%] w-full rounded-t-[32px] bg-general-bg px-6 pt-6 pb-8 shadow-xl">
           <Text className="mb-6 text-center font-poppins-semibold text-[20px] text-artesao-main">
             {isEditing ? "Editar Produto" : "Novo Produto"}
           </Text>
@@ -172,7 +161,7 @@ export const ProductModal = ({
                 onChangeText={setTitle}
                 placeholder="Nome do Produto"
                 placeholderTextColor="#9CA3AF"
-                className="h-12 rounded-2xl bg-[#E8EFE8] px-4 font-poppins-regular text-[15px] text-artesao-main py-0"
+                className="h-12 rounded-2xl bg-artesao-surface px-4 font-poppins-regular text-[15px] text-artesao-main py-0"
                 style={{
                   textAlignVertical: "center",
                   includeFontPadding: false,
@@ -190,7 +179,7 @@ export const ProductModal = ({
                 placeholder="R$"
                 placeholderTextColor="#9CA3AF"
                 keyboardType="numeric"
-                className="h-12 rounded-2xl bg-[#E8EFE8] px-4 font-poppins-regular text-[15px] text-artesao-main py-0"
+                className="h-12 rounded-2xl bg-artesao-surface px-4 font-poppins-regular text-[15px] text-artesao-main py-0"
                 style={{
                   textAlignVertical: "center",
                   includeFontPadding: false,
@@ -205,7 +194,7 @@ export const ProductModal = ({
               <TouchableOpacity
                 activeOpacity={0.7}
                 onPress={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="h-12 flex-row items-center justify-between rounded-2xl bg-[#E8EFE8] px-4"
+                className="h-12 flex-row items-center justify-between rounded-2xl bg-artesao-surface px-4"
               >
                 <Text className="font-poppins-regular text-[15px] text-artesao-main">
                   {status}
@@ -214,7 +203,7 @@ export const ProductModal = ({
               </TouchableOpacity>
 
               {isDropdownOpen && (
-                <View className="absolute top-[70px] z-50 w-full overflow-hidden rounded-xl bg-white shadow-lg elevation-5 border border-gray-100">
+                <View className="absolute top-[70px] z-50 w-full overflow-hidden rounded-xl bg-general-bg shadow-lg elevation-5 border border-gray-100">
                   {STATUS_OPTIONS.map((option) => (
                     <TouchableOpacity
                       key={option}
@@ -244,7 +233,7 @@ export const ProductModal = ({
                 placeholderTextColor="#9CA3AF"
                 multiline
                 numberOfLines={4}
-                className="min-h-[100px] rounded-2xl border-[1.5px] border-[#E8EFE8] bg-white p-4 font-poppins-regular text-[15px] text-artesao-main"
+                className="min-h-[100px] rounded-2xl border-[1.5px] border-artesao-surface bg-general-bg p-4 font-poppins-regular text-[15px] text-artesao-main"
                 style={{ textAlignVertical: "top" }}
               />
             </View>
@@ -265,21 +254,19 @@ export const ProductModal = ({
               {[0, 1, 2].map((index) => {
                 const imageUrl = imageUrls[index];
                 return (
-                  <>
-                    <TouchableOpacity
-                      key={index}
-                      activeOpacity={imageUrl ? 0.7 : 1}
-                      onPress={() => setIsOpenImageViewer(true)}
-                      className="aspect-[3/4] flex-1 overflow-hidden rounded-2xl bg-general-bg"
-                    >
-                      {imageUrl ? (
-                        <Image
-                          source={{ uri: imageUrl }}
-                          className="h-full w-full"
-                          resizeMode="cover"
-                        />
-                      ) : null}
-                    </TouchableOpacity>
+                  <TouchableOpacity
+                    key={index}
+                    activeOpacity={imageUrl ? 0.7 : 1}
+                    onPress={() => setIsOpenImageViewer(true)}
+                    className="aspect-[3/4] flex-1 overflow-hidden rounded-2xl bg-general-bg"
+                  >
+                    {imageUrl ? (
+                      <Image
+                        source={{ uri: imageUrl }}
+                        className="h-full w-full"
+                        resizeMode="cover"
+                      />
+                    ) : null}
                     <ImageViewerModal
                       visible={isOpenImageViewer}
                       imageUrl={imageUrl}
@@ -287,7 +274,7 @@ export const ProductModal = ({
                       onClose={() => setIsOpenImageViewer(false)}
                       onRemove={() => handleRemoveImage(index)}
                     />
-                  </>
+                  </TouchableOpacity>
                 );
               })}
             </View>
