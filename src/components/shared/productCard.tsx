@@ -34,11 +34,11 @@ export const ProductCard = ({
     return (
       <View
         className="self-start rounded-full px-3 py-1 mr-2 mb-2"
-        style={{ backgroundColor: colors.tagBg }}
+        style={{ backgroundColor: colors.surface }}
       >
         <Text
           className="font-poppins-medium text-[12px]"
-          style={{ color: colors.primary }}
+          style={{ color: colors.main }}
         >
           {label}
         </Text>
@@ -53,7 +53,7 @@ export const ProductCard = ({
       activeOpacity={0.5}
       onPress={onPress}
       className="mb-4 w-full flex-row rounded-3xl border-[1.5px] p-3 bg-general-bg"
-      style={{ borderColor: colors.border }}
+      style={{ borderColor: colors.surface }}
     >
       {/* Imagem do Produto */}
       {imageUrl ? (
@@ -72,7 +72,7 @@ export const ProductCard = ({
         {/* Título */}
         <Text
           className="font-poppins-medium text-xl"
-          style={{ color: colors.primary }}
+          style={{ color: colors.main }}
           numberOfLines={1}
         >
           {title}
@@ -81,14 +81,14 @@ export const ProductCard = ({
         {/* Linha Divisória */}
         <View
           className="h-[1px] w-full my-2"
-          style={{ backgroundColor: colors.line }}
+          style={{ backgroundColor: colors.surface }}
         />
 
         {/* Código */}
         <View className="flex-row justify-between items-center mb-2">
           <Text
             className="font-poppins-regular text-[14px]"
-            style={{ color: colors.primary }}
+            style={{ color: colors.main }}
           >
             {code}
           </Text>
@@ -96,7 +96,7 @@ export const ProductCard = ({
           {quantity !== undefined && quantity > 1 && (
             <Text
               className="font-poppins-medium text-[14px]"
-              style={{ color: colors.primary }}
+              style={{ color: colors.main }}
             >
               Qtd: {quantity}
             </Text>
@@ -115,13 +115,13 @@ export const ProductCard = ({
         {/* Preço */}
         <Text
           className="font-poppins-medium text-[22px] mt-1"
-          style={{ color: colors.primary }}
+          style={{ color: colors.main }}
         >
           {formattedPrice}
         </Text>
         <View
           className="h-[1px] w-full mt-2"
-          style={{ backgroundColor: colors.line }}
+          style={{ backgroundColor: colors.surface }}
         />
       </View>
     </TouchableOpacity>

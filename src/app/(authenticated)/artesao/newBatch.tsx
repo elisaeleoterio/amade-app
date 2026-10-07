@@ -6,6 +6,7 @@ import { ScreenTemplate } from "@/components/templates/screen-template";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/sonner";
 import { Text } from "@/components/ui/text";
+import { roleConfig } from "@/constants/theme";
 import {
   BatchProductItem,
   createMockBatch,
@@ -92,7 +93,7 @@ export default function NewBatchScreen() {
         showBack: false,
         leftContent: (
           <Info
-            color="#166534"
+            color={roleConfig["artesao"].dark}
             size={24}
             strokeWidth={1.5}
             onPress={() => setBatchInfoModalOpen(true)}
@@ -110,12 +111,16 @@ export default function NewBatchScreen() {
         <TouchableOpacity
           activeOpacity={0.7}
           onPress={() => setIsCreateModalVisible(true)}
-          className="flex-row items-center justify-between py-4 border-b border-[#E8EFE8]"
+          className="flex-row items-center justify-between py-4 border-b border-artesao-surface"
         >
           <Text className="font-poppins-regular text-[17px] text-artesao-main">
             Adicionar Novo Produto
           </Text>
-          <CirclePlus size={24} color="#14532D" strokeWidth={1.5} />
+          <CirclePlus
+            size={24}
+            color={roleConfig["artesao"].dark}
+            strokeWidth={1.5}
+          />
         </TouchableOpacity>
 
         {batchItems.length === 0 ? (
@@ -163,7 +168,7 @@ export default function NewBatchScreen() {
 
         {batchItems.length > 0 &&
           (selectedIds.size > 0 ? (
-            <View className="flex-row justify-between gap-4 py-4 bg-general-bg border-t border-[#E8EFE8]">
+            <View className="flex-row justify-between gap-4 py-4 bg-general-bg border-t border-artesao-surface">
               <View className="flex-1">
                 <Button
                   appRole="artesao"
@@ -194,7 +199,7 @@ export default function NewBatchScreen() {
               </View>
             </View>
           ) : (
-            <View className="flex-row justify-between gap-4 py-4 bg-general-bg border-t border-[#E8EFE8]">
+            <View className="flex-row justify-between gap-4 py-4 bg-general-bg border-t border-artesao-surface">
               <View className="flex-1">
                 <Button
                   appRole="artesao"

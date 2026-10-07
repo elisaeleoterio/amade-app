@@ -3,6 +3,7 @@ import { ProductCard } from "@/components/shared/productCard";
 import { ScreenTemplate } from "@/components/templates/screen-template";
 import { toast } from "@/components/ui/sonner";
 import { Text } from "@/components/ui/text";
+import { roleConfig } from "@/constants/theme";
 import { fetchMockProducts, Product } from "@/mocks/productMock";
 import { useFocusEffect, useRouter } from "expo-router";
 import { Info, Search } from "lucide-react-native";
@@ -96,7 +97,7 @@ export default function MyInventory() {
   if (loading) {
     return (
       <View className="flex-1 items-center justify-center bg-[#FDFBF5]">
-        <ActivityIndicator size="large" color="#14532D" />
+        <ActivityIndicator size="large" color={roleConfig["artesao"].main} />
         <Text className="mt-4 font-poppins-regular text-artesao-main">
           Buscando estoque...
         </Text>
@@ -127,7 +128,11 @@ export default function MyInventory() {
               includeFontPadding: false,
             }}
           />
-          <Search color="#14532D" size={22} strokeWidth={1.5} />
+          <Search
+            color={roleConfig["artesao"].dark}
+            size={22}
+            strokeWidth={1.5}
+          />
         </View>
 
         {/* Tags de filtro */}
@@ -137,7 +142,7 @@ export default function MyInventory() {
               Filtro por status
             </Text>
             <Info
-              color="#14532D"
+              color={roleConfig["artesao"].dark}
               size={20}
               strokeWidth={1.5}
               onPress={() => setInfoModalOpen(true)}

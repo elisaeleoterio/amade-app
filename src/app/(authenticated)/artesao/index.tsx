@@ -5,6 +5,7 @@ import { ScreenTemplate } from "@/components/templates/screen-template";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/sonner";
 import { Text } from "@/components/ui/text";
+import { roleConfig } from "@/constants/theme";
 import { fetchMockProducts, Product } from "@/mocks/productMock";
 import { MOCK_USER_ARTESAO_LOJISTA, UserProfile } from "@/mocks/userMock";
 import { useFocusEffect, useRouter } from "expo-router";
@@ -56,7 +57,7 @@ export default function WelcomeScreen() {
   if (loading) {
     return (
       <View className="flex-1 items-center justify-center bg-general-bg">
-        <ActivityIndicator size="large" color="#14532D" />
+        <ActivityIndicator size="large" color={roleConfig["artesao"].main} />
         <Text className="mt-4 font-poppins-regular">Buscando dados...</Text>
       </View>
     );
@@ -69,7 +70,11 @@ export default function WelcomeScreen() {
         appRole: "artesao",
         rightContent: (
           <View className="">
-            <AmadeLogo color="#166534" width={50} height={45} />
+            <AmadeLogo
+              color={roleConfig["artesao"].main}
+              width={50}
+              height={45}
+            />
           </View>
         ),
         leftContent: (

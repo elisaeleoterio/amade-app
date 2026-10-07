@@ -1,6 +1,7 @@
 import { ScreenTemplate } from "@/components/templates/screen-template";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
+import { roleConfig } from "@/constants/theme";
 import { useRouter } from "expo-router";
 import { FaceSlightlySmiling } from "lucide-react-native";
 import { View } from "react-native";
@@ -25,7 +26,11 @@ export default function AccountCreated() {
       className="bg-general-bg"
     >
       <View className="items-center mb-10">
-        <FaceSlightlySmiling color={"#712B05"} size={108} strokeWidth={0.8} />
+        <FaceSlightlySmiling
+          color={roleConfig["admin"].dark}
+          size={108}
+          strokeWidth={0.8}
+        />
       </View>
 
       <View className="mx-12 mb-3">
