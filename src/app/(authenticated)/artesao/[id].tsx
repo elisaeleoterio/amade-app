@@ -64,10 +64,11 @@ export default function ArtesaoProductDetailsScreen() {
       setIsProcessing(true);
       await deleteMockProduct(id);
       toast.success("Produto removido.");
-      setIsProcessing(false);
+      setisDeleteProductModalOpen(false);
       router.back();
     } catch (error) {
       toast.error("Não foi possível excluir o produto.");
+    } finally {
       setIsProcessing(false);
     }
   };
