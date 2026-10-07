@@ -1,3 +1,5 @@
+import AmadeLogo from "@/assets/logoComplete.svg";
+import { roleConfig } from "@/constants/theme";
 import type { Role } from "@/types/role.type";
 import { Image, TouchableOpacity, View } from "react-native";
 import { Text } from "../ui/text";
@@ -11,28 +13,8 @@ interface ItemCardProps {
   status: string;
   paymentMethod?: string;
   onPress?: () => void;
+  quantity?: number;
 }
-
-const roleConfig = {
-  artesao: {
-    primary: "#14532D",
-    border: "#C6DACB",
-    tagBg: "#E5EFE5",
-    line: "#E5EFE5",
-  },
-  lojista: {
-    primary: "#4C0519",
-    border: "#F4C4D0",
-    tagBg: "#F3E4E5",
-    line: "#F3E4E5",
-  },
-  admin: {
-    primary: "#2A0F01",
-    border: "#EAD6CC",
-    tagBg: "#E0D1C7",
-    line: "#E0D1C7",
-  },
-};
 
 export const ProductCard = ({
   title,
@@ -43,6 +25,7 @@ export const ProductCard = ({
   status,
   paymentMethod,
   onPress,
+  quantity,
 }: ItemCardProps) => {
   const colors = roleConfig[role];
 
@@ -63,7 +46,6 @@ export const ProductCard = ({
     );
   };
 
-  // Formatação do preço (ex: 700.00 -> 700,00)
   const formattedPrice = `R$${price.toFixed(2).replace(".", ",")}`;
 
   return (
@@ -74,13 +56,18 @@ export const ProductCard = ({
       style={{ borderColor: colors.border }}
     >
       {/* Imagem do Produto */}
-      <Image
-        source={{ uri: imageUrl }}
-        className="h-40 w-28 rounded-2xl bg-gray-100"
-        resizeMode="cover"
-      />
+      {imageUrl ? (
+        <Image
+          source={{ uri: imageUrl }}
+          className="h-40 w-28 rounded-2xl bg-gray-100"
+          resizeMode="cover"
+        />
+      ) : (
+        <View className="h-40 w-28 rounded-2xl bg-gray-100 justify-center items-center">
+          <AmadeLogo color={"#d1d5db"} width={60} height={60} />
+        </View>
+      )}
 
-      {/* Conteúdo à Direita */}
       <View className="ml-4 flex-1 py-1">
         {/* Título */}
         <Text
@@ -98,12 +85,23 @@ export const ProductCard = ({
         />
 
         {/* Código */}
-        <Text
-          className="font-poppins-regular text-[14px] mb-2"
-          style={{ color: colors.primary }}
-        >
-          {code}
-        </Text>
+        <View className="flex-row justify-between items-center mb-2">
+          <Text
+            className="font-poppins-regular text-[14px]"
+            style={{ color: colors.primary }}
+          >
+            {code}
+          </Text>
+
+          {quantity !== undefined && quantity > 1 && (
+            <Text
+              className="font-poppins-medium text-[14px]"
+              style={{ color: colors.primary }}
+            >
+              Qtd: {quantity}
+            </Text>
+          )}
+        </View>
 
         {/* Tags Condicionais baseadas no Role */}
         <View className="flex-row flex-wrap">
@@ -121,8 +119,6 @@ export const ProductCard = ({
         >
           {formattedPrice}
         </Text>
-
-        {/* Linha Divisória Inferior (conforme o design) */}
         <View
           className="h-[1px] w-full mt-2"
           style={{ backgroundColor: colors.line }}

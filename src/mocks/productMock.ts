@@ -10,6 +10,11 @@ export interface Product {
   imageUrls: string[];
 }
 
+export interface BatchProductItem {
+  product: Product;
+  quantity: number;
+}
+
 export let MOCK_PRODUCTS: Product[] = [
   {
     id: "COD-001",
@@ -20,9 +25,9 @@ export let MOCK_PRODUCTS: Product[] = [
     status: "Disponível",
     paymentMethod: "PIX",
     imageUrls: [
-      "https://images.unsplash.com/photo-1588058365548-9efe5acb8077?auto=format&fit=crop&q=80&w=300", // Imagem principal (Capa)
-      "https://images.unsplash.com/photo-1588058365548-9efe5acb8077?auto=format&fit=crop&q=80&w=400", // Imagem 2 (Detalhes)
-      "https://images.unsplash.com/photo-1588058365548-9efe5acb8077?auto=format&fit=crop&q=80&w=500", // Imagem 3 (Costas)
+      "https://images.unsplash.com/photo-1588058365548-9efe5acb8077?auto=format&fit=crop&q=80&w=300",
+      "https://images.unsplash.com/photo-1588058365548-9efe5acb8077?auto=format&fit=crop&q=80&w=400",
+      "https://images.unsplash.com/photo-1588058365548-9efe5acb8077?auto=format&fit=crop&q=80&w=500",
     ],
   },
   {
@@ -67,6 +72,32 @@ export const fetchMockProducts = async (): Promise<Product[]> => {
     setTimeout(() => {
       resolve([...MOCK_PRODUCTS]); // O spread [...] cria uma nova referência, forçando a re-renderização
     }, 0);
+  });
+};
+
+// SIMULA CRIAÇÃO DE UM LOTE
+export const createMockBatch = async (
+  batchItems: BatchProductItem[],
+): Promise<void> => {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const generatedProducts: Product[] = [];
+      const baseId = Math.floor(Math.random() * 10000);
+      let currentIdOffset = 0;
+
+      for (const item of batchItems) {
+        for (let i = 0; i < item.quantity; i++) {
+          generatedProducts.push({
+            ...item.product,
+            id: `COD-${(baseId + currentIdOffset).toString().padStart(4, "0")}`,
+          });
+          currentIdOffset++;
+        }
+      }
+
+      MOCK_PRODUCTS = [...generatedProducts, ...MOCK_PRODUCTS];
+      resolve();
+    }, 1000);
   });
 };
 
