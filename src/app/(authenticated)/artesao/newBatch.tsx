@@ -1,4 +1,5 @@
 import { BatchInfoModal } from "@/components/artesao/modals/batchInfoModal";
+import { CancelNewBatchtModal } from "@/components/artesao/modals/cancelNewBatchModal";
 import { ProductModal } from "@/components/artesao/modals/ProductModal";
 import { RemoveProductBatchtModal } from "@/components/artesao/modals/removeProductsBtachModal";
 import { ProductCard } from "@/components/shared/productCard";
@@ -23,6 +24,7 @@ export default function NewBatchScreen() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [isRemoveProductsOpen, setIsRemoveProductsOpen] = useState(false);
   const [isBatchInfoModalOpen, setBatchInfoModalOpen] = useState(false);
+  const [isCancelModalOpen, setCancelModalOpen] = useState(false);
 
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
@@ -34,7 +36,16 @@ export default function NewBatchScreen() {
     toast.success("Produto adicionado ao lote.");
   };
 
+  const handleCancelNewBatch = () => {
+    setCancelModalOpen(false);
+    setBatchItems([]);
+    setSelectedIds(new Set());
+
+    router.back();
+  };
+
   const handleRemoveSelected = () => {
+    setIsRemoveProductsOpen(false);
     if (selectedIds.size === 0) return;
     setBatchItems((prev) =>
       prev.filter((item) => !selectedIds.has(item.product.id)),
@@ -102,10 +113,6 @@ export default function NewBatchScreen() {
       }}
       className="bg-general-bg"
     >
-      <BatchInfoModal
-        visible={isBatchInfoModalOpen}
-        onClose={() => setBatchInfoModalOpen(false)}
-      />
       <View className="flex-1 px-5 pt-2">
         {/* Botão de Adicionar ao Lote */}
         <TouchableOpacity
@@ -190,12 +197,6 @@ export default function NewBatchScreen() {
                 >
                   <Text>{isProcessing ? "Removendo..." : "Remover"}</Text>
                 </Button>
-
-                <RemoveProductBatchtModal
-                  visible={isRemoveProductsOpen}
-                  onClose={() => setIsRemoveProductsOpen(false)}
-                  onConfirm={handleRemoveSelected}
-                />
               </View>
             </View>
           ) : (
@@ -205,7 +206,7 @@ export default function NewBatchScreen() {
                   appRole="artesao"
                   variant="outline"
                   size="md"
-                  onPress={() => router.back()}
+                  onPress={() => setCancelModalOpen(true)}
                   disabled={isProcessing}
                 >
                   <Text>Cancelar</Text>
@@ -226,11 +227,29 @@ export default function NewBatchScreen() {
           ))}
       </View>
 
+      {/* ÁREA DE MODAIS */}
+      <BatchInfoModal
+        visible={isBatchInfoModalOpen}
+        onClose={() => setBatchInfoModalOpen(false)}
+      />
+
       <ProductModal
         visible={isCreateModalVisible}
         onClose={() => setIsCreateModalVisible(false)}
         onSave={handleAddProductToBatch}
         initialData={null}
+      />
+
+      <RemoveProductBatchtModal
+        visible={isRemoveProductsOpen}
+        onClose={() => setIsRemoveProductsOpen(false)}
+        onConfirm={handleRemoveSelected}
+      />
+
+      <CancelNewBatchtModal
+        visible={isCancelModalOpen}
+        onClose={() => setCancelModalOpen(false)}
+        onConfirm={handleCancelNewBatch}
       />
     </ScreenTemplate>
   );
