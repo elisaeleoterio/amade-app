@@ -1,5 +1,6 @@
 import { ImageViewerModal } from "@/components/modals/imageViwerModal";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/sonner";
 import { Text } from "@/components/ui/text";
 import { Product } from "@/mocks/productMock";
@@ -21,7 +22,7 @@ import {
 interface ProductModalProps {
   visible: boolean;
   onClose: () => void;
-  onSave: (product: Product) => void;
+  onSave: (product: Product, quantity: number) => void;
   initialData?: Product | null;
 }
 
@@ -47,6 +48,7 @@ export const ProductModal = ({
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   const [isOpenImageViewer, setIsOpenImageViewer] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [quantity, setQuantity] = useState("1");
 
   useEffect(() => {
     if (visible) {
@@ -86,12 +88,10 @@ export const ProductModal = ({
       return;
     }
 
+    const qty = isEditing ? 1 : parseInt(quantity) || 1;
+
     const productData: Product = {
-      id: isEditing
-        ? initialData.id
-        : `COD-${Math.floor(Math.random() * 10000)
-            .toString()
-            .padStart(4, "0")}`,
+      id: initialData?.id || "TEMP-ID",
       title,
       price: numericPrice,
       status,
@@ -100,7 +100,7 @@ export const ProductModal = ({
       paymentMethod: initialData?.paymentMethod,
     };
 
-    onSave(productData);
+    onSave(productData, qty);
     onClose();
   };
 
@@ -187,37 +187,56 @@ export const ProductModal = ({
               />
             </View>
 
-            <View className="mb-4 z-50">
-              <Text className="mb-1 font-poppins-medium text-[15px] text-artesao-main">
-                Status
-              </Text>
-              <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="h-12 flex-row items-center justify-between rounded-2xl bg-artesao-surface px-4"
-              >
-                <Text className="font-poppins-regular text-[15px] text-artesao-main">
-                  {status}
+            <View className="flex-row justify-between">
+              <View className="mb-4 z-50">
+                <Text className="mb-1 font-poppins-medium text-[15px] text-artesao-main">
+                  Status
                 </Text>
-                <ChevronDown size={20} color="#14532D" />
-              </TouchableOpacity>
+                <TouchableOpacity
+                  activeOpacity={0.7}
+                  onPress={() => setIsDropdownOpen(!isDropdownOpen)}
+                  className="h-12 flex-row items-center justify-between rounded-2xl bg-artesao-surface px-4"
+                >
+                  <Text className="font-poppins-regular text-[15px] text-artesao-main">
+                    {status}
+                  </Text>
+                  <ChevronDown size={20} color="#14532D" />
+                </TouchableOpacity>
 
-              {isDropdownOpen && (
-                <View className="absolute top-[70px] z-50 w-full overflow-hidden rounded-xl bg-general-bg shadow-lg elevation-5 border border-gray-100">
-                  {STATUS_OPTIONS.map((option) => (
-                    <TouchableOpacity
-                      key={option}
-                      className="border-b border-gray-100 p-3"
-                      onPress={() => {
-                        setStatus(option);
-                        setIsDropdownOpen(false);
-                      }}
-                    >
-                      <Text className="font-poppins-regular text-[14px] text-artesao-main">
-                        {option}
-                      </Text>
-                    </TouchableOpacity>
-                  ))}
+                {isDropdownOpen && (
+                  <View className="absolute top-[70px] z-50 w-full overflow-hidden rounded-xl bg-general-bg shadow-lg elevation-5 border border-gray-100">
+                    {STATUS_OPTIONS.map((option) => (
+                      <TouchableOpacity
+                        key={option}
+                        className="border-b border-gray-10"
+                        onPress={() => {
+                          setStatus(option);
+                          setIsDropdownOpen(false);
+                        }}
+                      >
+                        <Text className="font-poppins-regular text-[14px] text-artesao-main">
+                          {option}
+                        </Text>
+                      </TouchableOpacity>
+                    ))}
+                  </View>
+                )}
+              </View>
+              {!isEditing && (
+                <View className="mb-4 z-50 pr-4">
+                  <Text className="mb-1 font-poppins-medium text-[15px] text-artesao-main">
+                    Quantidade
+                  </Text>
+                  <Input
+                    appRole="artesao"
+                    className="h-12 flex-row items-center justify-between rounded-2xl bg-artesao-surface px-4"
+                    value={quantity}
+                    keyboardType="numeric"
+                    onChangeText={setQuantity}
+                    placeholder="1"
+                    placeholderTextColor="#9CA3AF"
+                    style={{ textAlignVertical: "center", textAlign: "center" }}
+                  />
                 </View>
               )}
             </View>
