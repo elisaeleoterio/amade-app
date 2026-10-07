@@ -49,6 +49,7 @@ export const ProductModal = ({
   const [isOpenImageViewer, setIsOpenImageViewer] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [quantity, setQuantity] = useState("1");
+  const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
     if (visible) {
@@ -78,13 +79,13 @@ export const ProductModal = ({
 
   const handleSave = () => {
     if (!title.trim() || !price.trim() || !description.trim()) {
-      toast.warning("Preencha todos os campos obrigatórios.");
+      setErrorMessage("Preencha todos os campos obrigatórios.");
       return;
     }
 
     const numericPrice = parseFloat(price.replace(",", "."));
     if (isNaN(numericPrice)) {
-      toast.warning("Insira um valor de preço válido.");
+      setErrorMessage("Insira um valor de preço válido.");
       return;
     }
 
@@ -303,6 +304,12 @@ export const ProductModal = ({
               })}
             </View>
           </ScrollView>
+
+          {errorMessage ? (
+            <Text className="mt-2 text-center font-poppins-medium text-[14px] text-red-500">
+              {errorMessage}
+            </Text>
+          ) : null}
 
           <View className="mt-4 flex-row justify-between gap-4">
             <View className="flex-1">
