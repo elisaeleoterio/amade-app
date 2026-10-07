@@ -275,7 +275,6 @@ export const ProductModal = ({
                   <Text className="mb-1 font-poppins-medium text-[15px] text-artesao-main">
                     Quantidade
                   </Text>
-                  {/* Novo Input de Quantidade com Steppers */}
                   <View className="h-12 w-32 flex-row items-center justify-between rounded-2xl bg-artesao-surface px-1">
                     <TouchableOpacity
                       activeOpacity={0.7}
