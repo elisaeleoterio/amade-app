@@ -1,3 +1,4 @@
+import AmadeLogo from "@/assets/logoComplete.svg";
 import { roleConfig } from "@/constants/theme";
 import type { Role } from "@/types/role.type";
 import { Image, TouchableOpacity, View } from "react-native";
@@ -55,11 +56,17 @@ export const ProductCard = ({
       style={{ borderColor: colors.border }}
     >
       {/* Imagem do Produto */}
-      <Image
-        source={{ uri: imageUrl }}
-        className="h-40 w-28 rounded-2xl bg-gray-100"
-        resizeMode="cover"
-      />
+      {imageUrl ? (
+        <Image
+          source={{ uri: imageUrl }}
+          className="h-40 w-28 rounded-2xl bg-gray-100"
+          resizeMode="cover"
+        />
+      ) : (
+        <View className="h-40 w-28 rounded-2xl bg-gray-100 justify-center items-center">
+          <AmadeLogo color={"#d1d5db"} width={60} height={60} />
+        </View>
+      )}
 
       <View className="ml-4 flex-1 py-1">
         {/* Título */}
