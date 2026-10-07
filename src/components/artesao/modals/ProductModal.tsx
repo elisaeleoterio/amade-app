@@ -187,7 +187,7 @@ export const ProductModal = ({
               />
             </View>
 
-            <View className="flex-row justify-between">
+            <View className="flex-row w-full justify-between">
               <View className="mb-4 z-50">
                 <Text className="mb-1 font-poppins-medium text-[15px] text-artesao-main">
                   Status
@@ -195,7 +195,7 @@ export const ProductModal = ({
                 <TouchableOpacity
                   activeOpacity={0.7}
                   onPress={() => setIsDropdownOpen(!isDropdownOpen)}
-                  className="h-12 flex-row items-center justify-between rounded-2xl bg-artesao-surface px-4"
+                  className="h-12 w-48 flex-row items-center justify-between rounded-2xl bg-artesao-surface px-4"
                 >
                   <Text className="font-poppins-regular text-[15px] text-artesao-main">
                     {status}
@@ -208,7 +208,7 @@ export const ProductModal = ({
                     {STATUS_OPTIONS.map((option) => (
                       <TouchableOpacity
                         key={option}
-                        className="border-b border-gray-10"
+                        className="border-b border-gray-100 p-3"
                         onPress={() => {
                           setStatus(option);
                           setIsDropdownOpen(false);
@@ -222,20 +222,25 @@ export const ProductModal = ({
                   </View>
                 )}
               </View>
+
               {!isEditing && (
-                <View className="mb-4 z-50 pr-4">
+                <View className="mb-4 z-40 pr-4">
                   <Text className="mb-1 font-poppins-medium text-[15px] text-artesao-main">
                     Quantidade
                   </Text>
                   <Input
                     appRole="artesao"
-                    className="h-12 flex-row items-center justify-between rounded-2xl bg-artesao-surface px-4"
+                    className="h-12 flex-row items-center justify-between rounded-2xl bg-artesao-surface px-4 font-poppins-regular text-[15px] text-artesao-main"
                     value={quantity}
                     keyboardType="numeric"
                     onChangeText={setQuantity}
                     placeholder="1"
                     placeholderTextColor="#9CA3AF"
-                    style={{ textAlignVertical: "center", textAlign: "center" }}
+                    style={{
+                      textAlignVertical: "center",
+                      textAlign: "center",
+                      includeFontPadding: false,
+                    }}
                   />
                 </View>
               )}
