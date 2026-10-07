@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/sonner";
 import { Text } from "@/components/ui/text";
+import { roleConfig } from "@/constants/theme";
 import { mockLogin } from "@/mocks/userMock";
 import { useRouter } from "expo-router";
 import { Eye, EyeOff } from "lucide-react-native";
@@ -51,7 +52,7 @@ export default function LoginScreen() {
       className="bg-general-bg"
     >
       <View className="items-center">
-        <AmadeLogo color="#712B05" width={150} />
+        <AmadeLogo color={roleConfig["admin"].dark} width={150} />
       </View>
       <View className="mx-16">
         <Text

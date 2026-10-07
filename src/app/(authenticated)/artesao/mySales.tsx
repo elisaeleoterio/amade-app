@@ -5,15 +5,16 @@ import { CalendarModal } from "@/components/shared/calendarModal";
 import { ScreenTemplate } from "@/components/templates/screen-template";
 import { toast } from "@/components/ui/sonner";
 import { Text } from "@/components/ui/text";
+import { roleConfig } from "@/constants/theme";
 import { fetchSalesData, SalesSummary, SoldItem } from "@/mocks/salesMock";
 import { exportSalesToExcel } from "@/utils/exportSales";
 import { Calendar, Info, Printer } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import {
-    ActivityIndicator,
-    ScrollView,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  ScrollView,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 const getCurrentWeek = () => {
@@ -29,7 +30,6 @@ const getCurrentWeek = () => {
   return { start, end };
 };
 
-// Função auxiliar para formatar a data
 const formatRangeString = (start: Date, end: Date) => {
   const formatter = new Intl.DateTimeFormat("pt-BR", {
     day: "2-digit",
@@ -125,11 +125,11 @@ export default function MySalesScreen() {
   return (
     <ScreenTemplate
       navbar={{ appRole: "artesao", title: "Minhas Vendas", showBack: true }}
-      className="bg-[#FDFBF5]"
+      className="bg-general-bg"
     >
       {loading || !summary ? (
         <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="large" color="#14532D" />
+          <ActivityIndicator size="large" color={roleConfig["artesao"].dark} />
         </View>
       ) : (
         <ScrollView
@@ -139,7 +139,11 @@ export default function MySalesScreen() {
         >
           <View className="flex-row items-center justify-between py-6">
             <TouchableOpacity onPress={handlePrint} className="p-2">
-              <Printer size={24} color="#14532D" strokeWidth={1.5} />
+              <Printer
+                size={24}
+                color={roleConfig["artesao"].dark}
+                strokeWidth={1.5}
+              />
             </TouchableOpacity>
 
             <Text className="text-center font-poppins-regular text-[16px] text-artesao-dark leading-tight">
@@ -150,7 +154,11 @@ export default function MySalesScreen() {
               onPress={() => setCalendarOpen(true)}
               className="p-2"
             >
-              <Calendar size={24} color="#14532D" strokeWidth={1.5} />
+              <Calendar
+                size={24}
+                color={roleConfig["artesao"].dark}
+                strokeWidth={1.5}
+              />
             </TouchableOpacity>
           </View>
           <View className="h-[1px] w-full bg-artesao-dark/50 mb-4" />
@@ -162,7 +170,7 @@ export default function MySalesScreen() {
             <Text className="font-poppins-medium text-xl text-artesao-main">
               Faturamento
             </Text>
-            <Info size={18} color="#14532D" />
+            <Info size={18} color={roleConfig["artesao"].dark} />
           </TouchableOpacity>
 
           <SalesOverviewCard summary={summary} />

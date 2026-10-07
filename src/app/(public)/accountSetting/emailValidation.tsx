@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/sonner";
 import { Text } from "@/components/ui/text";
+import { roleConfig } from "@/constants/theme";
 import { mockVerifyEmailCode } from "@/mocks/userMock";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useRef, useState } from "react";
@@ -78,7 +79,7 @@ export default function EmailValidation() {
       className="bg-general-bg"
     >
       <View className="items-center">
-        <AmadeLogo color="#712B05" width={150} />
+        <AmadeLogo color={roleConfig["admin"].dark} width={150} />
       </View>
       <View className="mx-12 mb-3">
         <Text
