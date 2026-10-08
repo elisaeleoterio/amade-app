@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
+import { roleConfig } from "@/constants/theme";
+import { Role } from "@/types/role.type";
 import { TriangleAlert, X } from "lucide-react-native";
 import { Modal, Pressable, TouchableOpacity, View } from "react-native";
 
@@ -14,7 +16,8 @@ export const RemoveProductBatchtModal = ({
   onClose,
   onConfirm,
 }: RemoveProductBatchtModalProps) => {
-  const activeColor = "#166534";
+  const role: Role = "artesao";
+  const colors = roleConfig[role];
 
   return (
     <Modal
@@ -33,23 +36,23 @@ export const RemoveProductBatchtModal = ({
             className="absolute right-5 top-5 p-2"
             activeOpacity={0.7}
           >
-            <X size={24} color={activeColor} strokeWidth={1.5} />
+            <X size={24} color={colors.main} strokeWidth={1.5} />
           </TouchableOpacity>
 
           <View className="mb-4 mt-2">
-            <TriangleAlert size={56} color={activeColor} strokeWidth={1.2} />
+            <TriangleAlert size={56} color={colors.main} strokeWidth={1.2} />
           </View>
 
           <Text
             className="text-center font-poppins-semibold text-[20px] mb-3 mx-10"
-            style={{ color: activeColor }}
+            style={{ color: colors.main }}
           >
             Tem certeza que deseja remover esse(s) produto(s) do lote?
           </Text>
 
           <View className="w-full flex-row justify-between">
             <Button
-              appRole="artesao"
+              appRole={role}
               className="bg-toaster-success w-40"
               onPress={onClose}
               variant="default"
@@ -59,7 +62,7 @@ export const RemoveProductBatchtModal = ({
             </Button>
 
             <Button
-              appRole="artesao"
+              appRole={role}
               className="bg-toaster-error w-40"
               variant="default"
               size="md"

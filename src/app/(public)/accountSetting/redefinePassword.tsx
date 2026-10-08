@@ -6,16 +6,18 @@ import { toast } from "@/components/ui/sonner";
 import { Text } from "@/components/ui/text";
 import { roleConfig } from "@/constants/theme";
 import { updateMockPassword } from "@/mocks/userMock";
+import { Role } from "@/types/role.type";
 import { router } from "expo-router";
 import { Eye, EyeOff } from "lucide-react-native";
 import { useState } from "react";
 import { TouchableOpacity, View } from "react-native";
 
 export default function redefinePassword() {
+  const role: Role = "admin";
+  const colors = roleConfig[role];
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
 
   const handlePasswordRedefinition = async () => {
     if (password !== confirmPassword) {
@@ -28,7 +30,6 @@ export default function redefinePassword() {
     }
 
     try {
-      setIsProcessing(true);
       await updateMockPassword(password);
 
       toast.success("Senha alterada com sucesso!");
@@ -37,7 +38,6 @@ export default function redefinePassword() {
     } catch (error) {
       toast.error("Erro ao alterar a senha.");
     } finally {
-      setIsProcessing(false);
     }
   };
 
@@ -56,7 +56,7 @@ export default function redefinePassword() {
       className="bg-general-bg"
     >
       <View className="items-center mb-2">
-        <AmadeLogo color={roleConfig["admin"].dark} width={150} />
+        <AmadeLogo color={colors.dark} width={150} />
       </View>
 
       <Text

@@ -5,18 +5,18 @@ import { Role } from "@/types/role.type";
 import { TriangleAlert, X } from "lucide-react-native";
 import { Modal, Pressable, TouchableOpacity, View } from "react-native";
 
-interface DeleteImageModalProps {
+interface CancelNewBatchtModalProps {
   visible: boolean;
   onClose: () => void;
   onConfirm: () => void;
 }
 
-export const DeleteImageModal = ({
+export const CancelNewBatchtModal = ({
   visible,
   onClose,
   onConfirm,
-}: DeleteImageModalProps) => {
-  const role: Role = "artesao";
+}: CancelNewBatchtModalProps) => {
+  const role: Role = "admin";
   const colors = roleConfig[role];
 
   return (
@@ -43,40 +43,19 @@ export const DeleteImageModal = ({
             <TriangleAlert size={56} color={colors.main} strokeWidth={1.2} />
           </View>
 
-          <Text
-            className="text-center font-poppins-semibold text-[20px] mb-3 mx-10"
-            style={{ color: colors.main }}
-          >
-            Tem certeza que deseja excluir essa imagem?
+          <Text className="text-center font-poppins-semibold text-[20px] mb-3 mx-10 text-artesao-main">
+            Tem certeza que deseja cancelar a criação do lote?
           </Text>
 
-          <Text
-            className="text-center font-poppins-regular text-[15px] mx-6 mb-8 leading-6 px-2"
-            style={{ color: colors.main }}
-          >
-            Ao excluir essa imagem, não será possível recuperá-la
-            posteriormente.
-          </Text>
-
-          <View className="w-full flex-row justify-between">
+          <View className="w-full justify-between px-5">
             <Button
               appRole={role}
-              className="bg-toaster-success w-40"
-              onPress={onClose}
-              variant="default"
-              size="md"
-            >
-              <Text>Cancelar</Text>
-            </Button>
-
-            <Button
-              appRole={role}
-              className="bg-toaster-error w-40"
+              className="bg-toaster-error"
               variant="default"
               size="md"
               onPress={onConfirm}
             >
-              <Text>Excluir</Text>
+              <Text>Confirmar Cancelamento</Text>
             </Button>
           </View>
         </Pressable>

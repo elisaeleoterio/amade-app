@@ -5,6 +5,7 @@ import { toast } from "@/components/ui/sonner";
 import { Text } from "@/components/ui/text";
 import { roleConfig } from "@/constants/theme";
 import { fetchMockProducts, Product } from "@/mocks/productMock";
+import { Role } from "@/types/role.type";
 import { useFocusEffect, useRouter } from "expo-router";
 import { Info, Search } from "lucide-react-native";
 import { useCallback, useState } from "react";
@@ -16,6 +17,8 @@ import {
 } from "react-native";
 
 export default function MyInventory() {
+  const role: Role = "artesao";
+  const colors = roleConfig[role];
   const router = useRouter();
   const [isInfoModalOpen, setInfoModalOpen] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
@@ -96,8 +99,8 @@ export default function MyInventory() {
 
   if (loading) {
     return (
-      <View className="flex-1 items-center justify-center bg-[#FDFBF5]">
-        <ActivityIndicator size="large" color={roleConfig["artesao"].main} />
+      <View className="flex-1 items-center justify-center bg-general-bg">
+        <ActivityIndicator size="large" color={colors.main} />
         <Text className="mt-4 font-poppins-regular text-artesao-main">
           Buscando estoque...
         </Text>
@@ -108,7 +111,7 @@ export default function MyInventory() {
   return (
     <ScreenTemplate
       navbar={{
-        appRole: "artesao",
+        appRole: role,
         title: "Meu Estoque",
         onBackPress: () => router.back(),
       }}
@@ -128,11 +131,7 @@ export default function MyInventory() {
               includeFontPadding: false,
             }}
           />
-          <Search
-            color={roleConfig["artesao"].dark}
-            size={22}
-            strokeWidth={1.5}
-          />
+          <Search color={colors.dark} size={22} strokeWidth={1.5} />
         </View>
 
         {/* Tags de filtro */}
@@ -142,14 +141,10 @@ export default function MyInventory() {
               Filtro por status
             </Text>
             <Info
-              color={roleConfig["artesao"].dark}
+              color={colors.dark}
               size={20}
               strokeWidth={1.5}
               onPress={() => setInfoModalOpen(true)}
-            />
-            <StatusInfoModal
-              visible={isInfoModalOpen}
-              onClose={() => setInfoModalOpen(false)}
             />
           </View>
 
@@ -188,7 +183,7 @@ export default function MyInventory() {
             filteredProducts.map((item) => (
               <ProductCard
                 key={item.id}
-                role="artesao"
+                role={role}
                 title={item.title}
                 code={item.id}
                 price={item.price}
@@ -206,6 +201,10 @@ export default function MyInventory() {
           )}
         </View>
       </View>
+      <StatusInfoModal
+        visible={isInfoModalOpen}
+        onClose={() => setInfoModalOpen(false)}
+      />
     </ScreenTemplate>
   );
 }

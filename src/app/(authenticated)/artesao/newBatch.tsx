@@ -1,4 +1,5 @@
 import { BatchInfoModal } from "@/components/artesao/modals/batchInfoModal";
+import { CancelNewBatchtModal } from "@/components/artesao/modals/cancelNewBatchModal";
 import { ProductModal } from "@/components/artesao/modals/ProductModal";
 import { RemoveProductBatchtModal } from "@/components/artesao/modals/removeProductsBtachModal";
 import { ProductCard } from "@/components/shared/productCard";
@@ -12,17 +13,21 @@ import {
   createMockBatch,
   Product,
 } from "@/mocks/productMock";
+import { Role } from "@/types/role.type";
 import { useRouter } from "expo-router";
 import { CirclePlus, Info } from "lucide-react-native";
 import { useState } from "react";
 import { ScrollView, TouchableOpacity, View } from "react-native";
 
 export default function NewBatchScreen() {
+  const role: Role = "artesao";
+  const colors = roleConfig[role];
   const router = useRouter();
   const [isCreateModalVisible, setIsCreateModalVisible] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [isRemoveProductsOpen, setIsRemoveProductsOpen] = useState(false);
   const [isBatchInfoModalOpen, setBatchInfoModalOpen] = useState(false);
+  const [isCancelModalOpen, setCancelModalOpen] = useState(false);
 
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
 
@@ -34,7 +39,16 @@ export default function NewBatchScreen() {
     toast.success("Produto adicionado ao lote.");
   };
 
+  const handleCancelNewBatch = () => {
+    setCancelModalOpen(false);
+    setBatchItems([]);
+    setSelectedIds(new Set());
+
+    router.back();
+  };
+
   const handleRemoveSelected = () => {
+    setIsRemoveProductsOpen(false);
     if (selectedIds.size === 0) return;
     setBatchItems((prev) =>
       prev.filter((item) => !selectedIds.has(item.product.id)),
@@ -88,12 +102,12 @@ export default function NewBatchScreen() {
   return (
     <ScreenTemplate
       navbar={{
-        appRole: "artesao",
+        appRole: role,
         title: "Novo Lote",
         showBack: false,
         leftContent: (
           <Info
-            color={roleConfig["artesao"].dark}
+            color={colors.dark}
             size={24}
             strokeWidth={1.5}
             onPress={() => setBatchInfoModalOpen(true)}
@@ -102,10 +116,6 @@ export default function NewBatchScreen() {
       }}
       className="bg-general-bg"
     >
-      <BatchInfoModal
-        visible={isBatchInfoModalOpen}
-        onClose={() => setBatchInfoModalOpen(false)}
-      />
       <View className="flex-1 px-5 pt-2">
         {/* Botão de Adicionar ao Lote */}
         <TouchableOpacity
@@ -116,11 +126,7 @@ export default function NewBatchScreen() {
           <Text className="font-poppins-regular text-[17px] text-artesao-main">
             Adicionar Novo Produto
           </Text>
-          <CirclePlus
-            size={24}
-            color={roleConfig["artesao"].dark}
-            strokeWidth={1.5}
-          />
+          <CirclePlus size={24} color={colors.dark} strokeWidth={1.5} />
         </TouchableOpacity>
 
         {batchItems.length === 0 ? (
@@ -143,7 +149,7 @@ export default function NewBatchScreen() {
               return (
                 <View key={product.id} className="relative mb-4">
                   <ProductCard
-                    role="artesao"
+                    role={role}
                     title={product.title}
                     code={product.id}
                     price={product.price}
@@ -171,18 +177,18 @@ export default function NewBatchScreen() {
             <View className="flex-row justify-between gap-4 py-4 bg-general-bg border-t border-artesao-surface">
               <View className="flex-1">
                 <Button
-                  appRole="artesao"
+                  appRole={role}
                   variant="default"
                   size="md"
                   className="bg-toaster-success"
                   onPress={clearSelected}
                 >
-                  <Text className="">Desmarcar</Text>
+                  <Text>Desmarcar</Text>
                 </Button>
               </View>
               <View className="flex-1">
                 <Button
-                  appRole="artesao"
+                  appRole={role}
                   variant="default"
                   size="md"
                   className="bg-toaster-error"
@@ -190,22 +196,16 @@ export default function NewBatchScreen() {
                 >
                   <Text>{isProcessing ? "Removendo..." : "Remover"}</Text>
                 </Button>
-
-                <RemoveProductBatchtModal
-                  visible={isRemoveProductsOpen}
-                  onClose={() => setIsRemoveProductsOpen(false)}
-                  onConfirm={handleRemoveSelected}
-                />
               </View>
             </View>
           ) : (
             <View className="flex-row justify-between gap-4 py-4 bg-general-bg border-t border-artesao-surface">
               <View className="flex-1">
                 <Button
-                  appRole="artesao"
+                  appRole={role}
                   variant="outline"
                   size="md"
-                  onPress={() => router.back()}
+                  onPress={() => setCancelModalOpen(true)}
                   disabled={isProcessing}
                 >
                   <Text>Cancelar</Text>
@@ -213,7 +213,7 @@ export default function NewBatchScreen() {
               </View>
               <View className="flex-1">
                 <Button
-                  appRole="artesao"
+                  appRole={role}
                   variant="default"
                   size="md"
                   onPress={handleSaveBatch}
@@ -226,11 +226,29 @@ export default function NewBatchScreen() {
           ))}
       </View>
 
+      {/* ÁREA DE MODAIS */}
+      <BatchInfoModal
+        visible={isBatchInfoModalOpen}
+        onClose={() => setBatchInfoModalOpen(false)}
+      />
+
       <ProductModal
         visible={isCreateModalVisible}
         onClose={() => setIsCreateModalVisible(false)}
         onSave={handleAddProductToBatch}
         initialData={null}
+      />
+
+      <RemoveProductBatchtModal
+        visible={isRemoveProductsOpen}
+        onClose={() => setIsRemoveProductsOpen(false)}
+        onConfirm={handleRemoveSelected}
+      />
+
+      <CancelNewBatchtModal
+        visible={isCancelModalOpen}
+        onClose={() => setCancelModalOpen(false)}
+        onConfirm={handleCancelNewBatch}
       />
     </ScreenTemplate>
   );

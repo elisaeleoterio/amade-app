@@ -8,6 +8,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 import { Text } from "@/components/ui/text";
 import { cn } from "@/lib/utils";
+import { Role } from "@/types/role.type";
 
 const navbarVariants = cva(
   "min-h-16 w-full flex-row items-center bg-[#FDFBF5] justify-between px-4",
@@ -35,15 +36,13 @@ const navbarVariants = cva(
   },
 );
 
-export type AppRole = "admin" | "artesao" | "lojista";
-
-const roleTextColors: Record<AppRole, string> = {
+const roleTextColors: Record<Role, string> = {
   admin: "text-admin-main",
   artesao: "text-artesao-main",
   lojista: "text-lojista-main",
 };
 
-const roleHexColors: Record<AppRole, string> = {
+const roleHexColors: Record<Role, string> = {
   admin: "#712B05",
   artesao: "#166534",
   lojista: "#9F1239",
@@ -60,7 +59,7 @@ export type NavbarProps = VariantProps<typeof navbarVariants> & {
   textStyle?: string;
   onLeftPress?: () => void;
   onBackPress?: () => void;
-  appRole?: AppRole;
+  appRole?: Role;
 };
 
 export const Navbar = ({

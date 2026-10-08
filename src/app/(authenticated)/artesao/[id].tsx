@@ -109,12 +109,6 @@ export default function ArtesaoProductDetailsScreen() {
               Excluir
             </Text>
           </Button>
-
-          <DeleteProductModal
-            visible={isDeleteProductModalOpen}
-            onClose={() => setisDeleteProductModalOpen(false)}
-            onConfirm={handleDeleteProduct}
-          />
         </View>
 
         {/* BOTÃO EDITAR */}
@@ -150,6 +144,11 @@ export default function ArtesaoProductDetailsScreen() {
         onClose={() => setIsEditModalVisible(false)}
         onSave={handleSaveProduct}
         initialData={selectedProduct}
+      />
+      <DeleteProductModal
+        visible={isDeleteProductModalOpen}
+        onClose={() => setisDeleteProductModalOpen(false)}
+        onConfirm={handleDeleteProduct}
       />
     </ProductDetailsTemplate>
   );

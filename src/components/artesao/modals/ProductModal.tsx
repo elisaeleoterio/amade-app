@@ -1,12 +1,13 @@
 import { ImageViewerModal } from "@/components/modals/imageViwerModal";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/sonner";
 import { Text } from "@/components/ui/text";
+import { roleConfig } from "@/constants/theme";
 import { Product } from "@/mocks/productMock";
+import { Role } from "@/types/role.type";
 import { Status } from "@/types/status.type";
 import * as ImagePicker from "expo-image-picker";
-import { ChevronDown } from "lucide-react-native";
+import { ChevronDown, Minus, Plus } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import {
   Image,
@@ -26,12 +27,7 @@ interface ProductModalProps {
   initialData?: Product | null;
 }
 
-const STATUS_OPTIONS: Status[] = [
-  "Cadastrado",
-  "Disponível",
-  "Vendido",
-  "Indisponível",
-];
+const STATUS_OPTIONS: Status[] = ["Cadastrado", "Disponível", "Indisponível"];
 
 export const ProductModal = ({
   visible,
@@ -39,8 +35,9 @@ export const ProductModal = ({
   onSave,
   initialData,
 }: ProductModalProps) => {
+  const role: Role = "artesao";
+  const colors = roleConfig[role];
   const isEditing = !!initialData;
-
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
   const [status, setStatus] = useState<Status>("Cadastrado");
@@ -50,6 +47,18 @@ export const ProductModal = ({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [quantity, setQuantity] = useState("1");
   const [errorMessage, setErrorMessage] = useState("");
+
+  const formatPrice = (rawValue: string) => {
+    const numericValue = rawValue.replace(/\D/g, "");
+    if (!numericValue) return "";
+
+    const amount = (Number(numericValue) / 100).toFixed(2);
+
+    const [intPart, decPart] = amount.split(".");
+    const formattedInt = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+
+    return `${formattedInt},${decPart}`;
+  };
 
   useEffect(() => {
     if (visible) {
@@ -62,7 +71,7 @@ export const ProductModal = ({
         }
 
         setTitle(initialData.title);
-        setPrice(initialData.price.toString());
+        setPrice(formatPrice(initialData.price.toFixed(2)));
         setStatus(initialData.status as Status);
         setDescription(initialData.description);
         setImageUrls(initialData.imageUrls || []);
@@ -74,6 +83,8 @@ export const ProductModal = ({
         setImageUrls([]);
       }
       setIsDropdownOpen(false);
+      setQuantity("1");
+      setErrorMessage("");
     }
   }, [visible, initialData, isEditing]);
 
@@ -83,16 +94,34 @@ export const ProductModal = ({
       return;
     }
 
-    const numericPrice = parseFloat(price.replace(",", "."));
-    if (isNaN(numericPrice)) {
+    if (title.length > 50) {
+      setErrorMessage("O título do produto ultrapassa o máximo permitido.");
+      return;
+    }
+    const cleanPrice = price.replace(/\./g, "").replace(",", ".");
+    const numericPrice = parseFloat(cleanPrice);
+
+    if (isNaN(numericPrice) || numericPrice <= 0) {
       setErrorMessage("Insira um valor de preço válido.");
       return;
     }
 
-    const qty = isEditing ? 1 : parseInt(quantity) || 1;
+    const qty = isEditing ? 1 : parseInt(quantity, 10);
 
+    if (!isEditing) {
+      const isInteger = /^\d+$/.test(quantity.trim());
+      if (!isInteger || qty < 1) {
+        setErrorMessage("Insira uma quantidade inteira válida (mínimo de 1).");
+        return;
+      } else if (qty > 999) {
+        setErrorMessage("Você só pode adicionar até 999 produtos por vez.");
+        return;
+      }
+    }
+
+    const tempId = `TEMP-${Math.floor(Math.random() * 1000)}`;
     const productData: Product = {
-      id: initialData?.id || "TEMP-ID",
+      id: initialData?.id || tempId,
       title,
       price: numericPrice,
       status,
@@ -101,6 +130,8 @@ export const ProductModal = ({
       paymentMethod: initialData?.paymentMethod,
     };
 
+    setErrorMessage("");
+    setQuantity("1");
     onSave(productData, qty);
     onClose();
   };
@@ -134,6 +165,18 @@ export const ProductModal = ({
     setImageUrls((prev) => prev.filter((_, index) => index !== indexToRemove));
   };
 
+  const incrementQuantity = () => {
+    const current = parseInt(quantity, 10) || 0;
+    setQuantity((current + 1).toString());
+  };
+
+  const decrementQuantity = () => {
+    const current = parseInt(quantity, 10) || 0;
+    if (current > 1) {
+      setQuantity((current - 1).toString());
+    }
+  };
+
   return (
     <Modal
       visible={visible}
@@ -158,6 +201,7 @@ export const ProductModal = ({
                 Título
               </Text>
               <TextInput
+                maxLength={50}
                 value={title}
                 onChangeText={setTitle}
                 placeholder="Nome do Produto"
@@ -174,18 +218,23 @@ export const ProductModal = ({
               <Text className="mb-1 font-poppins-medium text-[15px] text-artesao-main">
                 Preço
               </Text>
-              <TextInput
-                value={price}
-                onChangeText={setPrice}
-                placeholder="R$"
-                placeholderTextColor="#9CA3AF"
-                keyboardType="numeric"
-                className="h-12 rounded-2xl bg-artesao-surface px-4 font-poppins-regular text-[15px] text-artesao-main py-0"
-                style={{
-                  textAlignVertical: "center",
-                  includeFontPadding: false,
-                }}
-              />
+              <View className="h-12 flex-row items-center rounded-2xl bg-artesao-surface px-4">
+                <Text className="font-poppins-medium text-[15px] text-artesao-main mr-1 mt-[2px]">
+                  R$
+                </Text>
+                <TextInput
+                  value={price}
+                  onChangeText={(text) => setPrice(formatPrice(text))}
+                  placeholder="0,00"
+                  placeholderTextColor="#9CA3AF"
+                  keyboardType="numeric"
+                  className="flex-1 font-poppins-regular text-[15px] text-artesao-main py-0"
+                  style={{
+                    textAlignVertical: "center",
+                    includeFontPadding: false,
+                  }}
+                />
+              </View>
             </View>
 
             <View className="flex-row w-full justify-between">
@@ -201,7 +250,7 @@ export const ProductModal = ({
                   <Text className="font-poppins-regular text-[15px] text-artesao-main">
                     {status}
                   </Text>
-                  <ChevronDown size={20} color="#14532D" />
+                  <ChevronDown size={20} color={colors.dark} />
                 </TouchableOpacity>
 
                 {isDropdownOpen && (
@@ -225,24 +274,43 @@ export const ProductModal = ({
               </View>
 
               {!isEditing && (
-                <View className="mb-4 z-40 pr-4">
+                <View className="mb-4 z-40">
                   <Text className="mb-1 font-poppins-medium text-[15px] text-artesao-main">
                     Quantidade
                   </Text>
-                  <Input
-                    appRole="artesao"
-                    className="h-12 flex-row items-center justify-between rounded-2xl bg-artesao-surface px-4 font-poppins-regular text-[15px] text-artesao-main"
-                    value={quantity}
-                    keyboardType="numeric"
-                    onChangeText={setQuantity}
-                    placeholder="1"
-                    placeholderTextColor="#9CA3AF"
-                    style={{
-                      textAlignVertical: "center",
-                      textAlign: "center",
-                      includeFontPadding: false,
-                    }}
-                  />
+                  <View className="h-12 w-32 flex-row items-center justify-between rounded-2xl bg-artesao-surface px-1">
+                    <TouchableOpacity
+                      activeOpacity={0.7}
+                      onPress={decrementQuantity}
+                      className="p-2"
+                    >
+                      <Minus size={20} color={colors.dark} />
+                    </TouchableOpacity>
+
+                    <TextInput
+                      className="flex-1 text-center font-poppins-regular text-[15px] text-artesao-main py-0"
+                      value={quantity}
+                      maxLength={3}
+                      keyboardType="numeric"
+                      onChangeText={(text) =>
+                        setQuantity(text.replace(/\D/g, ""))
+                      }
+                      placeholder="1"
+                      placeholderTextColor="#9CA3AF"
+                      style={{
+                        textAlignVertical: "center",
+                        includeFontPadding: false,
+                      }}
+                    />
+
+                    <TouchableOpacity
+                      activeOpacity={0.7}
+                      onPress={incrementQuantity}
+                      className="p-2"
+                    >
+                      <Plus size={20} color={colors.dark} />
+                    </TouchableOpacity>
+                  </View>
                 </View>
               )}
             </View>
@@ -295,7 +363,7 @@ export const ProductModal = ({
                     <ImageViewerModal
                       visible={isOpenImageViewer}
                       imageUrl={imageUrl}
-                      role="artesao"
+                      role={role}
                       onClose={() => setIsOpenImageViewer(false)}
                       onRemove={() => handleRemoveImage(index)}
                     />
@@ -314,7 +382,7 @@ export const ProductModal = ({
           <View className="mt-4 flex-row justify-between gap-4">
             <View className="flex-1">
               <Button
-                appRole="artesao"
+                appRole={role}
                 variant="outline"
                 size="md"
                 onPress={onClose}
@@ -324,7 +392,7 @@ export const ProductModal = ({
             </View>
             <View className="flex-1">
               <Button
-                appRole="artesao"
+                appRole={role}
                 variant="default"
                 size="md"
                 onPress={handleSave}

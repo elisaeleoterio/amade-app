@@ -1,8 +1,8 @@
 import { cn } from "@/lib/utils";
-import { AppRole } from "@/types/app";
+import { Role } from "@/types/role.type";
 import { TextInput } from "react-native";
 
-const roleStyles: Record<AppRole, string> = {
+const roleStyles: Record<Role, string> = {
   admin: "focus:border-admin-main bg-admin-main/5 text-admin-dark",
   lojista: "focus:border-lojista-main bg-lojista-main/5 text-lojista-dark",
   artesao: "focus:border-artesao-main bg-artesao-main/5 text-artesao-dark",
@@ -14,7 +14,7 @@ function Input({
   style,
   ...props
 }: React.ComponentProps<typeof TextInput> &
-  React.RefAttributes<TextInput> & { appRole?: AppRole }) {
+  React.RefAttributes<TextInput> & { appRole?: Role }) {
   return (
     <TextInput
       style={[

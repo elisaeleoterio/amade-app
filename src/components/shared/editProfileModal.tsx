@@ -2,21 +2,22 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/sonner";
 import { Text } from "@/components/ui/text";
+import { roleConfig } from "@/constants/theme";
 import {
-    UserProfile,
-    updateMockEmail,
-    updateMockProfileImage,
+  UserProfile,
+  updateMockEmail,
+  updateMockProfileImage,
 } from "@/mocks/userMock";
 import { Role } from "@/types/role.type";
 import * as ImagePicker from "expo-image-picker";
 import { Camera, X } from "lucide-react-native";
 import { useEffect, useState } from "react";
 import {
-    ActivityIndicator,
-    Image,
-    Modal,
-    TouchableOpacity,
-    View,
+  ActivityIndicator,
+  Image,
+  Modal,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 interface EditProfileModalProps {
@@ -27,24 +28,6 @@ interface EditProfileModalProps {
   onSaveSuccess: (newAvatar?: string, newEmail?: string) => void;
 }
 
-const roleConfig = {
-  admin: {
-    main: "#712B05",
-    surface: "#E0D1C7",
-    textDark: "#2A0F01",
-  },
-  lojista: {
-    main: "#9F1239",
-    surface: "#E9CCD2",
-    textDark: "#4C0519",
-  },
-  artesao: {
-    main: "#14532D",
-    surface: "#E5EFE5",
-    textDark: "#0C331C",
-  },
-};
-
 export const EditProfileModal = ({
   visible,
   onClose,
@@ -52,6 +35,7 @@ export const EditProfileModal = ({
   onSaveSuccess,
   role,
 }: EditProfileModalProps) => {
+  const colors = roleConfig[role];
   const [avatarUri, setAvatarUri] = useState<string | undefined>(
     user?.avatarUrl,
   );
@@ -115,7 +99,6 @@ export const EditProfileModal = ({
       setIsProcessing(false);
     }
   };
-  const theme = roleConfig[role];
 
   return (
     <Modal
@@ -130,12 +113,12 @@ export const EditProfileModal = ({
             onPress={onClose}
             className="absolute right-5 top-5 p-2 z-10"
           >
-            <X size={24} color="#14532D" strokeWidth={1.5} />
+            <X size={24} color={colors.dark} strokeWidth={1.5} />
           </TouchableOpacity>
 
           <Text
-            className="text-center font-poppins-semibold text-[20px] text-artesao-main mb-6"
-            style={{ color: theme.textDark }}
+            className="text-center font-poppins-semibold text-[20px] mb-6"
+            style={{ color: colors.main }}
           >
             Editar Conta
           </Text>
@@ -151,12 +134,12 @@ export const EditProfileModal = ({
                 <Image
                   source={{ uri: avatarUri }}
                   className="w-24 h-24 rounded-full"
-                  style={{ backgroundColor: theme.surface }}
+                  style={{ backgroundColor: colors.surface }}
                 />
               ) : (
                 <View
                   className="w-24 h-24 rounded-full items-center justify-center"
-                  style={{ backgroundColor: theme.main }}
+                  style={{ backgroundColor: colors.main }}
                 >
                   <Text className="font-poppins-medium text-white text-[32px] mt-1">
                     {user?.name.first.charAt(0).toUpperCase()}
@@ -165,7 +148,7 @@ export const EditProfileModal = ({
               )}
               <View
                 className="absolute bottom-0 right-0 w-8 h-8 rounded-full items-center justify-center border-2 border-white"
-                style={{ backgroundColor: theme.main }}
+                style={{ backgroundColor: colors.main }}
               >
                 <Camera size={14} color="#FFF" />
               </View>

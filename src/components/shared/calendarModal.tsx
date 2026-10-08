@@ -1,4 +1,5 @@
 import { Text } from "@/components/ui/text";
+import { roleConfig } from "@/constants/theme";
 import type { Role } from "@/types/role.type";
 import { Check, ChevronLeft, ChevronRight, X } from "lucide-react-native";
 import { useEffect, useMemo, useState } from "react";
@@ -46,41 +47,12 @@ export const CalendarModal = ({
   role = "artesao",
   selectPeriod = true,
 }: CalendarModalProps) => {
+  const colors = roleConfig[role];
   const [currentDate, setCurrentDate] = useState(new Date());
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const [showMonthPicker, setShowMonthPicker] = useState(false);
   const [showYearPicker, setShowYearPicker] = useState(false);
-
-  const theme = useMemo(() => {
-    const configs = {
-      artesao: {
-        hex: "#14532D",
-        bg: "#166534",
-        text: "#166534",
-        mainText: "#14532D",
-        border: "#166534",
-        lightBg: "#E5EFE5",
-      },
-      lojista: {
-        hex: "#9F1239",
-        bg: "#810F2F",
-        text: "#810F2F",
-        mainText: "#4C0519",
-        border: "#810F2F",
-        lightBg: "#E9CCD2",
-      },
-      admin: {
-        hex: "#712B05",
-        bg: "#712B05",
-        text: "#712B05",
-        mainText: "#2A0F01",
-        border: "#712B05",
-        lightBg: "#E0D1C7",
-      },
-    };
-    return configs[role] || configs.artesao;
-  }, [role]);
 
   useEffect(() => {
     if (visible) {
@@ -201,12 +173,12 @@ export const CalendarModal = ({
       onRequestClose={onClose}
     >
       <Pressable
-        className="flex-1 bg-black/50 justify-center items-center px-4"
+        className="flex-1 dark-black/50 justify-center items-center px-4"
         onPress={onClose}
       >
         <Pressable
-          className={`w-full bg-general-bg rounded-3xl p-6 border shadow-xl relative z-10`}
-          style={{ borderColor: theme.border }}
+          className={`w-full dark-general-dark rounded-3xl p-6 border shadow-xl relative z-10`}
+          style={{ borderColor: colors.main }}
         >
           {/* Header Actions */}
           <View className="flex-row justify-between items-center mb-2">
@@ -214,17 +186,17 @@ export const CalendarModal = ({
               onPress={() => onConfirm(startDate, endDate)}
               className="px-2"
             >
-              <Check size={24} color={theme.hex} strokeWidth={2.5} />
+              <Check size={24} color={colors.main} strokeWidth={2.5} />
             </TouchableOpacity>
             <TouchableOpacity onPress={onClose} className="px-2">
-              <X size={24} color={theme.hex} strokeWidth={2.5} />
+              <X size={24} color={colors.main} strokeWidth={2.5} />
             </TouchableOpacity>
           </View>
 
           {/* Seletores Dinâmicos de Mês/Ano */}
           <View className="flex-row justify-between items-center px-2 mb-6">
             <TouchableOpacity onPress={handlePrevMonth} className="p-2">
-              <ChevronLeft size={24} color={theme.hex} />
+              <ChevronLeft size={24} color={colors.main} />
             </TouchableOpacity>
 
             <View className="flex-row gap-3 relative">
@@ -235,11 +207,11 @@ export const CalendarModal = ({
                   setShowMonthPicker(!showMonthPicker);
                   setShowYearPicker(false);
                 }}
-                className="border-2 rounded-xl px-8 py-2 flex-row items-center bg-surface"
+                className="border-2 rounded-xl px-8 py-2 flex-row items-center dark-surface"
                 style={
                   showMonthPicker
-                    ? { borderColor: theme.border }
-                    : { borderColor: theme.lightBg }
+                    ? { borderColor: colors.main }
+                    : { borderColor: colors.surface }
                 }
               >
                 <Text className="font-poppins-regular text-left mr-2">
@@ -248,7 +220,7 @@ export const CalendarModal = ({
                 <ChevronRight
                   size={16}
                   className={showMonthPicker ? "-rotate-90" : "rotate-90"}
-                  color={theme.bg}
+                  color={colors.dark}
                 />
               </TouchableOpacity>
 
@@ -259,11 +231,11 @@ export const CalendarModal = ({
                   setShowYearPicker(!showYearPicker);
                   setShowMonthPicker(false);
                 }}
-                className="border-2 rounded-xl px-4 py-2 flex-row items-center bg-general-bg"
+                className="border-2 rounded-xl px-4 py-2 flex-row items-center dark-general-dark"
                 style={
                   showMonthPicker
-                    ? { borderColor: theme.border }
-                    : { borderColor: theme.lightBg }
+                    ? { borderColor: colors.main }
+                    : { borderColor: colors.surface }
                 }
               >
                 <Text className="font-poppins-regular text-left mr-2">
@@ -272,27 +244,27 @@ export const CalendarModal = ({
                 <ChevronRight
                   size={16}
                   className={showYearPicker ? "-rotate-90" : "rotate-90"}
-                  color={theme.bg}
+                  color={colors.dark}
                 />
               </TouchableOpacity>
             </View>
 
             <TouchableOpacity onPress={handleNextMonth} className="p-2">
-              <ChevronRight size={24} color={theme.mainText} />
+              <ChevronRight size={24} color={colors.main} />
             </TouchableOpacity>
           </View>
 
           {/* Container do Calendário */}
           <View
             className="border-[1.5px] rounded-2xl p-3"
-            style={{ borderColor: theme.bg }}
+            style={{ borderColor: colors.dark }}
           >
             <View className="flex-row justify-around mb-2">
               {DAYS_OF_WEEK.map((day, i) => (
                 <Text
                   key={i}
                   className="font-poppins-medium w-10 text-center"
-                  style={{ color: theme.mainText }}
+                  style={{ color: colors.main }}
                 >
                   {day}
                 </Text>
@@ -311,16 +283,16 @@ export const CalendarModal = ({
                     const isRange = isInRange(dayObj.date);
                     const isOnlyOne = isSelectedOnlyOne(dayObj.date);
 
-                    let bgColor = "transparent";
+                    let darkColor = "transparent";
                     let textColor = dayObj.isCurrentMonth
                       ? "#1f2937"
                       : "#d1d5db";
 
                     if (isStart || isEnd || isOnlyOne) {
-                      bgColor = theme.bg;
+                      darkColor = colors.dark;
                       textColor = "#ffffff";
                     } else if (isRange && selectPeriod) {
-                      bgColor = theme.lightBg;
+                      darkColor = colors.surface;
                       textColor = "#1f2937";
                     }
 
@@ -330,7 +302,7 @@ export const CalendarModal = ({
                         activeOpacity={0.7}
                         onPress={() => handleDayPress(dayObj.date)}
                         className="rounded-xl w-10 h-10 items-center justify-center"
-                        style={{ backgroundColor: bgColor }}
+                        style={{ backgroundColor: darkColor }}
                       >
                         <Text
                           className="text-center font-poppins-medium"
@@ -348,7 +320,7 @@ export const CalendarModal = ({
 
           {/* Menus Flutuantes (Dropdowns) */}
           {showMonthPicker && (
-            <View className="absolute top-[100px] left-[5%] w-[70%] bg-white border border-gray-100 shadow-2xl rounded-2xl p-3 flex-row flex-wrap justify-between z-50">
+            <View className="absolute top-[100px] left-[5%] w-[70%] dark-white border border-gray-100 shadow-2xl rounded-2xl p-3 flex-row flex-wrap justify-between z-50">
               {MONTHS.map((m, i) => (
                 <TouchableOpacity
                   key={m}
@@ -356,8 +328,8 @@ export const CalendarModal = ({
                   className="w-[30%] py-3 my-1 rounded-xl items-center"
                   style={
                     currentDate.getMonth() === i
-                      ? { backgroundColor: theme.bg }
-                      : { backgroundColor: theme.lightBg }
+                      ? { backgroundColor: colors.dark }
+                      : { backgroundColor: colors.surface }
                   }
                 >
                   <Text
@@ -365,7 +337,7 @@ export const CalendarModal = ({
                     style={
                       currentDate.getMonth() === i
                         ? { color: "white" }
-                        : { color: theme.mainText }
+                        : { color: colors.main }
                     }
                   >
                     {m}
@@ -376,7 +348,7 @@ export const CalendarModal = ({
           )}
 
           {showYearPicker && (
-            <View className="absolute top-[100px] right-[20%] w-32 bg-white border border-gray-100 shadow-2xl rounded-2xl z-50 max-h-56 overflow-hidden">
+            <View className="absolute top-[100px] right-[20%] w-32 dark-white border border-gray-100 shadow-2xl rounded-2xl z-50 max-h-56 overflow-hidden">
               <ScrollView showsVerticalScrollIndicator={false}>
                 {YEARS.map((y) => (
                   <TouchableOpacity
@@ -385,7 +357,7 @@ export const CalendarModal = ({
                     className="py-4 items-center border-b border-gray-100"
                     style={
                       currentDate.getFullYear() === y
-                        ? { backgroundColor: theme.lightBg }
+                        ? { backgroundColor: colors.surface }
                         : { backgroundColor: "" }
                     }
                   >
@@ -393,8 +365,8 @@ export const CalendarModal = ({
                       className="font-poppins-medium"
                       style={
                         currentDate.getFullYear() === y
-                          ? { color: theme.text }
-                          : { color: theme.mainText }
+                          ? { color: colors.main }
+                          : { color: colors.main }
                       }
                     >
                       {y}

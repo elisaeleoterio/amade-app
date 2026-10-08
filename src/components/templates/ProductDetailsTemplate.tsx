@@ -1,5 +1,6 @@
 import { ScreenTemplate } from "@/components/templates/screen-template";
 import { Text } from "@/components/ui/text";
+import { roleConfig } from "@/constants/theme";
 import { fetchMockProducts, Product } from "@/mocks/productMock";
 import type { Role } from "@/types/role.type";
 import { useFocusEffect, useLocalSearchParams, useRouter } from "expo-router";
@@ -20,23 +21,6 @@ interface ProductDetailsTemplateProps {
   refreshKey?: number;
 }
 
-const roleTheme = {
-  artesao: {
-    main: "#14532D",
-    bg: "#FDFBF5",
-    line: "#E8EFE8",
-  },
-  lojista: {
-    main: "#9F1239",
-    bg: "#FDF7F8",
-    line: "#F3E4E5",
-  },
-  admin: {
-    main: "#712B05",
-    bg: "#FCF9F7",
-    line: "#E0D1C7",
-  },
-};
 export const ProductDetailsTemplate = ({
   productId,
   role,
@@ -46,11 +30,11 @@ export const ProductDetailsTemplate = ({
 }: ProductDetailsTemplateProps & {
   onUpdateProduct?: (p: Product) => void;
 }) => {
+  const colors = roleConfig[role];
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
   const { origin } = useLocalSearchParams<{ origin?: string }>();
-  const theme = roleTheme[role];
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [isViewerVisible, setIsViewerVisible] = useState(false);
 
@@ -132,12 +116,12 @@ export const ProductDetailsTemplate = ({
     return (
       <View
         className="flex-1 items-center justify-center"
-        style={{ backgroundColor: theme.bg }}
+        style={{ backgroundColor: colors.bg }}
       >
-        <ActivityIndicator size="large" color={theme.main} />
+        <ActivityIndicator size="large" color={colors.main} />
         <Text
           className="mt-4 font-poppins-regular"
-          style={{ color: theme.main }}
+          style={{ color: colors.main }}
         >
           Carregando produto...
         </Text>
@@ -149,24 +133,24 @@ export const ProductDetailsTemplate = ({
     return (
       <View
         className="flex-1 items-center justify-center px-6"
-        style={{ backgroundColor: theme.bg }}
+        style={{ backgroundColor: colors.bg }}
       >
         <Text
           className="font-poppins-semibold text-xl text-center mb-2"
-          style={{ color: theme.main }}
+          style={{ color: colors.main }}
         >
           Produto não encontrado
         </Text>
         <Text
           className="font-poppins-regular text-[15px] text-center mb-6"
-          style={{ color: theme.main }}
+          style={{ color: colors.main }}
         >
           Este produto pode ter sido removido do estoque.
         </Text>
         <TouchableOpacity
           onPress={handleGoBack}
           className="px-6 py-3 rounded-xl"
-          style={{ backgroundColor: theme.main }}
+          style={{ backgroundColor: colors.main }}
         >
           <Text className="font-poppins-medium text-white text-[15px]">
             Voltar
@@ -204,17 +188,17 @@ export const ProductDetailsTemplate = ({
         {/* Linha Divisória Superior */}
         <View
           className="h-[1px] w-full mb-5 mt-2"
-          style={{ backgroundColor: theme.line }}
+          style={{ backgroundColor: colors.surface }}
         />
 
         {/* Tag de Status / Pagamento */}
         <View
           className="self-start rounded-full px-4 py-1.5 mb-6"
-          style={{ backgroundColor: theme.line }}
+          style={{ backgroundColor: colors.surface }}
         >
           <Text
             className="font-poppins-medium text-[14px]"
-            style={{ color: theme.main }}
+            style={{ color: colors.main }}
           >
             {role === "lojista" ? product.paymentMethod : product.status}
           </Text>
@@ -230,7 +214,7 @@ export const ProductDetailsTemplate = ({
                 activeOpacity={imageUrl ? 0.7 : 1}
                 onPress={() => imageUrl && handleOpenViewer(imageUrl)}
                 className="flex-1 aspect-[3/4] rounded-2xl overflow-hidden"
-                style={{ backgroundColor: theme.line }}
+                style={{ backgroundColor: colors.surface }}
               >
                 {imageUrl && (
                   <Image
@@ -244,31 +228,23 @@ export const ProductDetailsTemplate = ({
           })}
         </View>
 
-        <ImageViewerModal
-          visible={isViewerVisible}
-          imageUrl={selectedImage}
-          role={role}
-          onClose={() => setIsViewerVisible(false)}
-          onRemove={handleRemoveImageFromViewer}
-        />
-
         {/* Linha Divisória */}
         <View
           className="h-[1px] w-full mb-5"
-          style={{ backgroundColor: theme.line }}
+          style={{ backgroundColor: colors.surface }}
         />
 
         {/* Informações Básicas */}
         <Text
           className="font-poppins-regular text-[20px] mb-2"
-          style={{ color: theme.main }}
+          style={{ color: colors.main }}
         >
           <Text className="font-poppins-semibold">Código Único: </Text>
           {product.id}
         </Text>
         <Text
           className="font-poppins-medium text-xl mb-2"
-          style={{ color: theme.main }}
+          style={{ color: colors.main }}
         >
           {formattedPrice}
         </Text>
@@ -276,17 +252,17 @@ export const ProductDetailsTemplate = ({
         {/* Descrição Geral */}
         <Text
           className="font-poppins-medium text-[16px] mb-2"
-          style={{ color: theme.main }}
+          style={{ color: colors.main }}
         >
           Descrição Geral:
         </Text>
         <View
           className="w-full min-h-[140px] rounded-2xl border-[1.5px] p-4 mb-8"
-          style={{ borderColor: theme.line, backgroundColor: theme.bg }}
+          style={{ borderColor: colors.surface, backgroundColor: colors.bg }}
         >
           <Text
             className="font-poppins-regular text-[15px] leading-relaxed"
-            style={{ color: theme.main }}
+            style={{ color: colors.main }}
           >
             {product.description}
           </Text>
@@ -295,12 +271,20 @@ export const ProductDetailsTemplate = ({
         {/* Linha Divisória Inferior */}
         <View
           className="h-[1px] w-full mb-6"
-          style={{ backgroundColor: theme.line }}
+          style={{ backgroundColor: colors.surface }}
         />
 
         {/* Área Flexível para Injetar Botões */}
         <View className="w-full">{children}</View>
       </ScrollView>
+
+      <ImageViewerModal
+        visible={isViewerVisible}
+        imageUrl={selectedImage}
+        role={role}
+        onClose={() => setIsViewerVisible(false)}
+        onRemove={handleRemoveImageFromViewer}
+      />
     </ScreenTemplate>
   );
 };

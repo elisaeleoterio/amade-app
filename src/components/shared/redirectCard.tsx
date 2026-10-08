@@ -1,3 +1,4 @@
+import { roleConfig } from "@/constants/theme";
 import type { Role } from "@/types/role.type";
 import { useRouter } from "expo-router";
 import { TouchableOpacity, View } from "react-native";
@@ -10,21 +11,6 @@ interface RedirectCardProps {
   route: string;
   role: Role;
 }
-
-const roleConfig = {
-  artesao: {
-    primary: "#14532D",
-    border: "#C6DACB",
-  },
-  lojista: {
-    primary: "#9F1239",
-    border: "#F4C4D0",
-  },
-  admin: {
-    primary: "#712B05",
-    border: "#EAD6CC",
-  },
-};
 
 export const RedirectCard = ({
   title,
@@ -42,24 +28,27 @@ export const RedirectCard = ({
       onPress={() => router.push(route as any)}
       className="mb-4 w-full flex-row items-center rounded-2xl border-[1.5px] p-5"
       style={{
-        borderColor: colors.border,
+        borderColor: colors.surface,
       }}
     >
       {/* Ícone à esquerda */}
       <View className="mr-5 items-center justify-center">
-        <Icon size={44} color={colors.primary} strokeWidth={1.5} />
+        <Icon size={44} color={colors.main} strokeWidth={1.5} />
       </View>
 
       {/* Textos à direita */}
       <View className="flex-1">
         <Text
           className="mb-1 font-poppins-medium text-xl"
-          style={{ color: colors.primary }}
+          style={{ color: colors.main }}
         >
           {title}
         </Text>
 
-        <Text className="font-poppins-regular text-[15px] leading-snug text-artesao-dark">
+        <Text
+          className="font-poppins-regular text-[15px] leading-snug"
+          style={{ color: colors.dark }}
+        >
           {description}
         </Text>
       </View>

@@ -3,13 +3,16 @@ import { LogoutModal } from "@/components/modals/logoutModal";
 import { ScreenTemplate } from "@/components/templates/screen-template";
 import { Text } from "@/components/ui/text";
 import { roleConfig } from "@/constants/theme";
+import { Role } from "@/types/role.type";
 import { useRouter } from "expo-router";
 import { UserRoundArrowLeft } from "lucide-react-native";
 import { useState } from "react";
 import { TouchableOpacity, View } from "react-native";
-import { RoleButton, type Role } from "../../components/shared/roleButton";
+import { RoleButton } from "../../components/shared/roleButton";
 
 export default function RoleSelect() {
+  const role: Role = "admin";
+  const colors = roleConfig[role];
   const router = useRouter();
   const handleConfirmLogout = async () => {
     setLogoutModalVisible(false);
@@ -27,15 +30,20 @@ export default function RoleSelect() {
 
   // Mock simulando a resposta do backend
   const userRoles: Role[] = ["artesao", "lojista", "admin"];
+
   const [isLogoutModalVisible, setLogoutModalVisible] = useState(false);
   return (
     <ScreenTemplate
       isStatic
       navbar={{
-        appRole: "admin",
+        appRole: role,
         leftContent: (
           <TouchableOpacity onPress={() => setLogoutModalVisible(true)}>
-            <UserRoundArrowLeft color="#712B05" size={32} strokeWidth={1.5} />
+            <UserRoundArrowLeft
+              color={colors.main}
+              size={32}
+              strokeWidth={1.5}
+            />
           </TouchableOpacity>
         ),
       }}
@@ -51,7 +59,7 @@ export default function RoleSelect() {
       />
 
       <View className="mt-4 items-center">
-        <AmadeLogo color={roleConfig["admin"].main} width={150} />
+        <AmadeLogo color={colors.main} width={150} />
       </View>
 
       <View className="mx-8 mt-2">
