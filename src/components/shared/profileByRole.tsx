@@ -5,6 +5,7 @@ import { EditProfileModal } from "@/components/shared/editProfileModal";
 import { ScreenTemplate } from "@/components/templates/screen-template";
 import { toast } from "@/components/ui/sonner";
 import { Text } from "@/components/ui/text";
+import { roleConfig } from "@/constants/theme";
 import { fetchMockProfile, UserProfile } from "@/mocks/userMock";
 import type { Role } from "@/types/role.type";
 import { useRouter } from "expo-router";
@@ -16,28 +17,9 @@ interface ProfileByRoleProps {
   role: Role;
 }
 
-// Dicionário de cores unificado para todos os perfis
-const roleConfig = {
-  admin: {
-    main: "#712B05",
-    surface: "#E0D1C7",
-    textDark: "#2A0F01",
-  },
-  lojista: {
-    main: "#9F1239",
-    surface: "#E9CCD2",
-    textDark: "#4C0519",
-  },
-  artesao: {
-    main: "#14532D",
-    surface: "#E5EFE5",
-    textDark: "#0C331C",
-  },
-};
-
 export const ProfileByRole = ({ role }: ProfileByRoleProps) => {
+  const colors = roleConfig[role];
   const router = useRouter();
-  const theme = roleConfig[role];
 
   const [user, setUser] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -64,6 +46,7 @@ export const ProfileByRole = ({ role }: ProfileByRoleProps) => {
   }, [role]);
 
   const handleUpdateLocalUser = (newAvatar?: string, newEmail?: string) => {
+    // Precisa adicionar a lógica com servidor
     setUser((prev) => {
       if (!prev) return prev;
       return {
@@ -75,15 +58,18 @@ export const ProfileByRole = ({ role }: ProfileByRoleProps) => {
   };
 
   const handleLogout = () => {
+    // Precisa adicionar lógica com servido de remoção de token
     router.replace("/(public)/welcome");
   };
 
   const handleDeleteAccount = () => {
+    // Precisa adicionar a lógica com servidor
     toast.success("Conta excluída com sucesso.");
     router.replace("/(public)/welcome");
   };
 
   const handleResetPassword = () => {
+    // Precisa adicionar a lógica com servidor
     router.push("/(public)/accountSetting/redefinePassword");
   };
 
@@ -99,7 +85,7 @@ export const ProfileByRole = ({ role }: ProfileByRoleProps) => {
       <View className="flex-1 px-5 pt-8">
         {isLoading || !user ? (
           <View className="flex-1 justify-center items-center">
-            <ActivityIndicator size="large" color={theme.main} />
+            <ActivityIndicator size="large" color={colors.main} />
           </View>
         ) : (
           <>
@@ -109,12 +95,12 @@ export const ProfileByRole = ({ role }: ProfileByRoleProps) => {
                 <Image
                   source={{ uri: user.avatarUrl }}
                   className="w-[72px] h-[72px] rounded-full mr-4"
-                  style={{ backgroundColor: theme.surface }}
+                  style={{ backgroundColor: colors.surface }}
                 />
               ) : (
                 <View
                   className="w-[72px] h-[72px] rounded-full items-center justify-center mr-4"
-                  style={{ backgroundColor: theme.main }}
+                  style={{ backgroundColor: colors.main }}
                 >
                   <Text className="font-poppins-regular text-white text-xl mt-1">
                     {user.name.first.charAt(0).toUpperCase()}
@@ -125,7 +111,7 @@ export const ProfileByRole = ({ role }: ProfileByRoleProps) => {
               <View className="flex-1">
                 <Text
                   className="font-poppins-regular text-xl"
-                  style={{ color: theme.textDark }}
+                  style={{ color: colors.dark }}
                 >
                   {user.name.first} {user.name.second}
                 </Text>
@@ -140,14 +126,14 @@ export const ProfileByRole = ({ role }: ProfileByRoleProps) => {
               activeOpacity={0.7}
               onPress={() => setIsEditModalOpen(true)}
               className="border rounded-[20px] py-4 flex-row items-center mb-4 bg-general-bg"
-              style={{ borderColor: theme.surface }}
+              style={{ borderColor: colors.surface }}
             >
               <View className="absolute left-5">
-                <UserCog color={theme.main} size={24} strokeWidth={1.5} />
+                <UserCog color={colors.main} size={24} strokeWidth={1.5} />
               </View>
               <Text
                 className="flex-1 text-center font-poppins-medium text-[17px]"
-                style={{ color: theme.main }}
+                style={{ color: colors.main }}
               >
                 Editar Conta
               </Text>
@@ -158,14 +144,14 @@ export const ProfileByRole = ({ role }: ProfileByRoleProps) => {
               activeOpacity={0.7}
               onPress={() => setResetPassowordModalOpen(true)}
               className="border rounded-[20px] py-4 flex-row items-center mb-4 bg-general-bg"
-              style={{ borderColor: theme.surface }}
+              style={{ borderColor: colors.surface }}
             >
               <View className="absolute left-5">
-                <Lock color={theme.main} size={24} strokeWidth={1.5} />
+                <Lock color={colors.main} size={24} strokeWidth={1.5} />
               </View>
               <Text
                 className="flex-1 text-center font-poppins-medium text-[17px]"
-                style={{ color: theme.main }}
+                style={{ color: colors.main }}
               >
                 Alterar Senha
               </Text>
@@ -176,14 +162,14 @@ export const ProfileByRole = ({ role }: ProfileByRoleProps) => {
               activeOpacity={0.7}
               onPress={() => setIsLogoutModalOpen(true)}
               className="border rounded-[20px] py-4 flex-row items-center mb-4 bg-general-bg"
-              style={{ borderColor: theme.surface }}
+              style={{ borderColor: colors.surface }}
             >
               <View className="absolute left-5">
-                <LogOut color={theme.main} size={24} strokeWidth={1.5} />
+                <LogOut color={colors.main} size={24} strokeWidth={1.5} />
               </View>
               <Text
                 className="flex-1 text-center font-poppins-medium text-[17px]"
-                style={{ color: theme.main }}
+                style={{ color: colors.main }}
               >
                 Sair da Conta
               </Text>
@@ -194,14 +180,14 @@ export const ProfileByRole = ({ role }: ProfileByRoleProps) => {
               activeOpacity={0.7}
               onPress={() => setIsDeleteModalOpen(true)}
               className="border rounded-[20px] py-4 flex-row items-center mb-4 bg-general-bg"
-              style={{ borderColor: theme.surface }}
+              style={{ borderColor: colors.surface }}
             >
               <View className="absolute left-5">
-                <Trash2 color={theme.main} size={24} strokeWidth={1.5} />
+                <Trash2 color={colors.main} size={24} strokeWidth={1.5} />
               </View>
               <Text
                 className="flex-1 text-center font-poppins-medium text-[17px]"
-                style={{ color: theme.main }}
+                style={{ color: colors.main }}
               >
                 Excluir Conta
               </Text>

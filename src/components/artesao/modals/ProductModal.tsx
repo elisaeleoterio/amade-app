@@ -2,7 +2,9 @@ import { ImageViewerModal } from "@/components/modals/imageViwerModal";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/sonner";
 import { Text } from "@/components/ui/text";
+import { roleConfig } from "@/constants/theme";
 import { Product } from "@/mocks/productMock";
+import { Role } from "@/types/role.type";
 import { Status } from "@/types/status.type";
 import * as ImagePicker from "expo-image-picker";
 import { ChevronDown, Minus, Plus } from "lucide-react-native";
@@ -33,8 +35,9 @@ export const ProductModal = ({
   onSave,
   initialData,
 }: ProductModalProps) => {
+  const role: Role = "artesao";
+  const colors = roleConfig[role];
   const isEditing = !!initialData;
-
   const [title, setTitle] = useState("");
   const [price, setPrice] = useState("");
   const [status, setStatus] = useState<Status>("Cadastrado");
@@ -247,7 +250,7 @@ export const ProductModal = ({
                   <Text className="font-poppins-regular text-[15px] text-artesao-main">
                     {status}
                   </Text>
-                  <ChevronDown size={20} color="#14532D" />
+                  <ChevronDown size={20} color={colors.dark} />
                 </TouchableOpacity>
 
                 {isDropdownOpen && (
@@ -281,7 +284,7 @@ export const ProductModal = ({
                       onPress={decrementQuantity}
                       className="p-2"
                     >
-                      <Minus size={20} color="#14532D" />
+                      <Minus size={20} color={colors.dark} />
                     </TouchableOpacity>
 
                     <TextInput
@@ -305,7 +308,7 @@ export const ProductModal = ({
                       onPress={incrementQuantity}
                       className="p-2"
                     >
-                      <Plus size={20} color="#14532D" />
+                      <Plus size={20} color={colors.dark} />
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -360,7 +363,7 @@ export const ProductModal = ({
                     <ImageViewerModal
                       visible={isOpenImageViewer}
                       imageUrl={imageUrl}
-                      role="artesao"
+                      role={role}
                       onClose={() => setIsOpenImageViewer(false)}
                       onRemove={() => handleRemoveImage(index)}
                     />
@@ -379,7 +382,7 @@ export const ProductModal = ({
           <View className="mt-4 flex-row justify-between gap-4">
             <View className="flex-1">
               <Button
-                appRole="artesao"
+                appRole={role}
                 variant="outline"
                 size="md"
                 onPress={onClose}
@@ -389,7 +392,7 @@ export const ProductModal = ({
             </View>
             <View className="flex-1">
               <Button
-                appRole="artesao"
+                appRole={role}
                 variant="default"
                 size="md"
                 onPress={handleSave}

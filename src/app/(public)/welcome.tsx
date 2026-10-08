@@ -2,10 +2,14 @@ import AmadeLogo from "@/assets/logoComplete.svg";
 import { ScreenTemplate } from "@/components/templates/screen-template";
 import { Button } from "@/components/ui/button";
 import { Text } from "@/components/ui/text";
+import { roleConfig } from "@/constants/theme";
+import { Role } from "@/types/role.type";
 import { useRouter } from "expo-router";
 import { View } from "react-native";
 
 export default function WelcomeScreen() {
+  const role: Role = "admin";
+  const colors = roleConfig[role];
   const router = useRouter();
   return (
     <ScreenTemplate
@@ -16,7 +20,7 @@ export default function WelcomeScreen() {
       className="bg-general-bg"
     >
       <View className="items-center mb-2">
-        <AmadeLogo color="#712B05" width={250} />
+        <AmadeLogo color={colors.main} width={250} />
       </View>
 
       <View className="mx-4">
@@ -32,7 +36,6 @@ export default function WelcomeScreen() {
       <View className="gap-4 ">
         <Button
           size="lg"
-          appRole="admin"
           variant="default"
           onPress={() => router.push("/(public)/login")}
         >

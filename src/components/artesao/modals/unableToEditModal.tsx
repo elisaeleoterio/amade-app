@@ -1,4 +1,6 @@
 import { Text } from "@/components/ui/text";
+import { roleConfig } from "@/constants/theme";
+import { Role } from "@/types/role.type";
 import type { Status } from "@/types/status.type";
 import { Info, X } from "lucide-react-native";
 import { Modal, Pressable, TouchableOpacity, View } from "react-native";
@@ -14,6 +16,8 @@ export const UnableToEditModal = ({
   onClose,
   productStatus,
 }: UnableToEditModalProps) => {
+  const role: Role = "artesao";
+  const colors = roleConfig[role];
   return (
     <Modal
       visible={visible}
@@ -31,11 +35,11 @@ export const UnableToEditModal = ({
             className="absolute right-5 top-5 p-2"
             activeOpacity={0.7}
           >
-            <X size={24} color={"#166534"} strokeWidth={1.5} />
+            <X size={24} color={colors.main} strokeWidth={1.5} />
           </TouchableOpacity>
 
           <View className="mb-4 mt-2">
-            <Info size={30} color={"#166534"} strokeWidth={1.2} />
+            <Info size={30} color={colors.main} strokeWidth={1.2} />
           </View>
 
           <Text className="text-center font-poppins-semibold text-[20px] mb-3 mx-10 text-artesao-dark">

@@ -8,12 +8,15 @@ import { Text } from "@/components/ui/text";
 import { roleConfig } from "@/constants/theme";
 import { fetchMockProducts, Product } from "@/mocks/productMock";
 import { MOCK_USER_ARTESAO_LOJISTA, UserProfile } from "@/mocks/userMock";
+import { Role } from "@/types/role.type";
 import { useFocusEffect, useRouter } from "expo-router";
 import { CirclePlus, ShoppingCart } from "lucide-react-native";
 import { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, View } from "react-native";
 
 export default function WelcomeScreen() {
+  const role: Role = "artesao";
+  const colors = roleConfig[role];
   const [user, setUser] = useState<UserProfile | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -57,7 +60,7 @@ export default function WelcomeScreen() {
   if (loading) {
     return (
       <View className="flex-1 items-center justify-center bg-general-bg">
-        <ActivityIndicator size="large" color={roleConfig["artesao"].main} />
+        <ActivityIndicator size="large" color={colors.main} />
         <Text className="mt-4 font-poppins-regular">Buscando dados...</Text>
       </View>
     );
@@ -67,14 +70,10 @@ export default function WelcomeScreen() {
     <ScreenTemplate
       navbar={{
         showBack: false,
-        appRole: "artesao",
+        appRole: role,
         rightContent: (
-          <View className="">
-            <AmadeLogo
-              color={roleConfig["artesao"].main}
-              width={50}
-              height={45}
-            />
+          <View>
+            <AmadeLogo color={colors.main} width={50} height={45} />
           </View>
         ),
         leftContent: (
@@ -141,14 +140,14 @@ export default function WelcomeScreen() {
           description="Adicionar novos produtos ao meu estoque."
           icon={CirclePlus}
           route="/(authenticated)/artesao/newBatch"
-          role="artesao"
+          role={role}
         />
         <RedirectCard
           title="Ver Vendas"
           description="Analisar vendas dos meus produtos."
           icon={ShoppingCart}
           route="/(authenticated)/artesao/mySales"
-          role="artesao"
+          role={role}
         />
       </View>
     </ScreenTemplate>

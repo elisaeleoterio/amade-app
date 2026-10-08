@@ -6,6 +6,7 @@ import { toast } from "@/components/ui/sonner";
 import { Text } from "@/components/ui/text";
 import { roleConfig } from "@/constants/theme";
 import { mockSignUp } from "@/mocks/userMock";
+import { Role } from "@/types/role.type";
 import { router } from "expo-router";
 import { Brush, Eye, EyeOff, ShoppingBag } from "lucide-react-native";
 import { useState } from "react";
@@ -17,6 +18,8 @@ import {
 } from "react-native";
 
 export default function SignUp() {
+  const role: Role = "admin";
+  const colors = roleConfig[role];
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -63,7 +66,7 @@ export default function SignUp() {
       className="bg-general-bg"
     >
       <View className="items-center mb-2">
-        <AmadeLogo color={roleConfig["admin"].dark} width={150} />
+        <AmadeLogo color={colors.dark} width={150} />
       </View>
       <View className="self-center w-80 gap-4 mb-8">
         <View>
@@ -84,7 +87,9 @@ export default function SignUp() {
                 <Brush
                   size={32}
                   color={
-                    selectedRoles.includes("artesao") ? "#FFFBEB" : "#166534"
+                    selectedRoles.includes("artesao")
+                      ? "#FFFBEB"
+                      : roleConfig["artesao"].main
                   }
                   strokeWidth={1.5}
                 />
@@ -103,7 +108,9 @@ export default function SignUp() {
                 <ShoppingBag
                   size={32}
                   color={
-                    selectedRoles.includes("lojista") ? "#FFFBEB" : "#9F1239"
+                    selectedRoles.includes("lojista")
+                      ? "#FFFBEB"
+                      : roleConfig["lojista"].main
                   }
                   strokeWidth={1.5}
                 />

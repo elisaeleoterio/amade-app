@@ -6,11 +6,14 @@ import { toast } from "@/components/ui/sonner";
 import { Text } from "@/components/ui/text";
 import { roleConfig } from "@/constants/theme";
 import { mockSendPasswordResetEmail } from "@/mocks/userMock";
+import { Role } from "@/types/role.type";
 import { useRouter } from "expo-router";
 import { useState } from "react";
 import { ActivityIndicator, View } from "react-native";
 
 export default function SendEmail() {
+  const role: Role = "admin";
+  const colors = roleConfig[role];
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
@@ -41,7 +44,7 @@ export default function SendEmail() {
       className="bg-general-bg"
     >
       <View className="items-center">
-        <AmadeLogo color={roleConfig["admin"].dark} width={150} />
+        <AmadeLogo color={colors.dark} width={150} />
       </View>
       <View className="mx-16">
         <Text

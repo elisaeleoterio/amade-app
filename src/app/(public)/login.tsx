@@ -6,12 +6,15 @@ import { toast } from "@/components/ui/sonner";
 import { Text } from "@/components/ui/text";
 import { roleConfig } from "@/constants/theme";
 import { mockLogin } from "@/mocks/userMock";
+import { Role } from "@/types/role.type";
 import { useRouter } from "expo-router";
 import { Eye, EyeOff } from "lucide-react-native";
 import { useState } from "react";
 import { ActivityIndicator, TouchableOpacity, View } from "react-native";
 
 export default function LoginScreen() {
+  const role: Role = "admin";
+  const colors = roleConfig[role];
   const router = useRouter();
   const [email, setEmail] = useState("maria.artes@email.com");
   const [password, setPassword] = useState("123456");
@@ -40,7 +43,7 @@ export default function LoginScreen() {
     <ScreenTemplate
       navbar={{
         title: "Entrar",
-        appRole: "admin",
+        appRole: role,
       }}
       contentContainerStyle={{
         flexGrow: 1,
@@ -52,7 +55,7 @@ export default function LoginScreen() {
       className="bg-general-bg"
     >
       <View className="items-center">
-        <AmadeLogo color={roleConfig["admin"].dark} width={150} />
+        <AmadeLogo color={colors.dark} width={150} />
       </View>
       <View className="mx-16">
         <Text

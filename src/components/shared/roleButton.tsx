@@ -1,10 +1,8 @@
+import { Role } from "@/types/role.type";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import { Brush, Folder, ShoppingBasket } from "lucide-react-native";
 import { Text, TouchableOpacity } from "react-native";
-
-export type Role = "artesao" | "lojista" | "admin";
-
 interface RoleButtonProps {
   role: Role;
 }
