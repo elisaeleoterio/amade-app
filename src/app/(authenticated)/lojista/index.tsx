@@ -35,11 +35,18 @@ export default function WelcomeScreenLojista() {
         setLoading(true);
         const data = await fetchMockShifts();
 
-        const ShiftsOrdenados = data.sort(
-          (a, b) => b.date.getTime() - a.date.getTime(),
+        const getShiftDateTime = (shift: Shift) => {
+          const [hours, minutes] = shift.startTime.split(":").map(Number);
+          const dateTime = new Date(shift.date);
+          dateTime.setHours(hours, minutes, 0, 0);
+          return dateTime.getTime();
+        };
+
+        const shiftsOrdenados = [...data].sort(
+          (a, b) => getShiftDateTime(b) - getShiftDateTime(a),
         );
 
-        setRecentShifts(ShiftsOrdenados.slice(0, 5));
+        setRecentShifts(shiftsOrdenados.slice(0, 5));
       } catch (error) {
         console.error("Erro ao buscar turnos", error);
       } finally {
@@ -88,7 +95,7 @@ export default function WelcomeScreenLojista() {
         contentContainerStyle={{ paddingBottom: 24 }}
       >
         <View className="px-2 mt-4">
-          {/* Seção: Meus Turnos */}
+          {/* Meus Turnos */}
           <Text className="font-poppins-regular text-xl text-lojista-dark mb-4">
             Meus Turnos
           </Text>
@@ -104,6 +111,7 @@ export default function WelcomeScreenLojista() {
                 role={role}
                 pieces={Shift.pieces}
                 date={Shift.date}
+                startTime={Shift.startTime}
                 totalValue={Shift.totalValue}
                 onPress={() => {
                   console.log(`Turno ${Shift.id} selecionado`);
@@ -112,7 +120,7 @@ export default function WelcomeScreenLojista() {
             ))
           )}
 
-          {/* Botão Ver Mais (Só aparece se tiver Turnos) */}
+          {/* Botão Ver Mais*/}
           {recentShifts.length > 0 && (
             <TouchableOpacity
               activeOpacity={0.7}
@@ -125,7 +133,7 @@ export default function WelcomeScreenLojista() {
             </TouchableOpacity>
           )}
 
-          {/* Card de Iniciar Shift (Sempre por último) */}
+          {/* Card de Iniciar Turno */}
           <RedirectCard
             title="Iniciar Shift"
             description="Iniciar um período de vendas para registrar produtos."

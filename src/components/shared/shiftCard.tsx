@@ -6,6 +6,7 @@ import { Text } from "../ui/text";
 interface ShiftCardProps {
   pieces: number;
   date: Date;
+  startTime: string;
   totalValue: number;
   role: Role;
   onPress?: () => void;
@@ -14,6 +15,7 @@ interface ShiftCardProps {
 export const ShiftCard = ({
   pieces,
   date,
+  startTime,
   totalValue,
   role,
   onPress,
@@ -22,21 +24,7 @@ export const ShiftCard = ({
 
   const formattedPrice = `R$${totalValue.toFixed(2).replace(".", ",")}`;
 
-  const meses = [
-    "janeiro",
-    "fevereiro",
-    "março",
-    "abril",
-    "maio",
-    "junho",
-    "julho",
-    "agosto",
-    "setembro",
-    "outubro",
-    "novembro",
-    "dezembro",
-  ];
-  const dataFormatada = `${date.getDate()} de ${meses[date.getMonth()]} de ${date.getFullYear()}`;
+  const formattedDate = `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} às ${startTime}`;
 
   return (
     <TouchableOpacity
@@ -57,7 +45,7 @@ export const ShiftCard = ({
           className="font-poppins-extralight text-lg"
           style={{ color: "#6b7280" }}
         >
-          {dataFormatada}
+          {formattedDate}
         </Text>
       </View>
 
