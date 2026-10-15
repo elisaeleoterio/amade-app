@@ -177,7 +177,7 @@ export const CalendarModal = ({
         onPress={onClose}
       >
         <Pressable
-          className={`w-full dark-general-dark rounded-3xl p-6 border shadow-xl relative z-10`}
+          className={`w-full dark-general-dark bg-general-bg rounded-3xl p-6 border shadow-xl relative z-10`}
           style={{ borderColor: colors.main }}
         >
           {/* Header Actions */}
@@ -207,7 +207,7 @@ export const CalendarModal = ({
                   setShowMonthPicker(!showMonthPicker);
                   setShowYearPicker(false);
                 }}
-                className="border-2 rounded-xl px-8 py-2 flex-row items-center dark-surface"
+                className="border-2 rounded-xl px-8 py-2 flex-row items-center dark-surface bg-general-bg"
                 style={
                   showMonthPicker
                     ? { borderColor: colors.main }
@@ -231,7 +231,7 @@ export const CalendarModal = ({
                   setShowYearPicker(!showYearPicker);
                   setShowMonthPicker(false);
                 }}
-                className="border-2 rounded-xl px-4 py-2 flex-row items-center dark-general-dark"
+                className="border-2 rounded-xl px-4 py-2 flex-row items-center dark-general-dark bg-general-bg"
                 style={
                   showMonthPicker
                     ? { borderColor: colors.main }
@@ -320,7 +320,7 @@ export const CalendarModal = ({
 
           {/* Menus Flutuantes (Dropdowns) */}
           {showMonthPicker && (
-            <View className="absolute top-[100px] left-[5%] w-[70%] dark-white border border-gray-100 shadow-2xl rounded-2xl p-3 flex-row flex-wrap justify-between z-50">
+            <View className="absolute top-[100px] left-[5%] w-[70%] dark-white border border-gray-100 shadow-2xl rounded-2xl p-3 flex-row flex-wrap justify-between z-50 bg-general-bg">
               {MONTHS.map((m, i) => (
                 <TouchableOpacity
                   key={m}
@@ -348,7 +348,7 @@ export const CalendarModal = ({
           )}
 
           {showYearPicker && (
-            <View className="absolute top-[100px] right-[20%] w-32 dark-white border border-gray-100 shadow-2xl rounded-2xl z-50 max-h-56 overflow-hidden">
+            <View className="absolute top-[100px] right-[20%] w-32 dark-white border border-gray-100 shadow-2xl rounded-2xl z-50 max-h-56 overflow-hidden bg-general-bg">
               <ScrollView showsVerticalScrollIndicator={false}>
                 {YEARS.map((y) => (
                   <TouchableOpacity
