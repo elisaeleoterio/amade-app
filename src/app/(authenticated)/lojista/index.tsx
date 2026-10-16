@@ -1,6 +1,6 @@
 import AmadeLogo from "@/assets/logoComplete.svg";
+import { ShiftCard } from "@/components/lojista/shiftCard";
 import { RedirectCard } from "@/components/shared/redirectCard";
-import { ShiftCard } from "@/components/shared/shiftCard";
 import { ScreenTemplate } from "@/components/templates/screen-template";
 import { Text } from "@/components/ui/text";
 import { roleConfig } from "@/constants/theme";
@@ -125,7 +125,7 @@ export default function WelcomeScreenLojista() {
             <TouchableOpacity
               activeOpacity={0.7}
               className="py-2 mb-6"
-              onPress={() => console.log("Ver mais")}
+              onPress={() => router.push("/lojista/myShifts")}
             >
               <Text className="text-center font-poppins-semibold text-[16px] text-lojista-main">
                 Ver Mais
