@@ -32,8 +32,8 @@ const MONTHS = [
 
 const currentYear = new Date().getFullYear();
 const YEARS = Array.from(
-  { length: 2026 - currentYear + 1 },
-  (_, i) => currentYear + i,
+  { length: Math.max(0, currentYear - 2026 + 1) },
+  (_, i) => 2026 + i,
 );
 
 export default function MyShifts() {
