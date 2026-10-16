@@ -24,8 +24,7 @@ export const ShiftCard = ({
 
   const formattedPrice = `R$${totalValue.toFixed(2).replace(".", ",")}`;
 
-  const formattedDate = `${date.getDate()}/${date.getMonth()}/${date.getFullYear()} às ${startTime}`;
-
+  const formattedDate = `${String(date.getDate()).padStart(2, "0")}/${String(date.getMonth() + 1).padStart(2, "0")}/${date.getFullYear()} às ${startTime}`;
   return (
     <TouchableOpacity
       activeOpacity={0.7}
