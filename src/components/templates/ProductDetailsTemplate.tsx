@@ -17,6 +17,8 @@ import { toast } from "../ui/sonner";
 interface ProductDetailsTemplateProps {
   productId: string;
   role: Role;
+  artisanName?: string;
+  onBackPress?: () => void;
   children?: React.ReactNode;
   refreshKey?: number;
 }
@@ -24,6 +26,8 @@ interface ProductDetailsTemplateProps {
 export const ProductDetailsTemplate = ({
   productId,
   role,
+  artisanName,
+  onBackPress,
   children,
   refreshKey,
   onUpdateProduct,
@@ -148,7 +152,7 @@ export const ProductDetailsTemplate = ({
           Este produto pode ter sido removido do estoque.
         </Text>
         <TouchableOpacity
-          onPress={handleGoBack}
+          onPress={onBackPress ?? handleGoBack}
           className="px-6 py-3 rounded-xl"
           style={{ backgroundColor: colors.main }}
         >
@@ -176,7 +180,7 @@ export const ProductDetailsTemplate = ({
         appRole: role,
         title: product.title,
         showBack: true,
-        onBackPress: handleGoBack,
+        onBackPress: onBackPress ?? handleGoBack,
       }}
       className="bg-general-bg"
     >
@@ -192,16 +196,31 @@ export const ProductDetailsTemplate = ({
         />
 
         {/* Tag de Status / Pagamento */}
-        <View
-          className="self-start rounded-full px-4 py-1.5 mb-6"
-          style={{ backgroundColor: colors.surface }}
-        >
-          <Text
-            className="font-poppins-medium text-[14px]"
-            style={{ color: colors.main }}
+        <View className="flex-row items-center gap-2 mb-6">
+          {role === "lojista" && artisanName && (
+            <View
+              className="rounded-full px-4 py-1.5"
+              style={{ backgroundColor: colors.surface }}
+            >
+              <Text
+                className="font-poppins-medium text-[14px]"
+                style={{ color: colors.main }}
+              >
+                {artisanName}
+              </Text>
+            </View>
+          )}
+          <View
+            className="self-start rounded-full px-4 py-1.5"
+            style={{ backgroundColor: colors.surface }}
           >
-            {role === "lojista" ? product.paymentMethod : product.status}
-          </Text>
+            <Text
+              className="font-poppins-medium text-[14px]"
+              style={{ color: colors.main }}
+            >
+              {role === "lojista" ? product.paymentMethod : product.status}
+            </Text>
+          </View>
         </View>
 
         {/* Galeria de Imagens */}
@@ -258,7 +277,7 @@ export const ProductDetailsTemplate = ({
         </Text>
         <View
           className="w-full min-h-[140px] rounded-2xl border-[1.5px] p-4 mb-8"
-          style={{ borderColor: colors.surface, backgroundColor: colors.bg }}
+          style={{ borderColor: colors.surface }}
         >
           <Text
             className="font-poppins-regular text-[15px] leading-relaxed"

@@ -36,7 +36,7 @@ export let MOCK_PRODUCTS: Product[] = [
     description: "Relógio de cuco mecânico adaptado com marchetaria local.",
     price: 1250.0,
     status: "Vendido",
-    paymentMethod: "Cartão de Crédito",
+    paymentMethod: "Crédito",
     imageUrls: [
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzv6Tv5EOJQkx1qxAIOTDUzf6rhPQ6_CxcR2FwYj2THC6DeSx9sJ5BeAYI&s=10",
       "https://images.unsplash.com/photo-1583344658145-8c0c92bb943d?auto=format&fit=crop&q=80&w=400",
@@ -49,6 +49,7 @@ export let MOCK_PRODUCTS: Product[] = [
       "Caneca rústica tratada com cera de abelha, ideal para decoração ou uso.",
     price: 85.5,
     status: "Cadastrado",
+    paymentMethod: "PIX",
     imageUrls: [
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTg_t0kPewVq2TAfC76rO5MOZYoAo53R2M23LmPlRPH_C3Zlg4IflFyrGA-&s=10",
     ],
@@ -60,6 +61,7 @@ export let MOCK_PRODUCTS: Product[] = [
       "Caneca rústica tratada com cera de abelha, ideal para decoração ou uso.",
     price: 85.5,
     status: "Quitado",
+    paymentMethod: "Débito",
     imageUrls: [
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTg_t0kPewVq2TAfC76rO5MOZYoAo53R2M23LmPlRPH_C3Zlg4IflFyrGA-&s=10",
     ],

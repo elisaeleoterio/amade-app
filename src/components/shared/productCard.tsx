@@ -15,6 +15,23 @@ interface ItemCardProps {
   onPress?: () => void;
   quantity?: number;
 }
+const Tag = ({ label, role }: { label?: string; role: Role }) => {
+  const colors = roleConfig[role];
+  if (!label) return null;
+  return (
+    <View
+      className="self-start rounded-full px-3 py-1 mr-2 mb-2"
+      style={{ backgroundColor: colors.surface }}
+    >
+      <Text
+        className="font-poppins-medium text-[12px]"
+        style={{ color: colors.main }}
+      >
+        {label}
+      </Text>
+    </View>
+  );
+};
 
 export const ProductCard = ({
   title,
@@ -28,24 +45,6 @@ export const ProductCard = ({
   quantity,
 }: ItemCardProps) => {
   const colors = roleConfig[role];
-
-  const Tag = ({ label }: { label?: string }) => {
-    if (!label) return null;
-    return (
-      <View
-        className="self-start rounded-full px-3 py-1 mr-2 mb-2"
-        style={{ backgroundColor: colors.surface }}
-      >
-        <Text
-          className="font-poppins-medium text-[12px]"
-          style={{ color: colors.main }}
-        >
-          {label}
-        </Text>
-      </View>
-    );
-  };
-
   const formattedPrice = `R$${price.toFixed(2).replace(".", ",")}`;
 
   return (
@@ -105,10 +104,14 @@ export const ProductCard = ({
 
         {/* Tags Condicionais baseadas no Role */}
         <View className="flex-row flex-wrap">
-          {(role === "artesao" || role === "admin") && <Tag label={status} />}
+          {(role === "artesao" || role === "admin") && (
+            <Tag label={status} role={role} />
+          )}
 
-          {(role === "lojista" || role === "admin") && (
-            <Tag label={paymentMethod} />
+          {(role === "lojista" ||
+            role === "admin" ||
+            !paymentMethod === null) && (
+            <Tag label={paymentMethod} role={role} />
           )}
         </View>
 
