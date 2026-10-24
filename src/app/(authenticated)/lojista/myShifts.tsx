@@ -221,7 +221,12 @@ export default function MyShifts() {
                 date={item.date}
                 startTime={item.startTime}
                 totalValue={item.totalValue}
-                onPress={() => console.log("Apertou")}
+                onPress={() => {
+                  router.push({
+                    pathname: "/(authenticated)/lojista/[id]",
+                    params: { id: item.id, origin: "myShifts" },
+                  });
+                }}
               />
             )}
           />

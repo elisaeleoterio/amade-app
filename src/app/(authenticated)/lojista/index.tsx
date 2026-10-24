@@ -114,7 +114,10 @@ export default function WelcomeScreenLojista() {
                 startTime={Shift.startTime}
                 totalValue={Shift.totalValue}
                 onPress={() => {
-                  console.log(`Turno ${Shift.id} selecionado`);
+                  router.push({
+                    pathname: "/(authenticated)/lojista/[id]",
+                    params: { id: Shift.id, origin: "home" },
+                  });
                 }}
               />
             ))
