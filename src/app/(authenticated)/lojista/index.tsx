@@ -135,7 +135,7 @@ export default function WelcomeScreenLojista() {
 
           {/* Card de Iniciar Turno */}
           <RedirectCard
-            title="Iniciar Shift"
+            title="Iniciar Turno"
             description="Iniciar um período de vendas para registrar produtos."
             icon={FolderOpen}
             route="/(authenticated)/lojista/newShift"

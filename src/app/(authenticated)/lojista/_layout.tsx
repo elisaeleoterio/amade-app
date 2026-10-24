@@ -1,4 +1,5 @@
 import { CustomTabBar } from "@/components/templates/CustomTabBar";
+import { ShiftProvider } from "@/contexts/ShiftContext";
 import { Tabs, useRouter } from "expo-router";
 import { View } from "react-native";
 
@@ -12,19 +13,23 @@ export default function LojistaLayout() {
 
   return (
     <View className="flex-1 bg-general-bg">
-      <Tabs
-        tabBar={(props) => (
-          <CustomTabBar
-            {...props}
-            role="lojista"
-            onLogoutPress={() => router.replace("/(authenticated)/roleSelect")}
-          />
-        )}
-        screenOptions={{ headerShown: false }}
-      >
-        <Tabs.Screen name="index" options={{ title: "Início" }} />
-        <Tabs.Screen name="profile" options={{ title: "Meu Perfil" }} />
-      </Tabs>
+      <ShiftProvider>
+        <Tabs
+          tabBar={(props) => (
+            <CustomTabBar
+              {...props}
+              role="lojista"
+              onLogoutPress={() =>
+                router.replace("/(authenticated)/roleSelect")
+              }
+            />
+          )}
+          screenOptions={{ headerShown: false }}
+        >
+          <Tabs.Screen name="index" options={{ title: "Início" }} />
+          <Tabs.Screen name="profile" options={{ title: "Meu Perfil" }} />
+        </Tabs>
+      </ShiftProvider>
     </View>
   );
 }
